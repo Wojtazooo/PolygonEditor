@@ -44,13 +44,10 @@ namespace PolygonEditor
             this.formSplitter.Location = new System.Drawing.Point(0, 0);
             this.formSplitter.Name = "formSplitter";
             // 
-            // formSplitter.PanelDrawing
+            // formSplitter.Panel1
             // 
             this.formSplitter.Panel1.Controls.Add(this.DrawingArea);
             this.formSplitter.Panel1MinSize = 800;
-            // 
-            // formSplitter.PanelTools
-            // 
             this.formSplitter.Panel2MinSize = 300;
             this.formSplitter.Size = new System.Drawing.Size(1184, 761);
             this.formSplitter.SplitterDistance = 800;
@@ -63,6 +60,7 @@ namespace PolygonEditor
             this.DrawingArea.Size = new System.Drawing.Size(785, 737);
             this.DrawingArea.TabIndex = 0;
             this.DrawingArea.TabStop = false;
+            this.DrawingArea.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.DrawingArea_MouseDoubleClick);
             // 
             // MainForm
             // 

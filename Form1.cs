@@ -12,24 +12,31 @@ namespace PolygonEditor
 {
     public partial class MainForm : System.Windows.Forms.Form
     {
+        private Line testLine;
+        private RasterGraphicsApplier pointsApplier;
+        private List<RasterObject> testRasterObjects;
+        
         public MainForm()
         {
             InitializeComponent();
 
-            Line line1 = new Line(new Point(100, 100), new Point(150, 100), Color.Black);
-            Line line2 = new Line(new Point(100, 200), new Point(200, 200), Color.Black);
-            Line line3 = new Line(new Point(100, 300), new Point(250, 400), Color.Black);
-            Line line4 = new Line(new Point(100, 400), new Point(300, 400), Color.Black);
+            testLine = new Line(new Point(DrawingArea.Width/2, DrawingArea.Height/2), new Point(DrawingArea.Width / 2, DrawingArea.Height / 2), Color.Black);
+            testRasterObjects = new List<RasterObject>();
+            testRasterObjects.Add(testLine);
 
-            List<RasterObject> rasterObjects = new List<RasterObject>();
-            rasterObjects.Add(line1);
-            rasterObjects.Add(line2);
-            rasterObjects.Add(line3);
-            rasterObjects.Add(line4);
-
-            RasterGraphicsApplier pointsApplier = new RasterGraphicsApplier(DrawingArea);
-            pointsApplier.Apply(rasterObjects);
+            pointsApplier = new RasterGraphicsApplier(DrawingArea);
+            UpdateView();
         }
 
+        private void UpdateView()
+        {
+            pointsApplier.Apply(testRasterObjects);
+        }
+
+        private void DrawingArea_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            testLine.SetP2(new Point(e.X, e.Y));
+            UpdateView();
+        }
     }
 }
