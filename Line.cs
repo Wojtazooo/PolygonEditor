@@ -9,26 +9,38 @@ namespace PolygonEditor
 {
     class Line : RasterObject
     {
-        public Point P1 
+        private Point _p1;
+        private Point _p2;
+        private Color _color;
+
+        public Line(Point p1, Point p2, Color color)
         {
-            get => P1;
-            set { P1 = value; Update(); }
+            _p1 = p1;
+            _p2 = p2;
+            _color = color;
+            Update();
         }
-        public Point P2
+
+        public void SetP1(Point p1)
         {
-            get => P2;
-            set { P2 = value; Update(); }
+            _p1 = p1;
+            Update();
         }
-        public Color Color
+
+        public void SetP2(Point p1)
         {
-            get => Color;
-            set { Color = value; Update(); }
+            _p1 = p1;
+            Update();
+        }
+        public void SetColor(Color color)
+        {
+            _color = color;
+            Update();
         }
 
         void Update()
         {
-            // TODO: Implement Udpating method which will Generate line from RasterGraphicGenerator
-            // _pixels = GenerateLine(p1,p2,color)
+            _pixels = RasterGraphicsGenerator.GetLinePoints(_p1, _p2, _color);
         }
     }
 }
