@@ -5,6 +5,7 @@ namespace PolygonEditor.RasterGraphics.Models
     abstract class RasterObject
     {
         protected List<Pixel> _pixels;
-        public abstract List<Pixel> GetPixels();
+        public List<Pixel> GetPixels() => _pixels;
+        abstract public void Update();
     }
 }
