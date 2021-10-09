@@ -27,10 +27,10 @@ namespace PolygonEditor
         static List<Pixel> MidpointLine(int x1, int y1, int x2, int y2, Color color)
         {
             int dx = x2 - x1;
-            int dy = y2 - y1;
-            int d = 2 * dy - dx; //initial value of d
-            int incrE = 2 * dy; //increment used for move to E
-            int incrNE = 2 * (dy-dx); //increment used for move to NE
+            int dy = y1 - y2;
+            int d = 2 * dy - dx;
+            int incrE = 2 * dy;
+            int incrNE = 2 * (dy - dx);
             int x = x1;
             int y = y1;
 
@@ -47,11 +47,13 @@ namespace PolygonEditor
                 {
                     d += incrNE;
                     x++;
-                    y++;
+                    y--;
                 }
                 pixelsToReturn.Add(new Pixel(new Point(x, y), color));
             }
             return pixelsToReturn;
         }
+
+
     }
 }

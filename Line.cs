@@ -27,9 +27,9 @@ namespace PolygonEditor
             Update();
         }
 
-        public void SetP2(Point p1)
+        public void SetP2(Point p2)
         {
-            _p1 = p1;
+            _p2 = p2;
             Update();
         }
         public void SetColor(Color color)
