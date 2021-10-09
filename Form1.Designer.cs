@@ -55,9 +55,10 @@ namespace PolygonEditor
             // 
             // DrawingArea
             // 
-            this.DrawingArea.Location = new System.Drawing.Point(12, 12);
+            this.DrawingArea.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DrawingArea.Location = new System.Drawing.Point(0, 0);
             this.DrawingArea.Name = "DrawingArea";
-            this.DrawingArea.Size = new System.Drawing.Size(785, 737);
+            this.DrawingArea.Size = new System.Drawing.Size(800, 761);
             this.DrawingArea.TabIndex = 0;
             this.DrawingArea.TabStop = false;
             this.DrawingArea.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.DrawingArea_MouseDoubleClick);
