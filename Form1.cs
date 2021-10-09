@@ -14,7 +14,6 @@ namespace PolygonEditor
         private RasterGraphicsApplier pointsApplier;
         private List<RasterObject> rasterObjects;
         private ActionHandler activeActionHandler;
-        private Circle testCircle;
         
         public MainForm()
         {
@@ -45,9 +44,9 @@ namespace PolygonEditor
         {
             activeActionHandler?.Cancel();
             if (RadioButtonPolygonSelected.Checked)
-                activeActionHandler = new AddPolygonHandler(rasterObjects, textBoxHelper, PictureBoxSelectedColor.BackColor);
+                activeActionHandler = new AddPolygonHandler(rasterObjects, textBoxHelper, PictureBoxSelectedColor.BackColor, DrawingArea);
             else if (RadioButtonCircleSelected.Checked)
-                activeActionHandler = new AddCircleHandler(rasterObjects, textBoxHelper, PictureBoxSelectedColor.BackColor);
+                activeActionHandler = new AddCircleHandler(rasterObjects, textBoxHelper, PictureBoxSelectedColor.BackColor, DrawingArea);
             UpdateView();
         }
 
@@ -84,6 +83,12 @@ namespace PolygonEditor
                 activeActionHandler = null;
             }
             UpdateView();
+        }
+
+        private void ButtonDeleteObject_Click(object sender, EventArgs e)
+        {
+            activeActionHandler?.Cancel();
+            activeActionHandler = new RemoveRasterObjectHandler(rasterObjects, textBoxHelper, DrawingArea);
         }
     }
 }

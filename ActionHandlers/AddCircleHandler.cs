@@ -18,26 +18,29 @@ namespace PolygonEditor.ActionHandlers
         private Line _helpRadiusLine = new Line(Color.DarkGray);
         private List<RasterObject> _rasterObjects;
         private TextBox _helperTextBox;
+        private PictureBox _drawingArea;
 
-        public AddCircleHandler(List<RasterObject> rasterObjects, TextBox helperTextBox, Color circleColor)
+        public AddCircleHandler(List<RasterObject> rasterObjects, TextBox helperTextBox, Color circleColor, PictureBox drawingArea)
         {
             _rasterObjects = rasterObjects;
             _rasterObjects.Add(_helpRadiusLine);
             _helperTextBox = helperTextBox;
             _color = circleColor;
+            _drawingArea = drawingArea;
+            _drawingArea.Cursor = Cursors.Cross;
         }
 
         public void Cancel()
         {
-            _rasterObjects.Add(_helpRadiusLine);
+            Finish();
             _rasterObjects.Remove(_circle);
-            RemoveInstruction();
         }
 
         public void Finish()
         {
             _rasterObjects.Remove(_helpRadiusLine);
             RemoveInstruction();
+            _drawingArea.Cursor = Cursors.Default;
         }
 
         private void RemoveInstruction()

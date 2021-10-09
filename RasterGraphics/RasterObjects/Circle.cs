@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PolygonEditor.RasterGraphics.RasterObjects
 {
@@ -48,6 +49,16 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         {
             Center = center;
             Update();
+        }
+
+        public override Point? DetectObject(Point mousePoint, int radius)
+        {
+            if (ExtensionMethods.IsInCircle(mousePoint, Center, radius))
+                return Center;
+            int mouseCenterDist = ExtensionMethods.PixelDistance(mousePoint, Center);
+            if (mouseCenterDist <= Radius + radius && mouseCenterDist >= Radius - radius)
+                return mousePoint;
+            return null;
         }
     }
 }

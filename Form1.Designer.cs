@@ -81,6 +81,7 @@ namespace PolygonEditor
             // DrawingArea
             // 
             this.DrawingArea.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.DrawingArea.Cursor = System.Windows.Forms.Cursors.Default;
             this.DrawingArea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DrawingArea.Location = new System.Drawing.Point(0, 0);
             this.DrawingArea.Name = "DrawingArea";
@@ -214,6 +215,7 @@ namespace PolygonEditor
             this.ButtonDeleteObject.TabIndex = 2;
             this.ButtonDeleteObject.Text = "Delete";
             this.ButtonDeleteObject.UseVisualStyleBackColor = true;
+            this.ButtonDeleteObject.Click += new System.EventHandler(this.ButtonDeleteObject_Click);
             // 
             // ButtonEditObject
             // 

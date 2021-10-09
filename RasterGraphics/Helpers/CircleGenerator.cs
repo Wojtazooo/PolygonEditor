@@ -81,37 +81,5 @@ namespace PolygonEditor.RasterGraphics.Helpers
             }
             return pixelsToReturn;
         }
-
-        private static List<Pixel> MidpointCircle_2(Point center, int radius, Color color)
-        {
-            int delta1 = 3;
-            int delta2 = 5 - 2 * radius;
-            int d = 1 - radius;
-
-            int x = radius;
-            int y = 0;
-            
-            List<Pixel> pixelsToReturn = new List<Pixel>();
-            pixelsToReturn.Add(new Pixel(x, y, color));
-            while (x > y)
-            {
-                if (d < 0)
-                {
-                    d += delta1;
-                    delta1 += 2;
-                    delta2 += 2;
-                }
-                if (d > 0)
-                {
-                    d += delta2;
-                    delta1 += 2;
-                    delta2 += 4;
-                    x--;
-                }
-                y++;
-                pixelsToReturn.Add(new Pixel(x, y, color));
-            }
-            return pixelsToReturn;
-        }
     }
 }

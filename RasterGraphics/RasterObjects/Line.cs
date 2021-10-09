@@ -53,5 +53,10 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         {
             _pixels = LineGenerator.GetPixels(P1, P2, _color);
         }
+
+        public override Point? DetectObject(Point mousePoint, int radius)
+        {
+            return null;
+        }
     }
 }

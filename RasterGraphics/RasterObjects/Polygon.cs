@@ -50,5 +50,16 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             Color = color;
             Update();
         }
+
+        public override Point? DetectObject(Point mousePoint, int radius)
+        {
+            foreach (var v in Vertices)
+            {
+                if (ExtensionMethods.IsInCircle(mousePoint, v, Constants.DETECTION_RADIUS))
+                    return v;
+            }
+
+            return null;
+        }
     }
 }

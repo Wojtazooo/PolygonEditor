@@ -17,8 +17,9 @@ namespace PolygonEditor.ActionHandlers
         private Line helpLine2 = new Line(Color.DarkGray);
         private List<RasterObject> _rasterObjects;
         private TextBox _helperTextBox;
+        private PictureBox _drawingArea;
 
-        public AddPolygonHandler(List<RasterObject> rasterObjects, TextBox helperTextBox, Color polygonColor)
+        public AddPolygonHandler(List<RasterObject> rasterObjects, TextBox helperTextBox, Color polygonColor, PictureBox drawingArea)
         {
             _polygon = new Polygon(polygonColor);
             _rasterObjects = rasterObjects;
@@ -28,6 +29,8 @@ namespace PolygonEditor.ActionHandlers
             _helperTextBox = helperTextBox;
             _helperTextBox.Lines = InstructionTexts.AddPolygon;
             helperTextBox.ForeColor = Color.Red;
+            _drawingArea = drawingArea;
+            _drawingArea.Cursor = Cursors.Cross;
         }
 
         public void Cancel()
@@ -36,6 +39,7 @@ namespace PolygonEditor.ActionHandlers
             _rasterObjects.Remove(helpLine2);
             _rasterObjects.Remove(_polygon);
             RemoveInstruction();
+            _drawingArea.Cursor = Cursors.Default;
         }
 
         public void Finish()
@@ -45,6 +49,7 @@ namespace PolygonEditor.ActionHandlers
             if (_polygon.Vertices.Count < 3)
                 _rasterObjects.Remove(_polygon);
             RemoveInstruction();
+            _drawingArea.Cursor = Cursors.Default;
         }
 
         private void RemoveInstruction()
