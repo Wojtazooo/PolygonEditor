@@ -13,6 +13,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
     {
         public List<Point> Vertices { get; private set; }
         public Color Color { get; private set; }
+        public int VertexRadius = 5;
 
         public Polygon(Color color)
         {
@@ -31,7 +32,10 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         {
             var polygonPixels = new List<Pixel>();
             for (int v = 0; v < Vertices.Count; v++)
+            {
                 polygonPixels.AddRange(LineGenerator.GetPixels(Vertices[v], Vertices[(v + 1) % Vertices.Count], Color));
+                polygonPixels.AddRange(CircleGenerator.GetPixels(Vertices[v], VertexRadius, Color));
+            }
             _pixels = polygonPixels;
         }
 
@@ -41,7 +45,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             Update();
         }
 
-        public void setColor(Color color)
+        public void SetColor(Color color)
         {
             Color = color;
             Update();
