@@ -9,7 +9,6 @@ namespace PolygonEditor.RasterGraphics.Helpers
     {
         public static List<Pixel> GetPixels(Point p1, Point p2, Color color)
         {
-            List<Pixel> linePixels = new List<Pixel>();
             int dx = Math.Abs(p2.X - p1.X);
             int dy = Math.Abs(p2.Y - p1.Y);
 
