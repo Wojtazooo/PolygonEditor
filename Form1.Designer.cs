@@ -61,6 +61,7 @@ namespace PolygonEditor
             this.DrawingArea.TabIndex = 0;
             this.DrawingArea.TabStop = false;
             this.DrawingArea.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.DrawingArea_MouseDoubleClick);
+            this.DrawingArea.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DrawingArea_MouseMove);
             // 
             // MainForm
             // 

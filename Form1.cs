@@ -20,7 +20,11 @@ namespace PolygonEditor
         {
             InitializeComponent();
 
-            testLine = new Line(new Point(DrawingArea.Width/2, DrawingArea.Height/2), new Point(DrawingArea.Width / 2, DrawingArea.Height / 2), Color.Black);
+            testLine = new Line(
+                new Point(DrawingArea.Width / 2, DrawingArea.Height / 2), 
+                new Point(DrawingArea.Width / 2, DrawingArea.Height / 2), 
+                Color.Green
+                );
             testRasterObjects = new List<RasterObject>();
             testRasterObjects.Add(testLine);
 
@@ -31,6 +35,12 @@ namespace PolygonEditor
         private void UpdateView()
         {
             pointsApplier.Apply(testRasterObjects);
+        }
+
+        private void DrawingArea_MouseMove(object sender, MouseEventArgs e)
+        {
+            testLine.SetP2(new Point(e.X, e.Y));
+            UpdateView();
         }
 
         private void DrawingArea_MouseDoubleClick(object sender, MouseEventArgs e)
