@@ -21,7 +21,7 @@ namespace PolygonEditor.RasterGraphics.Helpers
             {
                 foreach(var p in o.GetPixels())
                 {
-                    if (p.X >= 0 && p.X <= bitmapToApply.Width && p.Y >= 0 && p.Y <= bitmapToApply.Height)
+                    if (p.X >= 0 && p.X < bitmapToApply.Width && p.Y >= 0 && p.Y < bitmapToApply.Height)
                     {
                         bitmapToApply.SetPixel(p.X, p.Y, p.Color);
                     }

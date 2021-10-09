@@ -15,6 +15,10 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         public int Radius { get; private set; }
         public Color Color { get; private set; }
 
+        public Circle(Color color)
+        {
+            Color = color;
+        }
         public Circle(Point center, int radius, Color color)
         {
             Center = center;
@@ -37,6 +41,12 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         public void SetColor(Color color)
         {
             Color = color;
+            Update();
+        }
+
+        public void SetCenter(Point center)
+        {
+            Center = center;
             Update();
         }
     }
