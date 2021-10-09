@@ -11,6 +11,11 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         public Point P2 { get; private set; }
         private Color _color;
 
+        public Line(Color color)
+        {
+            _color = color;
+        }
+
         public Line(Point p1, Point p2, Color color)
         {
             P1 = p1;
@@ -30,6 +35,14 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             P2 = p2;
             Update();
         }
+
+        public void SetP1AndP2(Point p1, Point p2)
+        {
+            P1 = p1;
+            P2 = p2;
+            Update();
+        }
+
         public void SetColor(Color color)
         {
             _color = color;

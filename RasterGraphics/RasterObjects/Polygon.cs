@@ -14,6 +14,12 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         public List<Point> Vertices { get; private set; }
         public Color Color { get; private set; }
 
+        public Polygon(Color color)
+        {
+            Vertices = new List<Point>();
+            Color = color;
+        }
+
         public Polygon(List<Point> vertices, Color color)
         {
             this.Vertices = vertices;

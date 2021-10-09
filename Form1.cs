@@ -9,63 +9,74 @@ namespace PolygonEditor
 {
     public partial class MainForm : System.Windows.Forms.Form
     {
-        private Line testLine;
-        private Line testLine2;
-        private Polygon testPolygon;
         private RasterGraphicsApplier pointsApplier;
-        private List<RasterObject> testRasterObjects;
+        private List<RasterObject> rasterObjects;
+        private ActionHandler activeActionHandler;
         
         public MainForm()
         {
             InitializeComponent();
             pointsApplier = new RasterGraphicsApplier(DrawingArea);
-            GenerateRasterObjects();
+            rasterObjects = new List<RasterObject>();
+            InitializeSelectedColor();
             UpdateView();
         }
 
-        public void GenerateRasterObjects()
+        public void InitializeSelectedColor()
         {
-            testLine = new Line(
-              new Point(0, 0),
-              new Point(0, 0),
-              Color.Gray
-              );
-            testLine2 = new Line(
-              new Point(0, 0),
-              new Point(0, 0),
-              Color.Gray
-              );
-
-            var polygonPoints = new List<Point>();
-            testPolygon = new Polygon(polygonPoints, Color.Blue);
-
-            testRasterObjects = new List<RasterObject>();
-            testRasterObjects.Add(testLine);
-            testRasterObjects.Add(testLine2);
-            testRasterObjects.Add(testPolygon);
+            PictureBoxSelectedColor.BackColor = Color.Black;
         }
 
         private void UpdateView()
         {
-            pointsApplier.Apply(testRasterObjects);
+            pointsApplier.Apply(rasterObjects);
         }
 
-        private void DrawingArea_MouseMove(object sender, MouseEventArgs e)
+        private void DrawingArea_MouseMove(object sender, MouseEventArgs mouseEventArgs)
         {
-            if (testPolygon.Vertices.Count > 0)
-                testLine2.SetP1(testPolygon.Vertices[0]);
-            testLine.SetP2(new Point(e.X, e.Y));
-            testLine2.SetP2(new Point(e.X, e.Y));
-
+            activeActionHandler?.HandleMouseMove(mouseEventArgs);
             UpdateView();
         }
 
-        private void DrawingArea_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void ButtonAddPolygon_Click(object sender, System.EventArgs e)
         {
-            var mousePoint = new Point(e.X, e.Y);
-            testLine.SetP1(testLine.P2);
-            testLine.SetP2(new Point(e.X, e.Y));
-            testPolygon.AddVertex(mousePoint);
+            activeActionHandler?.Cancel();
+            activeActionHandler = new AddPolygonHandler(rasterObjects, textBoxHelper, PictureBoxSelectedColor.BackColor);
+            UpdateView();
+        }
+
+        private void ButtonPickColor_Click(object sender, System.EventArgs e)
+        {
+            activeActionHandler?.Cancel();
+            activeActionHandler = null;
+            ColorDialog colorDialog = new ColorDialog();
+            colorDialog.AllowFullOpen = true;
+            colorDialog.ShowHelp = true;
+            colorDialog.Color = PictureBoxSelectedColor.BackColor;
+
+            if (colorDialog.ShowDialog() == DialogResult.OK)
+                PictureBoxSelectedColor.BackColor = colorDialog.Color;
+        }
+
+        private void DrawingArea_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                activeActionHandler?.HandleMouseClick(e);
+            else if (e.Button == MouseButtons.Right)
+            {
+                activeActionHandler?.Finish();
+                activeActionHandler = null;
+            }
+            UpdateView();
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Escape)
+            {
+                activeActionHandler?.Cancel();
+                activeActionHandler = null;
+            }
             UpdateView();
         }
     }
