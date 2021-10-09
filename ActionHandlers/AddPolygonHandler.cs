@@ -8,16 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace PolygonEditor
+namespace PolygonEditor.ActionHandlers
 {
-    public interface ActionHandler
-    {
-        void HandleMouseMove(MouseEventArgs e);
-        void HandleMouseClick(MouseEventArgs e);
-        void Finish();
-        void Cancel();
-    }
-
     public class AddPolygonHandler : ActionHandler
     {
         private Polygon _polygon;
@@ -54,7 +46,6 @@ namespace PolygonEditor
                 _rasterObjects.Remove(_polygon);
             RemoveInstruction();
         }
-
 
         private void RemoveInstruction()
         {
