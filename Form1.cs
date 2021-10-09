@@ -1,4 +1,5 @@
-﻿using PolygonEditor.RasterGraphics.Helpers;
+﻿using PolygonEditor.ActionHandlers;
+using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System.Collections.Generic;
