@@ -1,12 +1,9 @@
-﻿using System;
+﻿using PolygonEditor.RasterGraphics.Models;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace PolygonEditor
+namespace PolygonEditor.RasterGraphics.Helpers
 {
     class RasterGraphicsApplier
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PolygonEditor
+namespace PolygonEditor.RasterGraphics.Models
 {
     abstract class RasterObject
     {

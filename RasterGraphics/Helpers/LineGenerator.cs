@@ -1,12 +1,13 @@
-﻿using System;
+﻿using PolygonEditor.RasterGraphics.Models;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace PolygonEditor
+namespace PolygonEditor.RasterGraphics.Helpers
 {
-    public static class RasterGraphicsGenerator
+    public static class LineGenerator
     {
-        public static List<Pixel> GetLinePoints(Point p1, Point p2, Color color)
+        public static List<Pixel> GetPixels(Point p1, Point p2, Color color)
         {
             List<Pixel> linePixels = new List<Pixel>();
             int dx = Math.Abs(p2.X - p1.X);
@@ -15,12 +16,11 @@ namespace PolygonEditor
             int symetricByX = p1.X;
             int symetricXP2 = new Pixel(p2, color).GetSymetricPixelByX(symetricByX).X;
 
-
             if (p2.Y <= p1.Y) // 1-4/8
             {
-                if(p2.X > p1.X) // 1-2/8
+                if (p2.X > p1.X) // 1-2/8
                 {
-                    if(dx > dy) // 1/8
+                    if (dx > dy) // 1/8
                     {
                         return MidpointLine_NE_E(p1.X, p1.Y, p2.X, p2.Y, color);
                     }
@@ -41,7 +41,6 @@ namespace PolygonEditor
                         List<Pixel> symetricPixels = MidpointLine_N_NE(p1.X, p1.Y, symetricXP2, p2.Y, color);
                         return Pixel.GetPixelsSymetricByX(symetricPixels, symetricByX);
                     }
-
                 }
             }
             else // 5-8/8
@@ -63,7 +62,7 @@ namespace PolygonEditor
                 {
                     if (dx > dy) // 5/8
                     {
-                        return MidpointLine_NE_E( p2.X, p2.Y, p1.X, p1.Y, color); 
+                        return MidpointLine_NE_E(p2.X, p2.Y, p1.X, p1.Y, color);
                     }
                     else // 6/8
                     {

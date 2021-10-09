@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using PolygonEditor.RasterGraphics.Helpers;
+using PolygonEditor.RasterGraphics.Models;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PolygonEditor
+namespace PolygonEditor.RasterGraphics.RasterObjects
 {
     class Line : RasterObject
     {
@@ -40,7 +37,7 @@ namespace PolygonEditor
 
         void Update()
         {
-            _pixels = RasterGraphicsGenerator.GetLinePoints(_p1, _p2, _color);
+            _pixels = LineGenerator.GetPixels(_p1, _p2, _color);
         }
     }
 }
