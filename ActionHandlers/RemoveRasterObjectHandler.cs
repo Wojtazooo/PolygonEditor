@@ -38,9 +38,9 @@ namespace PolygonEditor.ActionHandlers
         public void HandleMouseClick(MouseEventArgs e)
         {
             _selectionHandler.HandleMouseClick(e);
-            if(_selectionHandler.clickeRasterObject != null)
+            if(_selectionHandler.clickedRasterObject != null)
             {
-                _rasterObjects.Remove(_selectionHandler.clickeRasterObject);
+                _rasterObjects.Remove(_selectionHandler.clickedRasterObject);
                 _selectionHandler.Cancel();
             }
         }

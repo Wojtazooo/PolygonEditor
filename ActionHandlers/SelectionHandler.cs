@@ -14,7 +14,7 @@ namespace PolygonEditor.ActionHandlers
         private List<RasterObject> _rasterObjects;
         private TextBox _helperTextBox;
         public RasterObject? detectedRasterObject { get; private set; }
-        public RasterObject? clickeRasterObject { get; private set; }
+        public RasterObject? clickedRasterObject { get; private set; }
 
         private PictureBox _drawingArea;
 
@@ -28,7 +28,7 @@ namespace PolygonEditor.ActionHandlers
         public void Cancel()
         {
             detectedRasterObject = null;
-            clickeRasterObject = null;
+            clickedRasterObject = null;
             _drawingArea.Cursor = Cursors.Default;
         }
 
@@ -41,7 +41,7 @@ namespace PolygonEditor.ActionHandlers
         {
             if(detectedRasterObject != null)
             {
-                clickeRasterObject = detectedRasterObject;
+                clickedRasterObject = detectedRasterObject;
             }
         }
 
