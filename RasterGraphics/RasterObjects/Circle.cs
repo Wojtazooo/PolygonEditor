@@ -55,7 +55,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         {
             if (ExtensionMethods.IsInCircle(mousePoint, Center, radius))
                 return Center;
-            int mouseCenterDist = ExtensionMethods.PixelDistance(mousePoint, Center);
+            int mouseCenterDist = (int)ExtensionMethods.PixelDistance(mousePoint, Center);
             if (mouseCenterDist <= Radius + radius && mouseCenterDist >= Radius - radius)
                 return mousePoint;
             return null;
