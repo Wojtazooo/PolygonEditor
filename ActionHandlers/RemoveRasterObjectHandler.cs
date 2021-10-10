@@ -56,6 +56,7 @@ namespace PolygonEditor.ActionHandlers
                     return;
                 }
             }
+            detectedRasterObject = null;
             _drawingArea.Cursor = Cursors.Default;
         }
     }
