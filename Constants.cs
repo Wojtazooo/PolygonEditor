@@ -10,5 +10,7 @@ namespace PolygonEditor
     {
         public const int DETECTION_RADIUS = 5;
         public const int REFRESH_TIME_IN_MS = 5;
+        public const int CROSS_WIDTH = 20;
+
     }
 }

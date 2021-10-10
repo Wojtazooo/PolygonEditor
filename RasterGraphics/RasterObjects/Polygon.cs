@@ -60,7 +60,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         {
             foreach (var v in Vertices)
             {
-                if (ExtensionMethods.IsInCircle(mousePoint, v, Constants.DETECTION_RADIUS))
+                if (ExtensionMethods.IsInCircle(mousePoint, v, radius))
                     return v;
             }
 
@@ -68,7 +68,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             {
                 Point currentV = Vertices[v];
                 Point nextV = Vertices[(v + 1) % Vertices.Count];
-                if (ExtensionMethods.IsPointInSegment(mousePoint, currentV, nextV, Constants.DETECTION_RADIUS))
+                if (ExtensionMethods.IsPointInSegment(mousePoint, currentV, nextV, radius))
                 {
                     return mousePoint;
                 }

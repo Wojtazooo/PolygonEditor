@@ -37,7 +37,7 @@ namespace PolygonEditor.ActionHandlers
 
         public bool HandleKeybordKeyClick(KeyEventArgs e)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public void HandleMouseClick(MouseEventArgs e)
@@ -52,7 +52,7 @@ namespace PolygonEditor.ActionHandlers
 
         public void HandleMouseMove(MouseEventArgs e)
         {
-            return false;
+            _selectionHandler.HandleMouseMove(e);
         }
     }
 }
