@@ -14,14 +14,23 @@ namespace PolygonEditor
         private RasterGraphicsApplier pointsApplier;
         private List<RasterObject> rasterObjects;
         private ActionHandler activeActionHandler;
+        private Timer _timer;
         
         public MainForm()
         {
             InitializeComponent();
-            pointsApplier = new RasterGraphicsApplier(DrawingArea);
             rasterObjects = new List<RasterObject>();
+            pointsApplier = new RasterGraphicsApplier(DrawingArea, rasterObjects);
             InitializeSelectedColor();
-            UpdateView();
+            InitializeRefreshTimer();
+        }
+
+        public void InitializeRefreshTimer()
+        {
+            _timer = new Timer();
+            _timer.Interval = Constants.REFRESH_TIME_IN_MS;
+            _timer.Tick += new EventHandler(UpdateView);
+            _timer.Start();
         }
 
         public void InitializeSelectedColor()
@@ -29,15 +38,14 @@ namespace PolygonEditor
             PictureBoxSelectedColor.BackColor = Color.Black;
         }
 
-        private void UpdateView()
+        private void UpdateView(object sender, EventArgs e)
         {
-            pointsApplier.Apply(rasterObjects);
+            pointsApplier.Apply();
         }
 
         private void DrawingArea_MouseMove(object sender, MouseEventArgs mouseEventArgs)
         {
             activeActionHandler?.HandleMouseMove(mouseEventArgs);
-            UpdateView();
         }
 
         private void ButtonAdd_Click(object sender, System.EventArgs e)
@@ -47,7 +55,6 @@ namespace PolygonEditor
                 activeActionHandler = new AddPolygonHandler(rasterObjects, textBoxHelper, PictureBoxSelectedColor.BackColor, DrawingArea);
             else if (RadioButtonCircleSelected.Checked)
                 activeActionHandler = new AddCircleHandler(rasterObjects, textBoxHelper, PictureBoxSelectedColor.BackColor, DrawingArea);
-            UpdateView();
         }
 
         private void ButtonPickColor_Click(object sender, System.EventArgs e)
@@ -72,7 +79,6 @@ namespace PolygonEditor
                 activeActionHandler?.Finish();
                 activeActionHandler = null;
             }
-            UpdateView();
         }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
@@ -82,7 +88,6 @@ namespace PolygonEditor
                 activeActionHandler?.Cancel();
                 activeActionHandler = null;
             }
-            UpdateView();
         }
 
         private void ButtonDeleteObject_Click(object sender, EventArgs e)

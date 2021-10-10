@@ -8,16 +8,19 @@ namespace PolygonEditor.RasterGraphics.Helpers
     class RasterGraphicsApplier
     {
         private PictureBox _picture;
-        public RasterGraphicsApplier(PictureBox picture)
+        private Bitmap bitmapToApply;
+        private List<RasterObject> _rasterObjects;
+        public RasterGraphicsApplier(PictureBox picture, List<RasterObject> rasterObjects)
         {
             _picture = picture;
+            _rasterObjects = rasterObjects;
         }
 
-        public void Apply(List<RasterObject> rasterObjects)
+        public void Apply()
         {
-            Bitmap bitmapToApply = new(_picture.Width, _picture.Height);
+            bitmapToApply = new(_picture.Width, _picture.Height);
 
-            foreach(var o in rasterObjects)
+            foreach(var o in _rasterObjects)
             {
                 foreach(var p in o.GetPixels())
                 {

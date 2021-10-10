@@ -93,7 +93,8 @@ namespace PolygonEditor
             // 
             // GroupBoxShapeSelect
             // 
-            this.GroupBoxShapeSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.GroupBoxShapeSelect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBoxShapeSelect.Controls.Add(this.RadioButtonCircleSelected);
             this.GroupBoxShapeSelect.Controls.Add(this.RadioButtonPolygonSelected);
             this.GroupBoxShapeSelect.Location = new System.Drawing.Point(11, 12);
@@ -156,6 +157,8 @@ namespace PolygonEditor
             // 
             // LabelCurrentColor
             // 
+            this.LabelCurrentColor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.LabelCurrentColor.AutoSize = true;
             this.LabelCurrentColor.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.LabelCurrentColor.Location = new System.Drawing.Point(69, 67);
@@ -168,7 +171,11 @@ namespace PolygonEditor
             // 
             // PictureBoxSelectedColor
             // 
+            this.PictureBoxSelectedColor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.PictureBoxSelectedColor.Location = new System.Drawing.Point(188, 67);
+            this.PictureBoxSelectedColor.MaximumSize = new System.Drawing.Size(37, 37);
+            this.PictureBoxSelectedColor.MinimumSize = new System.Drawing.Size(37, 37);
             this.PictureBoxSelectedColor.Name = "PictureBoxSelectedColor";
             this.PictureBoxSelectedColor.Size = new System.Drawing.Size(37, 37);
             this.PictureBoxSelectedColor.TabIndex = 2;
@@ -176,6 +183,8 @@ namespace PolygonEditor
             // 
             // ButtonPickColor
             // 
+            this.ButtonPickColor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonPickColor.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonPickColor.Image = global::PolygonEditor.Properties.Resources.color_wheel;
             this.ButtonPickColor.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -190,7 +199,8 @@ namespace PolygonEditor
             // 
             // ShapeOptionsGroupBox
             // 
-            this.ShapeOptionsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.ShapeOptionsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ShapeOptionsGroupBox.Controls.Add(this.ButtonDeleteObject);
             this.ShapeOptionsGroupBox.Controls.Add(this.ButtonEditObject);
             this.ShapeOptionsGroupBox.Controls.Add(this.ButtonAddObject);
@@ -205,13 +215,15 @@ namespace PolygonEditor
             // 
             // ButtonDeleteObject
             // 
+            this.ButtonDeleteObject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonDeleteObject.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonDeleteObject.Image = global::PolygonEditor.Properties.Resources.delete;
             this.ButtonDeleteObject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.ButtonDeleteObject.Location = new System.Drawing.Point(9, 123);
             this.ButtonDeleteObject.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonDeleteObject.Name = "ButtonDeleteObject";
-            this.ButtonDeleteObject.Size = new System.Drawing.Size(254, 37);
+            this.ButtonDeleteObject.Size = new System.Drawing.Size(257, 37);
             this.ButtonDeleteObject.TabIndex = 2;
             this.ButtonDeleteObject.Text = "Delete";
             this.ButtonDeleteObject.UseVisualStyleBackColor = true;
@@ -219,13 +231,15 @@ namespace PolygonEditor
             // 
             // ButtonEditObject
             // 
+            this.ButtonEditObject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonEditObject.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonEditObject.Image = global::PolygonEditor.Properties.Resources.pencil;
             this.ButtonEditObject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.ButtonEditObject.Location = new System.Drawing.Point(9, 74);
             this.ButtonEditObject.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonEditObject.Name = "ButtonEditObject";
-            this.ButtonEditObject.Size = new System.Drawing.Size(254, 37);
+            this.ButtonEditObject.Size = new System.Drawing.Size(257, 37);
             this.ButtonEditObject.TabIndex = 1;
             this.ButtonEditObject.Text = "Edit";
             this.ButtonEditObject.UseVisualStyleBackColor = true;
@@ -240,7 +254,7 @@ namespace PolygonEditor
             this.ButtonAddObject.Location = new System.Drawing.Point(9, 25);
             this.ButtonAddObject.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonAddObject.Name = "ButtonAddObject";
-            this.ButtonAddObject.Size = new System.Drawing.Size(254, 37);
+            this.ButtonAddObject.Size = new System.Drawing.Size(257, 37);
             this.ButtonAddObject.TabIndex = 0;
             this.ButtonAddObject.Text = "Add New";
             this.ButtonAddObject.UseVisualStyleBackColor = true;
