@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace PolygonEditor.RasterGraphics.Models
 {
-    public class Pixel
+    public class Pixel : RasterObject
     {
         public int X;
         public int Y;
@@ -11,6 +11,7 @@ namespace PolygonEditor.RasterGraphics.Models
 
         public Pixel(int x, int y, Color color)
         {
+            _pixels.Add(this);
             this.X = x;
             this.Y = y;
             this.Color = color;
@@ -18,6 +19,7 @@ namespace PolygonEditor.RasterGraphics.Models
 
         public Pixel(Point p, Color color)
         {
+            _pixels.Add(this);
             this.X = p.X;
             this.Y = p.Y;
             this.Color = color;
@@ -48,6 +50,19 @@ namespace PolygonEditor.RasterGraphics.Models
             foreach (var p in pixels)
                 ySymetricPixels.Add(p.GetSymetricPixelByY(y));
             return ySymetricPixels;
+        }
+
+        public override void Update()
+        {
+            return;
+        }
+
+        public override Point? DetectObject(Point mousePoint, int radius)
+        {
+            Point thisPoint = new Point(X, Y);
+            if (ExtensionMethods.IsInCircle(thisPoint, mousePoint, radius))
+                return thisPoint;
+            return null;
         }
     }
 }
