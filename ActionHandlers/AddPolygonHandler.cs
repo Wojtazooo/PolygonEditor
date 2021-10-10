@@ -60,7 +60,7 @@ namespace PolygonEditor.ActionHandlers
 
         public void HandleMouseMove(MouseEventArgs e)
         {
-            if(_polygon?.Vertices.Count > 1)
+            if(_polygon?.Vertices.Count >= 1)
             {
                 Point mousePoint = new Point(e.X, e.Y);
                 helpLine1.SetP1AndP2(_polygon.Vertices.First(), mousePoint);
@@ -79,6 +79,11 @@ namespace PolygonEditor.ActionHandlers
             {
                 Finish();
             }
+        }
+
+        public bool HandleKeybordKeyClick(KeyEventArgs e)
+        {
+            return false;
         }
     }
 }

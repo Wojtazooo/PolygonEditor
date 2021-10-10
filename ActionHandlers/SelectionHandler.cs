@@ -65,5 +65,10 @@ namespace PolygonEditor.ActionHandlers
         {
             _helperTextBox.Lines = InstructionTexts.Selection;
         }
+
+        public bool HandleKeybordKeyClick(KeyEventArgs e)
+        {
+            return false;
+        }
     }
 }

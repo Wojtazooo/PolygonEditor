@@ -83,10 +83,20 @@ namespace PolygonEditor
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Escape)
+            if (activeActionHandler != null && activeActionHandler.HandleKeybordKeyClick(e)) return;
+            
+            if (e.KeyCode == Keys.Escape)
             {
                 activeActionHandler?.Cancel();
                 activeActionHandler = null;
+            }
+            if(e.KeyCode == Keys.Delete)
+            {
+                ButtonDeleteObject_Click(null,null);
+            }
+            else if(e.KeyCode == Keys.E)
+            {
+                ButtonEditObject_Click(null,null);
             }
         }
 
@@ -109,6 +119,12 @@ namespace PolygonEditor
                     }
                 }
             }
+        }
+
+        private void ButtonEditObject_Click(object sender, EventArgs e)
+        {
+            activeActionHandler?.Cancel();
+            activeActionHandler = new EditPolygonHandler(rasterObjects, textBoxHelper, DrawingArea);
         }
     }
 }

@@ -76,5 +76,10 @@ namespace PolygonEditor.ActionHandlers
                 _circle.SetRadius(newRadius);
             }
         }
+
+        public bool HandleKeybordKeyClick(KeyEventArgs e)
+        {
+            return false;
+        }
     }
 }

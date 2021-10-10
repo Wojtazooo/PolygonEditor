@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace PolygonEditor.RasterGraphics.RasterObjects
 {
-    class Line : RasterObject
+    public class Line : RasterObject
     {
         public Point P1 { get; private set; }
         public Point P2 { get; private set; }

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace PolygonEditor.RasterGraphics.RasterObjects
 {
-    class Circle : RasterObject
+    public class Circle : RasterObject
     {
         public Point Center { get; private set; }
         public int Radius { get; private set; }

@@ -15,6 +15,10 @@ namespace PolygonEditor
             "Left Click: finish",
             "Escape: cancel"
         };
-
+        public readonly static string[] Selection = {
+            "Current option: Selection",
+            "",
+            "Right Click: Click to select object",
+        };
     }
 }

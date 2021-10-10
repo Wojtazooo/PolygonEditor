@@ -243,6 +243,7 @@ namespace PolygonEditor
             this.ButtonEditObject.TabIndex = 1;
             this.ButtonEditObject.Text = "Edit";
             this.ButtonEditObject.UseVisualStyleBackColor = true;
+            this.ButtonEditObject.Click += new System.EventHandler(this.ButtonEditObject_Click);
             // 
             // ButtonAddObject
             // 

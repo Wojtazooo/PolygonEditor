@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PolygonEditor.RasterGraphics.RasterObjects
 {
-    class Polygon : RasterObject
+    public class Polygon : RasterObject
     {
         public List<Point> Vertices { get; private set; }
         public Color Color { get; private set; }
@@ -33,7 +33,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             for (int v = 0; v < Vertices.Count; v++)
             {
                 polygonPixels.AddRange(LineGenerator.GetPixels(Vertices[v], Vertices[(v + 1) % Vertices.Count], Color));
-                polygonPixels.AddRange(CircleGenerator.GetPixels(Vertices[v], Constants.DETECTION_RADIUS, Color));
+                //polygonPixels.AddRange(CircleGenerator.GetPixels(Vertices[v], Constants.DETECTION_RADIUS, Color));
             }
             _pixels = polygonPixels;
         }
@@ -41,6 +41,12 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         public void AddVertex(Point vertex)
         {
             Vertices.Add(vertex);
+            Update();
+        }
+
+        public void RemoveVertex(Point vertex)
+        {
+            Vertices.Remove(vertex);
             Update();
         }
 
