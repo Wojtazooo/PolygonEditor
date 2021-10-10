@@ -55,7 +55,7 @@ namespace PolygonEditor.ActionHandlers
             {
                 Point mousePoint = new Point(e.X, e.Y);
                 Point circleCenter = _circle.Center;
-                int newRadius = ExtensionMethods.PixelDistance(mousePoint, circleCenter);
+                int newRadius = (int)ExtensionMethods.PixelDistance(mousePoint, circleCenter);
                 _circle.SetRadius(newRadius);
                 _helpRadiusLine.SetP1AndP2(_circle.Center, mousePoint);
             }
@@ -72,7 +72,7 @@ namespace PolygonEditor.ActionHandlers
             else
             {
                 Point circleCenter = _circle.Center;
-                int newRadius = ExtensionMethods.PixelDistance(clickedPoint, circleCenter);
+                int newRadius = (int)ExtensionMethods.PixelDistance(clickedPoint, circleCenter);
                 _circle.SetRadius(newRadius);
             }
         }
