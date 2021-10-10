@@ -18,11 +18,12 @@ namespace PolygonEditor.RasterGraphics.Helpers
 
         public void Apply()
         {
+            bitmapToApply?.Dispose();
             bitmapToApply = new(_picture.Width, _picture.Height);
 
-            foreach(var o in _rasterObjects)
+            foreach (var o in _rasterObjects)
             {
-                foreach(var p in o.GetPixels())
+                foreach (var p in o.GetPixels())
                 {
                     if (p.X >= 0 && p.X < bitmapToApply.Width && p.Y >= 0 && p.Y < bitmapToApply.Height)
                     {
