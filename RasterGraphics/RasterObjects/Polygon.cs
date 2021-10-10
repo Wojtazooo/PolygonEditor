@@ -58,6 +58,15 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
                     return v;
             }
 
+            for (int v = 0; v < Vertices.Count; v++)
+            {
+                Point currentV = Vertices[v];
+                Point nextV = Vertices[(v + 1) % Vertices.Count];
+                if (ExtensionMethods.IsPointInSegment(mousePoint, currentV, nextV, Constants.DETECTION_RADIUS))
+                {
+                    return mousePoint;
+                }
+            }
             return null;
         }
     }

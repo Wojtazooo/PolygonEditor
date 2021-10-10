@@ -9,12 +9,11 @@ namespace PolygonEditor
 {
     public static class ExtensionMethods
     {
-        public static int PixelDistance(Point p1, Point p2)
+        public static double PixelDistance(Point p1, Point p2)
         {
             int dx = p1.X - p2.X;
             int dy = p1.Y - p2.Y;
-            int distance = (int)Math.Sqrt(Math.Pow(dx, 2) + Math.Pow(dy, 2));
-            return distance;
+            return Math.Sqrt(Math.Pow(dx, 2) + Math.Pow(dy, 2));
         }
 
         public static bool IsInCircle(Point point, Point circleCenter, int radius)
@@ -24,9 +23,34 @@ namespace PolygonEditor
             return (Math.Pow(dx, 2) + Math.Pow(dy, 2) <= Math.Pow(radius, 2));
         }
 
-        public static int CountDistanceFromCircleCenterToLine(Point circleCenter, Point p1, Point p2)
+        public static double CountDistanceFromCircleCenterToLine(Point circleCenter, Point p1, Point p2)
         {
-            return 0;
+            if (p1.X == p2.X) 
+                return Math.Abs(p1.X - circleCenter.X);
+
+            double a = PixelDistance(p1, p2);
+            double b = PixelDistance(p1, circleCenter);
+            double c = PixelDistance(p2, circleCenter);
+
+            double p = (a + b + c) / 2;
+
+            double height = Math.Sqrt(p * (p - a) * (p - b) * (p - c))/a;
+            return height;
+        }
+
+        public static bool IsPointInSegment(Point circleCenter, Point p1, Point p2, int detectionRadius)
+        {
+            if (p1.X == p2.X) return Math.Abs(p1.X - circleCenter.X) < detectionRadius;
+
+            double a = PixelDistance(p1, p2);
+            double b = PixelDistance(p1, circleCenter);
+            double c = PixelDistance(p2, circleCenter);
+
+            double p = (a + b + c) / 2;
+
+            double height = Math.Sqrt(p * (p - a) * (p - b) * (p - c)) / a;
+
+            return height <= detectionRadius && a > b && a > c;
         }
     }
 }

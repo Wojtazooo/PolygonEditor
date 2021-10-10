@@ -95,5 +95,20 @@ namespace PolygonEditor
             activeActionHandler?.Cancel();
             activeActionHandler = new RemoveRasterObjectHandler(rasterObjects, textBoxHelper, DrawingArea);
         }
+
+        private void ShowWhereDetectionWorks()
+        {
+            for (int i = 0; i < DrawingArea.Width; i++)
+            {
+                for (int j = 0; j < DrawingArea.Height; j++)
+                {
+                    Point p = new Point(i, j);
+                    if (rasterObjects[0].DetectObject(p, Constants.DETECTION_RADIUS) != null)
+                    {
+                        rasterObjects.Add(new Pixel(p, Color.Red));
+                    }
+                }
+            }
+        }
     }
 }
