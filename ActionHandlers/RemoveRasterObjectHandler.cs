@@ -14,20 +14,20 @@ namespace PolygonEditor.ActionHandlers
     {
         private List<RasterObject> _rasterObjects;
         private TextBox _helperTextBox;
-        private RasterObject? detectedRasterObject = null;
         private PictureBox _drawingArea;
+        private SelectionHandler _selectionHandler;
 
         public RemoveRasterObjectHandler(List<RasterObject> rasterObjects, TextBox textBoxHelper, PictureBox drawingArea)
         {
             _rasterObjects = rasterObjects;
             _helperTextBox = textBoxHelper;
             _drawingArea = drawingArea;
+            _selectionHandler = new SelectionHandler(rasterObjects, textBoxHelper, drawingArea);
         }
 
         public void Cancel()
         {
             _drawingArea.Cursor = Cursors.Default;
-            detectedRasterObject = null;
         }
 
         public void Finish()
@@ -37,27 +37,17 @@ namespace PolygonEditor.ActionHandlers
 
         public void HandleMouseClick(MouseEventArgs e)
         {
-            if (detectedRasterObject != null)
+            _selectionHandler.HandleMouseClick(e);
+            if(_selectionHandler.clickeRasterObject != null)
             {
-                _rasterObjects.Remove(detectedRasterObject);
+                _rasterObjects.Remove(_selectionHandler.clickeRasterObject);
+                _selectionHandler.Cancel();
             }
         }
 
         public void HandleMouseMove(MouseEventArgs e)
         {
-            Point mousePoint = new Point(e.X, e.Y);
-            for(int i = 0; i < _rasterObjects.Count; i++)
-            {
-                var point = _rasterObjects[i].DetectObject(mousePoint, Constants.DETECTION_RADIUS);
-                if (point != null)
-                {
-                    _drawingArea.Cursor = Cursors.Hand;
-                    detectedRasterObject = _rasterObjects[i];
-                    return;
-                }
-            }
-            detectedRasterObject = null;
-            _drawingArea.Cursor = Cursors.Default;
+            _selectionHandler.HandleMouseMove(e);
         }
     }
 }
