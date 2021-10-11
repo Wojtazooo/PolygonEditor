@@ -14,7 +14,7 @@ namespace PolygonEditor.ActionHandlers
     {
         private List<RasterObject> _rasterObjects;
         private TextBox _helperTextBox;
-        private RasterObject? detectedRasterObject = null;
+        private RasterObject detectedRasterObject = null;
         private PictureBox _drawingArea;
 
         public RemoveRasterObjectHandler(List<RasterObject> rasterObjects, TextBox textBoxHelper, PictureBox drawingArea)

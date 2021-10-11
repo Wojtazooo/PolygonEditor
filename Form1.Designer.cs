@@ -43,6 +43,7 @@ namespace PolygonEditor
             this.ButtonDeleteObject = new System.Windows.Forms.Button();
             this.ButtonEditObject = new System.Windows.Forms.Button();
             this.ButtonAddObject = new System.Windows.Forms.Button();
+            this.ButtonMoveObject = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.formSplitter)).BeginInit();
             this.formSplitter.Panel1.SuspendLayout();
             this.formSplitter.Panel2.SuspendLayout();
@@ -134,12 +135,12 @@ namespace PolygonEditor
             this.textBoxHelper.Enabled = false;
             this.textBoxHelper.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBoxHelper.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.textBoxHelper.Location = new System.Drawing.Point(11, 413);
+            this.textBoxHelper.Location = new System.Drawing.Point(11, 468);
             this.textBoxHelper.Multiline = true;
             this.textBoxHelper.Name = "textBoxHelper";
             this.textBoxHelper.PlaceholderText = "Help text";
             this.textBoxHelper.ReadOnly = true;
-            this.textBoxHelper.Size = new System.Drawing.Size(275, 336);
+            this.textBoxHelper.Size = new System.Drawing.Size(275, 281);
             this.textBoxHelper.TabIndex = 2;
             // 
             // GroupBoxColorOptions
@@ -148,7 +149,7 @@ namespace PolygonEditor
             this.GroupBoxColorOptions.Controls.Add(this.LabelCurrentColor);
             this.GroupBoxColorOptions.Controls.Add(this.PictureBoxSelectedColor);
             this.GroupBoxColorOptions.Controls.Add(this.ButtonPickColor);
-            this.GroupBoxColorOptions.Location = new System.Drawing.Point(11, 286);
+            this.GroupBoxColorOptions.Location = new System.Drawing.Point(11, 341);
             this.GroupBoxColorOptions.Name = "GroupBoxColorOptions";
             this.GroupBoxColorOptions.Size = new System.Drawing.Size(275, 121);
             this.GroupBoxColorOptions.TabIndex = 1;
@@ -201,6 +202,7 @@ namespace PolygonEditor
             // 
             this.ShapeOptionsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.ShapeOptionsGroupBox.Controls.Add(this.ButtonMoveObject);
             this.ShapeOptionsGroupBox.Controls.Add(this.ButtonDeleteObject);
             this.ShapeOptionsGroupBox.Controls.Add(this.ButtonEditObject);
             this.ShapeOptionsGroupBox.Controls.Add(this.ButtonAddObject);
@@ -208,7 +210,7 @@ namespace PolygonEditor
             this.ShapeOptionsGroupBox.Location = new System.Drawing.Point(11, 102);
             this.ShapeOptionsGroupBox.Margin = new System.Windows.Forms.Padding(5);
             this.ShapeOptionsGroupBox.Name = "ShapeOptionsGroupBox";
-            this.ShapeOptionsGroupBox.Size = new System.Drawing.Size(275, 176);
+            this.ShapeOptionsGroupBox.Size = new System.Drawing.Size(275, 231);
             this.ShapeOptionsGroupBox.TabIndex = 0;
             this.ShapeOptionsGroupBox.TabStop = false;
             this.ShapeOptionsGroupBox.Text = "Shape Options";
@@ -260,6 +262,21 @@ namespace PolygonEditor
             this.ButtonAddObject.UseVisualStyleBackColor = true;
             this.ButtonAddObject.Click += new System.EventHandler(this.ButtonAdd_Click);
             // 
+            // ButtonMoveObject
+            // 
+            this.ButtonMoveObject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ButtonMoveObject.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonMoveObject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ButtonMoveObject.Location = new System.Drawing.Point(9, 172);
+            this.ButtonMoveObject.Margin = new System.Windows.Forms.Padding(6);
+            this.ButtonMoveObject.Name = "ButtonMoveObject";
+            this.ButtonMoveObject.Size = new System.Drawing.Size(257, 37);
+            this.ButtonMoveObject.TabIndex = 3;
+            this.ButtonMoveObject.Text = "Move";
+            this.ButtonMoveObject.UseVisualStyleBackColor = true;
+            this.ButtonMoveObject.Click += new System.EventHandler(this.ButtonMoveObject_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -305,6 +322,7 @@ namespace PolygonEditor
         private System.Windows.Forms.RadioButton RadioButtonPolygon;
         private System.Windows.Forms.GroupBox ShapeOptionsGroupBox;
         private System.Windows.Forms.RadioButton RadioButtonPolygonSelected;
+        private System.Windows.Forms.Button ButtonMoveObject;
     }
 }
 

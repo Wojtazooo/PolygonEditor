@@ -1,0 +1,81 @@
+﻿using PolygonEditor.RasterGraphics.Models;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace PolygonEditor.ActionHandlers
+{
+    class MoveRasterObjectHandler : ActionHandler
+    {
+        private List<RasterObject> _rasterObjects;
+        private RasterObject _selectedObject;
+        private RasterObject _copyObject;
+        private Point? _startedPoint;
+        private Point? _previousPoint;
+
+
+        public MoveRasterObjectHandler(List<RasterObject> rasterObjects)
+        {
+            _rasterObjects = rasterObjects;
+
+        }
+
+        public void Cancel()
+        {
+            _selectedObject = null;
+            _rasterObjects.Remove(_copyObject);
+        }
+
+        public void Finish()
+        {
+            Cancel();
+        }
+
+        public void HandleMouseClick(MouseEventArgs e)
+        {
+            Point mousePoint = new Point(e.X, e.Y);
+            if (_selectedObject == null)
+            {
+                foreach (var obj in _rasterObjects)
+                {
+                    Point? detectedPoint = obj.DetectObject(mousePoint, Constants.DETECTION_RADIUS);
+                    if (detectedPoint != null)
+                    {
+                        _selectedObject = obj;
+                        _startedPoint = mousePoint;
+                        _previousPoint = mousePoint;
+                        
+                    }
+                }
+
+                if (_selectedObject != null)
+                {
+                    _copyObject = _selectedObject.Clone();
+                    _copyObject.SetColor(Color.LightGray);
+                    _rasterObjects.Add(_copyObject);
+                }
+            }
+            else
+            {
+                _selectedObject.Move(_startedPoint.Value, mousePoint);
+                _selectedObject = null;
+                _rasterObjects.Remove(_copyObject);
+            }
+
+        }
+
+        public void HandleMouseMove(MouseEventArgs e)
+        {
+            Point mousePoint = new Point(e.X, e.Y);
+            if(_selectedObject != null)
+            {
+                _copyObject.Move(_previousPoint.Value, mousePoint);
+                _previousPoint = mousePoint;
+            }
+        }
+    }
+}

@@ -9,18 +9,14 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
     {
         public Point P1 { get; private set; }
         public Point P2 { get; private set; }
-        private Color _color;
+        
+        public Line(Color color): base(color) { }
 
-        public Line(Color color)
-        {
-            _color = color;
-        }
-
-        public Line(Point p1, Point p2, Color color)
+        public Line(Point p1, Point p2, Color color): base(color)
         {
             P1 = p1;
             P2 = p2;
-            _color = color;
+            Color = color;
             Update();
         }
 
@@ -43,20 +39,26 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             Update();
         }
 
-        public void SetColor(Color color)
-        {
-            _color = color;
-            Update();
-        }
-
         public override void Update()
         {
-            _pixels = LineGenerator.GetPixels(P1, P2, _color);
+            _pixels = LineGenerator.GetPixels(P1, P2, Color);
         }
 
         public override Point? DetectObject(Point mousePoint, int radius)
         {
             return null;
+        }
+
+        public override void Move(Point from, Point to)
+        {
+            Point newP1 = ExtensionMethods.MovePoint(P1, from, to);
+            Point newP2 = ExtensionMethods.MovePoint(P2, from, to);
+            SetP1AndP2(newP1, newP2);
+        }
+
+        public override RasterObject Clone()
+        {
+            return new Line(P1, P2, Color);
         }
     }
 }

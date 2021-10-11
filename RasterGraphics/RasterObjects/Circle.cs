@@ -14,17 +14,11 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
     {
         public Point Center { get; private set; }
         public int Radius { get; private set; }
-        public Color Color { get; private set; }
 
-        public Circle(Color color)
-        {
-            Color = color;
-        }
-        public Circle(Point center, int radius, Color color)
+        public Circle(Point center, int radius, Color color): base(color)
         {
             Center = center;
             Radius = radius;
-            Color = color;
             Update();
         }
 
@@ -36,12 +30,6 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         public void SetRadius(int newRadius)
         {
             Radius = newRadius;
-            Update();
-        }
-
-        public void SetColor(Color color)
-        {
-            Color = color;
             Update();
         }
 
@@ -59,6 +47,17 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             if (mouseCenterDist <= Radius + radius && mouseCenterDist >= Radius - radius)
                 return mousePoint;
             return null;
+        }
+
+        public override void Move(Point from, Point to)
+        {
+            Point newCenter = ExtensionMethods.MovePoint(Center, from, to);
+            this.SetCenter(newCenter);
+        }
+
+        public override RasterObject Clone()
+        {
+            return new Circle(Center, Radius, Color);
         }
     }
 }

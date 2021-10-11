@@ -52,5 +52,12 @@ namespace PolygonEditor
 
             return height <= detectionRadius && a > b && a > c;
         }
+
+        public static Point MovePoint(Point pointToMove, Point mouseFrom, Point mouseTo)
+        {
+            int dx = mouseTo.X - mouseFrom.X;
+            int dy = mouseTo.Y - mouseFrom.Y;
+            return new Point(pointToMove.X + dx, pointToMove.Y + dy);
+        }
     }
 }

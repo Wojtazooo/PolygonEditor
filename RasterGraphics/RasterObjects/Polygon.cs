@@ -12,18 +12,21 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
     class Polygon : RasterObject
     {
         public List<Point> Vertices { get; private set; }
-        public Color Color { get; private set; }
-
-        public Polygon(Color color)
+        
+        public Polygon(Color color): base(color)
         {
             Vertices = new List<Point>();
-            Color = color;
         }
 
-        public Polygon(List<Point> vertices, Color color)
+        public Polygon(List<Point> vertices, Color color): base(color)
         {
             this.Vertices = vertices;
-            Color = color;
+            Update();
+        }
+
+        public Polygon(Polygon polygon): base(polygon.Color)
+        {
+            Vertices = new List<Point>(polygon.Vertices);
             Update();
         }
 
@@ -41,12 +44,6 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         public void AddVertex(Point vertex)
         {
             Vertices.Add(vertex);
-            Update();
-        }
-
-        public void SetColor(Color color)
-        {
-            Color = color;
             Update();
         }
 
@@ -68,6 +65,21 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
                 }
             }
             return null;
+        }
+
+        public override void Move(Point from, Point to)
+        {
+            for(int v = 0; v < Vertices.Count; v++)
+            {
+                Point newV = ExtensionMethods.MovePoint(Vertices[v], from, to);
+                Vertices[v] = newV;
+            }
+            Update();
+        }
+
+        public override RasterObject Clone()
+        {
+            return new Polygon(this);
         }
     }
 }

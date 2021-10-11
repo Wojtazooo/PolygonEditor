@@ -110,5 +110,11 @@ namespace PolygonEditor
                 }
             }
         }
+
+        private void ButtonMoveObject_Click(object sender, EventArgs e)
+        {
+            activeActionHandler?.Cancel();
+            activeActionHandler = new MoveRasterObjectHandler(rasterObjects); 
+        }
     }
 }
