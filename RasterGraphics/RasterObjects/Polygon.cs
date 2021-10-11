@@ -72,12 +72,35 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             return null;
         }
 
+        public Point? isVertexClicked(Point mousePoint)
+        {
+            foreach (var v in Vertices)
+            {
+                if (ExtensionMethods.IsInCircle(mousePoint, v, Constants.DETECTION_RADIUS))
+                    return v;
+            }
+            return null;
+        }
+
         public override void Move(Point from, Point to)
         {
             for(int v = 0; v < Vertices.Count; v++)
             {
                 Point newV = ExtensionMethods.MovePoint(Vertices[v], from, to);
                 Vertices[v] = newV;
+            }
+            Update();
+        }
+
+        public void MoveVertex(Point vertex, Point to)
+        {
+            if (!Vertices.Contains(vertex)) return;
+
+            Point movedPoint = ExtensionMethods.MovePoint(vertex, vertex, to);
+            for(int i = 0; i < Vertices.Count; i++)
+            {
+                if (Vertices[i] == vertex)
+                    Vertices[i] = movedPoint;
             }
             Update();
         }
