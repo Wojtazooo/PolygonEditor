@@ -30,10 +30,18 @@ namespace PolygonEditor.ActionHandlers
             _drawingArea.Cursor = Cursors.Cross;
         }
 
+        public void Submit()
+        {
+            _rasterObjects.Remove(_helpRadiusLine);
+            _helpRadiusLine = new Line(Color.DarkGray);
+            _rasterObjects.Add(_helpRadiusLine);
+            _circle = null;
+        }
+
         public void Cancel()
         {
-            Finish();
             _rasterObjects.Remove(_circle);
+            Submit();
         }
 
         public void Finish()
@@ -71,9 +79,7 @@ namespace PolygonEditor.ActionHandlers
             }
             else
             {
-                Point circleCenter = _circle.Center;
-                int newRadius = (int)ExtensionMethods.PixelDistance(clickedPoint, circleCenter);
-                _circle.SetRadius(newRadius);
+                Submit();
             }
         }
 

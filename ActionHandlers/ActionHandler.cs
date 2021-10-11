@@ -12,7 +12,8 @@ namespace PolygonEditor.ActionHandlers
         void HandleMouseMove(MouseEventArgs e);
         void HandleMouseClick(MouseEventArgs e);
         bool HandleKeybordKeyClick(KeyEventArgs e); // returns true if key click was handled
-        void Finish();
-        void Cancel();
+        void Finish() { }
+        void Cancel() { }
+        void Submit() { }
     }
 }

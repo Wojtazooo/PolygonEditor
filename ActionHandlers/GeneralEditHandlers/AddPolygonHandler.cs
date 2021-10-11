@@ -33,6 +33,18 @@ namespace PolygonEditor.ActionHandlers
             _drawingArea.Cursor = Cursors.Cross;
         }
 
+        public void Submit()
+        {
+            _rasterObjects.Remove(helpLine1);
+            _rasterObjects.Remove(helpLine2);
+            _polygon = new Polygon(_polygon.Color);
+            _rasterObjects.Add(_polygon);
+            helpLine1 = new Line(Color.DarkGray);
+            helpLine2 = new Line(Color.DarkGray);
+            _rasterObjects.Add(helpLine1);
+            _rasterObjects.Add(helpLine2);
+        }
+
         public void Cancel()
         {
             _rasterObjects.Remove(helpLine1);

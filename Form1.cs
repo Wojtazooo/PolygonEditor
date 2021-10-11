@@ -48,18 +48,15 @@ namespace PolygonEditor
             activeActionHandler?.HandleMouseMove(mouseEventArgs);
         }
 
-        private void ButtonAdd_Click(object sender, System.EventArgs e)
+        private void ButtonAddPolygon_Click(object sender, System.EventArgs e)
         {
-            activeActionHandler?.Cancel();
-            if (RadioButtonPolygonSelected.Checked)
-                activeActionHandler = new AddPolygonHandler(rasterObjects, textBoxHelper, PictureBoxSelectedColor.BackColor, DrawingArea);
-            else if (RadioButtonCircleSelected.Checked)
-                activeActionHandler = new AddCircleHandler(rasterObjects, textBoxHelper, PictureBoxSelectedColor.BackColor, DrawingArea);
+            activeActionHandler?.Finish();
+            activeActionHandler = new AddPolygonHandler(rasterObjects, textBoxHelper, PictureBoxSelectedColor.BackColor, DrawingArea);
         }
 
         private void ButtonPickColor_Click(object sender, System.EventArgs e)
         {
-            activeActionHandler?.Cancel();
+            activeActionHandler?.Finish();
             activeActionHandler = null;
             ColorDialog colorDialog = new ColorDialog();
             colorDialog.AllowFullOpen = true;
@@ -76,8 +73,7 @@ namespace PolygonEditor
                 activeActionHandler?.HandleMouseClick(e);
             else if (e.Button == MouseButtons.Right)
             {
-                activeActionHandler?.Finish();
-                activeActionHandler = null;
+                activeActionHandler?.Submit();
             }
         }
 
@@ -102,7 +98,7 @@ namespace PolygonEditor
 
         private void ButtonDeleteObject_Click(object sender, EventArgs e)
         {
-            activeActionHandler?.Cancel();
+            activeActionHandler?.Finish();
             activeActionHandler = new RemoveRasterObjectHandler(rasterObjects, textBoxHelper, DrawingArea);
         }
 
@@ -123,13 +119,19 @@ namespace PolygonEditor
 
         private void ButtonEditObject_Click(object sender, EventArgs e)
         {
-            activeActionHandler?.Cancel();
+            activeActionHandler?.Finish();
             activeActionHandler = new EditPolygonHandler(rasterObjects, textBoxHelper, DrawingArea);
         }
  		private void ButtonMoveObject_Click(object sender, EventArgs e)
         {
-            activeActionHandler?.Cancel();
+            activeActionHandler?.Finish();
             activeActionHandler = new MoveRasterObjectHandler(rasterObjects, DrawingArea); 
+        }
+
+        private void ButtonAddCircle_Click(object sender, EventArgs e)
+        {
+            activeActionHandler?.Finish();
+            activeActionHandler = new AddCircleHandler(rasterObjects, textBoxHelper, PictureBoxSelectedColor.BackColor, DrawingArea);
         }
     }
 }
