@@ -16,11 +16,13 @@ namespace PolygonEditor.ActionHandlers
         private RasterObject _copyObject;
         private Point? _startedPoint;
         private Point? _previousPoint;
+        private PictureBox _drawingArea;
 
 
-        public MoveRasterObjectHandler(List<RasterObject> rasterObjects)
+        public MoveRasterObjectHandler(List<RasterObject> rasterObjects, PictureBox drawingArea)
         {
             _rasterObjects = rasterObjects;
+            _drawingArea = drawingArea;
 
         }
 
@@ -48,12 +50,15 @@ namespace PolygonEditor.ActionHandlers
                         _selectedObject = obj;
                         _startedPoint = mousePoint;
                         _previousPoint = mousePoint;
-                        
+                    }
+                    else
+                    {
                     }
                 }
 
                 if (_selectedObject != null)
                 {
+                    _drawingArea.Cursor = Cursors.SizeAll;
                     _copyObject = _selectedObject.Clone();
                     _copyObject.SetColor(Color.LightGray);
                     _rasterObjects.Add(_copyObject);
@@ -61,6 +66,7 @@ namespace PolygonEditor.ActionHandlers
             }
             else
             {
+                _drawingArea.Cursor = Cursors.Default;
                 _selectedObject.Move(_startedPoint.Value, mousePoint);
                 _selectedObject = null;
                 _rasterObjects.Remove(_copyObject);
@@ -75,6 +81,26 @@ namespace PolygonEditor.ActionHandlers
             {
                 _copyObject.Move(_previousPoint.Value, mousePoint);
                 _previousPoint = mousePoint;
+            }
+            else
+            {
+                Point? detectedPoint = null;
+                foreach (var obj in _rasterObjects)
+                {
+                    detectedPoint = obj.DetectObject(mousePoint, Constants.DETECTION_RADIUS);
+                    if (detectedPoint != null)
+                    {
+                        break;
+                    }
+                }
+                if(detectedPoint.HasValue)
+                {
+                    _drawingArea.Cursor = Cursors.Hand;
+                }
+                else
+                {
+                    _drawingArea.Cursor = Cursors.Default;
+                }
             }
         }
     }

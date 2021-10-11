@@ -40,10 +40,10 @@ namespace PolygonEditor
             this.PictureBoxSelectedColor = new System.Windows.Forms.PictureBox();
             this.ButtonPickColor = new System.Windows.Forms.Button();
             this.ShapeOptionsGroupBox = new System.Windows.Forms.GroupBox();
+            this.ButtonMoveObject = new System.Windows.Forms.Button();
             this.ButtonDeleteObject = new System.Windows.Forms.Button();
             this.ButtonEditObject = new System.Windows.Forms.Button();
             this.ButtonAddObject = new System.Windows.Forms.Button();
-            this.ButtonMoveObject = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.formSplitter)).BeginInit();
             this.formSplitter.Panel1.SuspendLayout();
             this.formSplitter.Panel2.SuspendLayout();
@@ -215,6 +215,21 @@ namespace PolygonEditor
             this.ShapeOptionsGroupBox.TabStop = false;
             this.ShapeOptionsGroupBox.Text = "Shape Options";
             // 
+            // ButtonMoveObject
+            // 
+            this.ButtonMoveObject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ButtonMoveObject.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonMoveObject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ButtonMoveObject.Location = new System.Drawing.Point(9, 172);
+            this.ButtonMoveObject.Margin = new System.Windows.Forms.Padding(6);
+            this.ButtonMoveObject.Name = "ButtonMoveObject";
+            this.ButtonMoveObject.Size = new System.Drawing.Size(257, 37);
+            this.ButtonMoveObject.TabIndex = 3;
+            this.ButtonMoveObject.Text = "Move";
+            this.ButtonMoveObject.UseVisualStyleBackColor = true;
+            this.ButtonMoveObject.Click += new System.EventHandler(this.ButtonMoveObject_Click);
+            // 
             // ButtonDeleteObject
             // 
             this.ButtonDeleteObject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -262,21 +277,6 @@ namespace PolygonEditor
             this.ButtonAddObject.UseVisualStyleBackColor = true;
             this.ButtonAddObject.Click += new System.EventHandler(this.ButtonAdd_Click);
             // 
-            // ButtonMoveObject
-            // 
-            this.ButtonMoveObject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonMoveObject.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ButtonMoveObject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonMoveObject.Location = new System.Drawing.Point(9, 172);
-            this.ButtonMoveObject.Margin = new System.Windows.Forms.Padding(6);
-            this.ButtonMoveObject.Name = "ButtonMoveObject";
-            this.ButtonMoveObject.Size = new System.Drawing.Size(257, 37);
-            this.ButtonMoveObject.TabIndex = 3;
-            this.ButtonMoveObject.Text = "Move";
-            this.ButtonMoveObject.UseVisualStyleBackColor = true;
-            this.ButtonMoveObject.Click += new System.EventHandler(this.ButtonMoveObject_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -287,6 +287,7 @@ namespace PolygonEditor
             this.MinimumSize = new System.Drawing.Size(1200, 800);
             this.Name = "MainForm";
             this.Text = "Polygon Editor";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.formSplitter.Panel1.ResumeLayout(false);
             this.formSplitter.Panel2.ResumeLayout(false);
