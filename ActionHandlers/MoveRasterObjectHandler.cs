@@ -30,11 +30,17 @@ namespace PolygonEditor.ActionHandlers
         {
             _selectedObject = null;
             _rasterObjects.Remove(_copyObject);
+            _drawingArea.Cursor = Cursors.Default;
         }
 
         public void Finish()
         {
             Cancel();
+        }
+
+        public bool HandleKeybordKeyClick(KeyEventArgs e)
+        {
+            return false;
         }
 
         public void HandleMouseClick(MouseEventArgs e)

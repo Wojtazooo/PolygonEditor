@@ -13,13 +13,10 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
     {
         public Point Center { get; private set; }
         public int Width { get; private set; }
-        public Color Color { get; private set; }
-
-        public Cross(Point center, int width, Color color)
+        public Cross(Point center, int width, Color color): base(color)
         {
             Center = center;
             Width = width;
-            Color = color;
             Update();
         }
         public override Point? DetectObject(Point mousePoint, int radius)
@@ -42,6 +39,18 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 
             _pixels.AddRange(firstLine);
             _pixels.AddRange(secondLine);
+        }
+
+        public override void Move(Point from, Point to)
+        {
+            Point movedCenter = ExtensionMethods.MovePoint(Center, from, to);
+            Center = movedCenter;
+            Update();
+        }
+
+        public override RasterObject Clone()
+        {
+            return new Cross(Center, Width, Color);
         }
     }
 }

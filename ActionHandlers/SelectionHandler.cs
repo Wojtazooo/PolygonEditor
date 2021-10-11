@@ -13,8 +13,8 @@ namespace PolygonEditor.ActionHandlers
     {
         private List<RasterObject> _rasterObjects;
         private TextBox _helperTextBox;
-        public RasterObject? detectedRasterObject { get; private set; }
-        public RasterObject? clickedRasterObject { get; private set; }
+        public RasterObject detectedRasterObject { get; private set; }
+        public RasterObject clickedRasterObject { get; private set; }
 
         private PictureBox _drawingArea;
 
