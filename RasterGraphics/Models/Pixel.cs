@@ -7,22 +7,19 @@ namespace PolygonEditor.RasterGraphics.Models
     {
         public int X;
         public int Y;
-        public Color Color;
-
-        public Pixel(int x, int y, Color color)
+         
+        public Pixel(int x, int y, Color color): base(color)
         {
             _pixels.Add(this);
             this.X = x;
             this.Y = y;
-            this.Color = color;
         }
 
-        public Pixel(Point p, Color color)
+        public Pixel(Point p, Color color): base(color)
         {
             _pixels.Add(this);
             this.X = p.X;
             this.Y = p.Y;
-            this.Color = color;
         }
 
         public Pixel GetSymetricPixelByX(int x)
@@ -63,6 +60,17 @@ namespace PolygonEditor.RasterGraphics.Models
             if (ExtensionMethods.IsInCircle(thisPoint, mousePoint, radius))
                 return thisPoint;
             return null;
+        }
+
+        public override void Move(Point from, Point to)
+        {
+            _pixels.Clear();
+            _pixels.Add(new Pixel(to, Color));
+        }
+
+        public override RasterObject Clone()
+        {
+            return new Pixel(X, Y, Color);
         }
     }
 }

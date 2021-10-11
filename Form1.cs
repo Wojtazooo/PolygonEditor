@@ -125,6 +125,11 @@ namespace PolygonEditor
         {
             activeActionHandler?.Cancel();
             activeActionHandler = new EditPolygonHandler(rasterObjects, textBoxHelper, DrawingArea);
+       
+ 		private void ButtonMoveObject_Click(object sender, EventArgs e)
+        {
+            activeActionHandler?.Cancel();
+            activeActionHandler = new MoveRasterObjectHandler(rasterObjects, DrawingArea); 
         }
     }
 }
