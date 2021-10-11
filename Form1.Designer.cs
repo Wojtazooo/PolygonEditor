@@ -46,10 +46,10 @@ namespace PolygonEditor
             this.ButtonPickColor = new System.Windows.Forms.Button();
             this.ShapeOptionsGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.MoveSegmentButton = new System.Windows.Forms.Button();
-            this.MoveVertexButton = new System.Windows.Forms.Button();
-            this.ButtonAddPolygon = new System.Windows.Forms.Button();
             this.ButtonRemoveVertex = new System.Windows.Forms.Button();
+            this.MoveSegmentButton = new System.Windows.Forms.Button();
+            this.ButtonMoveVertex = new System.Windows.Forms.Button();
+            this.ButtonAddPolygon = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.formSplitter)).BeginInit();
             this.formSplitter.Panel1.SuspendLayout();
             this.formSplitter.Panel2.SuspendLayout();
@@ -101,7 +101,9 @@ namespace PolygonEditor
             this.DrawingArea.TabIndex = 0;
             this.DrawingArea.TabStop = false;
             this.DrawingArea.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DrawingArea_MouseClick);
+            this.DrawingArea.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrawingArea_MouseDown);
             this.DrawingArea.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DrawingArea_MouseMove);
+            this.DrawingArea.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DrawingArea_MouseUp);
             // 
             // groupBox1
             // 
@@ -312,7 +314,7 @@ namespace PolygonEditor
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.37594F));
             this.tableLayoutPanel2.Controls.Add(this.ButtonRemoveVertex, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.MoveSegmentButton, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.MoveVertexButton, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.ButtonMoveVertex, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.ButtonAddPolygon, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 19);
@@ -323,6 +325,22 @@ namespace PolygonEditor
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 53F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(399, 163);
             this.tableLayoutPanel2.TabIndex = 0;
+            // 
+            // ButtonRemoveVertex
+            // 
+            this.ButtonRemoveVertex.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ButtonRemoveVertex.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonRemoveVertex.Image = global::PolygonEditor.Properties.Resources.delete;
+            this.ButtonRemoveVertex.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ButtonRemoveVertex.Location = new System.Drawing.Point(6, 115);
+            this.ButtonRemoveVertex.Margin = new System.Windows.Forms.Padding(6);
+            this.ButtonRemoveVertex.Name = "ButtonRemoveVertex";
+            this.ButtonRemoveVertex.Size = new System.Drawing.Size(186, 37);
+            this.ButtonRemoveVertex.TabIndex = 3;
+            this.ButtonRemoveVertex.Text = "Remove Vertex";
+            this.ButtonRemoveVertex.UseVisualStyleBackColor = true;
+            this.ButtonRemoveVertex.Click += new System.EventHandler(this.ButtonRemoveVertex_Click);
             // 
             // MoveSegmentButton
             // 
@@ -339,21 +357,21 @@ namespace PolygonEditor
             this.MoveSegmentButton.Text = "Move Segment";
             this.MoveSegmentButton.UseVisualStyleBackColor = true;
             // 
-            // MoveVertexButton
+            // ButtonMoveVertex
             // 
-            this.MoveVertexButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.ButtonMoveVertex.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.MoveVertexButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.MoveVertexButton.Image = global::PolygonEditor.Properties.Resources.pencil;
-            this.MoveVertexButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.MoveVertexButton.Location = new System.Drawing.Point(204, 6);
-            this.MoveVertexButton.Margin = new System.Windows.Forms.Padding(6);
-            this.MoveVertexButton.Name = "MoveVertexButton";
-            this.MoveVertexButton.Size = new System.Drawing.Size(189, 37);
-            this.MoveVertexButton.TabIndex = 1;
-            this.MoveVertexButton.Text = "Move Vertex";
-            this.MoveVertexButton.UseVisualStyleBackColor = true;
-            this.MoveVertexButton.Click += new System.EventHandler(this.ButtonEditObject_Click);
+            this.ButtonMoveVertex.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonMoveVertex.Image = global::PolygonEditor.Properties.Resources.pencil;
+            this.ButtonMoveVertex.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ButtonMoveVertex.Location = new System.Drawing.Point(204, 6);
+            this.ButtonMoveVertex.Margin = new System.Windows.Forms.Padding(6);
+            this.ButtonMoveVertex.Name = "ButtonMoveVertex";
+            this.ButtonMoveVertex.Size = new System.Drawing.Size(189, 37);
+            this.ButtonMoveVertex.TabIndex = 1;
+            this.ButtonMoveVertex.Text = "Move Vertex";
+            this.ButtonMoveVertex.UseVisualStyleBackColor = true;
+            this.ButtonMoveVertex.Click += new System.EventHandler(this.ButtonMoveVertex_Click);
             // 
             // ButtonAddPolygon
             // 
@@ -370,21 +388,6 @@ namespace PolygonEditor
             this.ButtonAddPolygon.Text = "Add Polygon";
             this.ButtonAddPolygon.UseVisualStyleBackColor = true;
             this.ButtonAddPolygon.Click += new System.EventHandler(this.ButtonAddPolygon_Click);
-            // 
-            // ButtonRemoveVertex
-            // 
-            this.ButtonRemoveVertex.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonRemoveVertex.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ButtonRemoveVertex.Image = global::PolygonEditor.Properties.Resources.delete;
-            this.ButtonRemoveVertex.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonRemoveVertex.Location = new System.Drawing.Point(6, 115);
-            this.ButtonRemoveVertex.Margin = new System.Windows.Forms.Padding(6);
-            this.ButtonRemoveVertex.Name = "ButtonRemoveVertex";
-            this.ButtonRemoveVertex.Size = new System.Drawing.Size(186, 37);
-            this.ButtonRemoveVertex.TabIndex = 3;
-            this.ButtonRemoveVertex.Text = "Remove Vertex";
-            this.ButtonRemoveVertex.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -422,7 +425,7 @@ namespace PolygonEditor
         private System.Windows.Forms.SplitContainer formSplitter;
         private System.Windows.Forms.PictureBox DrawingArea;
         private System.Windows.Forms.Button ButtonDeleteObject;
-        private System.Windows.Forms.Button MoveVertexButton;
+        private System.Windows.Forms.Button ButtonMoveVertex;
         private System.Windows.Forms.Button ButtonAddPolygon;
         private System.Windows.Forms.GroupBox GroupBoxColorOptions;
         private System.Windows.Forms.Label LabelCurrentColor;

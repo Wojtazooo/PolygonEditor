@@ -32,11 +32,6 @@ namespace PolygonEditor.ActionHandlers
             _drawingArea.Cursor = Cursors.Default;
         }
 
-        public void Finish()
-        {
-            return;
-        }
-
         public void HandleMouseClick(MouseEventArgs e)
         {
             if(detectedRasterObject != null)
@@ -64,11 +59,6 @@ namespace PolygonEditor.ActionHandlers
         public void InsertInstructions()
         {
             _helperTextBox.Lines = InstructionTexts.Selection;
-        }
-
-        public bool HandleKeybordKeyClick(KeyEventArgs e)
-        {
-            return false;
         }
     }
 }

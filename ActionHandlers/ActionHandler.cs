@@ -9,9 +9,11 @@ namespace PolygonEditor.ActionHandlers
 {
     interface ActionHandler
     {
-        void HandleMouseMove(MouseEventArgs e);
-        void HandleMouseClick(MouseEventArgs e);
-        bool HandleKeybordKeyClick(KeyEventArgs e); // returns true if key click was handled
+        void HandleMouseMove(MouseEventArgs e) { }
+        void HandleMouseClick(MouseEventArgs e) { }
+        void HandleMouseUp(MouseEventArgs e) { }
+        void HandleMouseDown(MouseEventArgs e) { }
+        bool HandleKeybordKeyClick(KeyEventArgs e) { return false; }// returns true if key click was handled
         void Finish() { }
         void Cancel() { }
         void Submit() { }
