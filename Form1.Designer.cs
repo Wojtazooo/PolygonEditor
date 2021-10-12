@@ -354,8 +354,9 @@ namespace PolygonEditor
             this.MoveSegmentButton.Name = "MoveSegmentButton";
             this.MoveSegmentButton.Size = new System.Drawing.Size(186, 37);
             this.MoveSegmentButton.TabIndex = 2;
-            this.MoveSegmentButton.Text = "Move Segment";
+            this.MoveSegmentButton.Text = "Move Edge";
             this.MoveSegmentButton.UseVisualStyleBackColor = true;
+            this.MoveSegmentButton.Click += new System.EventHandler(this.MoveSegmentButton_Click);
             // 
             // ButtonMoveVertex
             // 

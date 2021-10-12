@@ -16,7 +16,7 @@ namespace PolygonEditor.RasterGraphics.Models
         }
         abstract public void Update();
         abstract public Point? DetectObject(Point mousePoint, int radius);
-        abstract public void Move(Point from, Point to);
+        abstract public void MovePolygon(Point from, Point to);
         abstract public RasterObject Clone();
     }
 }

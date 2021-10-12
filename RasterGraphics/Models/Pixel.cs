@@ -62,7 +62,7 @@ namespace PolygonEditor.RasterGraphics.Models
             return null;
         }
 
-        public override void Move(Point from, Point to)
+        public override void MovePolygon(Point from, Point to)
         {
             _pixels.Clear();
             _pixels.Add(new Pixel(to, Color));

@@ -73,7 +73,7 @@ namespace PolygonEditor.ActionHandlers
             else
             {
                 _drawingArea.Cursor = Cursors.Default;
-                _selectedObject.Move(_startedPoint.Value, mousePoint);
+                _selectedObject.MovePolygon(_startedPoint.Value, mousePoint);
                 _selectedObject = null;
                 _rasterObjects.Remove(_copyObject);
             }
@@ -85,7 +85,7 @@ namespace PolygonEditor.ActionHandlers
             Point mousePoint = new Point(e.X, e.Y);
             if(_selectedObject != null)
             {
-                _copyObject.Move(_previousPoint.Value, mousePoint);
+                _copyObject.MovePolygon(_previousPoint.Value, mousePoint);
                 _previousPoint = mousePoint;
             }
             else

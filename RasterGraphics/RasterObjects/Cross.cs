@@ -41,7 +41,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             _pixels.AddRange(secondLine);
         }
 
-        public override void Move(Point from, Point to)
+        public override void MovePolygon(Point from, Point to)
         {
             Point movedCenter = ExtensionMethods.MovePoint(Center, from, to);
             Center = movedCenter;

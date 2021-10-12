@@ -114,13 +114,19 @@ namespace PolygonEditor
         private void ButtonRemoveVertex_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new RemoveVertexHandler(_rasterObjects, DrawingArea);
+            _activeActionHandler = new PolygonRemoveVertexHandler(_rasterObjects, DrawingArea);
         }
 
         private void ButtonMoveVertex_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
             _activeActionHandler = new MovePolygonVertexHandler(_rasterObjects, DrawingArea);
+        }
+
+        private void MoveSegmentButton_Click(object sender, EventArgs e)
+        {
+            _activeActionHandler?.Finish();
+            _activeActionHandler = new PolgonMoveEdgeHandler(_rasterObjects, DrawingArea);
         }
 
         private void DrawingArea_MouseUp(object sender, MouseEventArgs e)
@@ -132,5 +138,6 @@ namespace PolygonEditor
         {
             _activeActionHandler?.HandleMouseDown(e);
         }
+
     }
 }

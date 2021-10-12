@@ -12,19 +12,19 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
     public class Polygon : RasterObject
     {
         public List<Point> Vertices { get; private set; }
-        
-        public Polygon(Color color): base(color)
+
+        public Polygon(Color color) : base(color)
         {
             Vertices = new List<Point>();
         }
 
-        public Polygon(List<Point> vertices, Color color): base(color)
+        public Polygon(List<Point> vertices, Color color) : base(color)
         {
             this.Vertices = vertices;
             Update();
         }
 
-        public Polygon(Polygon polygon): base(polygon.Color)
+        public Polygon(Polygon polygon) : base(polygon.Color)
         {
             Vertices = new List<Point>(polygon.Vertices);
             Update();
@@ -36,7 +36,6 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             for (int v = 0; v < Vertices.Count; v++)
             {
                 polygonPixels.AddRange(LineGenerator.GetPixels(Vertices[v], Vertices[(v + 1) % Vertices.Count], Color));
-                //polygonPixels.AddRange(CircleGenerator.GetPixels(Vertices[v], Constants.DETECTION_RADIUS, Color));
             }
             _pixels = polygonPixels;
         }
@@ -82,7 +81,21 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             return null;
         }
 
-        public override void Move(Point from, Point to)
+        public (Point? a, Point? b) isEdgeClicked(Point mousePoint)
+        {
+            for (int v = 0; v < Vertices.Count; v++)
+            {
+                Point currentV = Vertices[v];
+                Point nextV = Vertices[(v + 1) % Vertices.Count];
+                if (ExtensionMethods.IsPointInSegment(mousePoint, currentV, nextV, Constants.DETECTION_RADIUS))
+                {
+                    return (currentV, nextV);
+                }
+            }
+            return (null, null);
+        }
+
+        public override void MovePolygon(Point from, Point to)
         {
             for(int v = 0; v < Vertices.Count; v++)
             {
@@ -103,6 +116,16 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
                     Vertices[i] = movedPoint;
             }
             Update();
+        }
+
+        public void MoveEdge(Point endOfEdge1, Point endOfEdge2, Point from, Point to)
+        {
+            int dx = to.X - from.X;
+            int dy = to.Y - from.Y;
+            Point newEdgeEnd1 = new Point(endOfEdge1.X + dx, endOfEdge1.Y + dy);
+            Point newEdgeEnd2 = new Point(endOfEdge2.X + dx, endOfEdge2.Y + dy);
+            MoveVertex(endOfEdge1, newEdgeEnd1);
+            MoveVertex(endOfEdge2, newEdgeEnd2);
         }
 
         public override RasterObject Clone()
