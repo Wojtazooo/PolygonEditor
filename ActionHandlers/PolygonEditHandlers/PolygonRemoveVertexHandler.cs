@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
 {
-    class RemoveVertexHandler : ActionHandler
+    class PolygonRemoveVertexHandler : ActionHandler
     {
         List<Cross> _redCrosses;
         private PictureBox _drawingArea;
@@ -18,7 +18,7 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
         private List<RasterObject> _rasterObjects;
         private SelectionHandler _selector;
 
-        public RemoveVertexHandler(List<RasterObject> rasterObjects, PictureBox drawingArea) 
+        public PolygonRemoveVertexHandler(List<RasterObject> rasterObjects, PictureBox drawingArea) 
         {
             _selector = new SelectionHandler(rasterObjects, null, drawingArea);
             _rasterObjects = rasterObjects;
