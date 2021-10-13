@@ -145,5 +145,11 @@ namespace PolygonEditor
             _activeActionHandler?.Finish();
             _activeActionHandler = new CircleChangeRadiusHandler(_rasterObjects, DrawingArea, textBoxHelper);
         }
+
+        private void ButtonAddVertex_Click(object sender, EventArgs e)
+        {
+            _activeActionHandler?.Finish();
+            _activeActionHandler = new PolygonAddVertexHandler(_rasterObjects, DrawingArea);
+        }
     }
 }

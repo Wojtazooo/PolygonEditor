@@ -37,6 +37,7 @@ namespace PolygonEditor.ActionHandlers.CircleEditHandlers
         public void Finish()
         {
             _helpRadius = null;
+            RemoveHelpRadius();
         }
 
         public void Submit()

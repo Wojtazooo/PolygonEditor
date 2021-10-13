@@ -128,6 +128,23 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             MoveVertex(endOfEdge2, newEdgeEnd2);
         }
 
+        public void AddVertexInsideEdge(Point vertexToAdd)
+        {
+            (Point? a, Point? b) = isEdgeClicked(vertexToAdd);
+            List<Point> newVertices = new List<Point>();
+
+            if (a.HasValue && b.HasValue)
+            {
+                Vertices.ForEach(v =>
+                {
+                    newVertices.Add(v);
+                    if (v == a.Value) newVertices.Add(vertexToAdd);
+                });
+                Vertices = newVertices;
+            }
+            Update();
+        }
+
         public override RasterObject Clone()
         {
             return new Polygon(this);
