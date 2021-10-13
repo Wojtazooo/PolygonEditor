@@ -23,6 +23,7 @@ namespace PolygonEditor.ActionHandlers
             _rasterObjects = rasterObjects;
             _helperTextBox = textBoxHelper;
             _drawingArea = drawingArea;
+            InsertInstructions();
         }
 
         public void Cancel()
@@ -58,7 +59,12 @@ namespace PolygonEditor.ActionHandlers
 
         public void InsertInstructions()
         {
-            _helperTextBox.Lines = InstructionTexts.Selection;
+            //_helperTextBox.Lines = InstructionTexts.Selection;
+        }
+
+        public void RemoveInstructions()
+        {
+            //_helperTextBox.Lines = null;
         }
     }
 }

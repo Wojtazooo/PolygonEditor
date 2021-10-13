@@ -207,6 +207,7 @@ namespace PolygonEditor
             this.ButtonEditRadius.TabIndex = 5;
             this.ButtonEditRadius.Text = "Edit Radius";
             this.ButtonEditRadius.UseVisualStyleBackColor = true;
+            this.ButtonEditRadius.Click += new System.EventHandler(this.ButtonEditRadius_Click);
             // 
             // ButtonAddCircle
             // 

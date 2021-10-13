@@ -17,12 +17,13 @@ namespace PolygonEditor.ActionHandlers
         private Point? _startedPoint;
         private Point? _previousPoint;
         private PictureBox _drawingArea;
+        private object _helperTextBox;
 
-
-        public MoveRasterObjectHandler(List<RasterObject> rasterObjects, PictureBox drawingArea)
+        public MoveRasterObjectHandler(List<RasterObject> rasterObjects, PictureBox drawingArea, TextBox helperTextBox)
         {
             _rasterObjects = rasterObjects;
             _drawingArea = drawingArea;
+            _helperTextBox = helperTextBox;
 
         }
 

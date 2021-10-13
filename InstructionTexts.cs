@@ -18,7 +18,7 @@ namespace PolygonEditor
         public readonly static string[] Selection = {
             "Current option: Selection",
             "",
-            "Right Click: Click to select object",
+            "Left Click: Click to select object",
         };
     }
 }

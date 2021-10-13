@@ -1,4 +1,5 @@
 ﻿using PolygonEditor.ActionHandlers;
+using PolygonEditor.ActionHandlers.CircleEditHandlers;
 using PolygonEditor.ActionHandlers.PolygonEditHandlers;
 using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
@@ -102,7 +103,7 @@ namespace PolygonEditor
  		private void ButtonMoveObject_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new MoveRasterObjectHandler(_rasterObjects, DrawingArea); 
+            _activeActionHandler = new MoveRasterObjectHandler(_rasterObjects, DrawingArea, textBoxHelper); 
         }
 
         private void ButtonAddCircle_Click(object sender, EventArgs e)
@@ -139,5 +140,10 @@ namespace PolygonEditor
             _activeActionHandler?.HandleMouseDown(e);
         }
 
+        private void ButtonEditRadius_Click(object sender, EventArgs e)
+        {
+            _activeActionHandler?.Finish();
+            _activeActionHandler = new CircleChangeRadiusHandler(_rasterObjects, DrawingArea, textBoxHelper);
+        }
     }
 }
