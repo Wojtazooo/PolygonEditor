@@ -1,6 +1,7 @@
 ﻿using PolygonEditor.ActionHandlers;
 using PolygonEditor.ActionHandlers.CircleEditHandlers;
 using PolygonEditor.ActionHandlers.PolygonEditHandlers;
+using PolygonEditor.Constraints;
 using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
@@ -17,7 +18,12 @@ namespace PolygonEditor
         private List<RasterObject> _rasterObjects;
         private ActionHandler _activeActionHandler;
         private Timer _timer;
-        
+
+        public Polygon TestPolygon;
+
+        public List<IConstraint> constraints;
+
+
         public MainForm()
         {
             InitializeComponent();
@@ -25,6 +31,60 @@ namespace PolygonEditor
             _pointsApplier = new RasterGraphicsApplier(DrawingArea, _rasterObjects);
             InitializeSelectedColor();
             InitializeRefreshTimer();
+
+            InitTestPolygonn();
+        }
+
+        public void InitTestPolygonn()
+        {
+            TestPolygon = new Polygon(Color.Red);
+
+            Point p1 = new Point(100, 100);
+            Point p2 = new Point(200, 100);
+            Point p3 = new Point(200, 200);
+            Point p4 = new Point(100, 200);
+            Point p5 = new Point(1100, 500);
+            //Point p6 = new Point(600, 500);
+
+
+
+
+
+            TestPolygon.AddVertex(p1);
+            TestPolygon.AddVertex(p2);
+            TestPolygon.AddVertex(p3);
+            //TestPolygon.AddVertex(p4);
+            //TestPolygon.AddVertex(p5);
+            //TestPolygon.AddVertex(p6);
+
+
+
+
+            _rasterObjects.Add(TestPolygon);
+
+            constraints = new List<IConstraint>();
+
+            var TestConstraint = new ConstantEdgeLength(TestPolygon, p1,p2, 100);
+            var TestConstraint2 = new ConstantEdgeLength(TestPolygon, p2, p3, 100);
+            //var TestConstraint3 = new ConstantEdgeLength(TestPolygon, p3, p4, 100);
+            //var TestConstraint4 = new ConstantEdgeLength(TestPolygon, p4, p5, 100);
+            //var TestConstraint5 = new ConstantEdgeLength(TestPolygon, p5, p1, 100);
+
+            //var TestConstraint4 = new ConstantEdgeLength(TestPolygon, p4, p1, 100);
+
+            //var TestConstraint4 = new ConstantEdgeLength(TestPolygon, p4, p1, 100);
+
+            // var TestConstraint4 = new ConstantEdgeLength(TestPolygon, p4, p1, 200);
+
+            constraints.Add(TestConstraint);
+            constraints.Add(TestConstraint2);
+            //constraints.Add(TestConstraint3);
+            //constraints.Add(TestConstraint4);
+            //constraints.Add(TestConstraint5);
+
+
+            //constraints.Add(TestConstraint4);
+
         }
 
         public void InitializeRefreshTimer()
@@ -42,6 +102,7 @@ namespace PolygonEditor
 
         private void UpdateView(object sender, EventArgs e)
         {
+           
             _pointsApplier.Apply();
         }
 
@@ -121,7 +182,7 @@ namespace PolygonEditor
         private void ButtonMoveVertex_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new MovePolygonVertexHandler(_rasterObjects, DrawingArea);
+            _activeActionHandler = new MovePolygonVertexHandler(_rasterObjects, DrawingArea, constraints);
         }
 
         private void MoveSegmentButton_Click(object sender, EventArgs e)
@@ -150,6 +211,17 @@ namespace PolygonEditor
         {
             _activeActionHandler?.Finish();
             _activeActionHandler = new PolygonAddVertexHandler(_rasterObjects, DrawingArea);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            foreach (var c in constraints)
+            {
+                {
+                    c.EnforceConstraint(null);
+                    _pointsApplier.Apply();
+                }
+            }
         }
     }
 }

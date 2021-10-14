@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PolygonEditor.Constraints;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -58,6 +59,28 @@ namespace PolygonEditor
             int dx = mouseTo.X - mouseFrom.X;
             int dy = mouseTo.Y - mouseFrom.Y;
             return new Point(pointToMove.X + dx, pointToMove.Y + dy);
+        }
+
+        public static Point MovePointToAchieveLength(Point pointToMove, Point seceondPoint, int length)
+        {
+            double c = ExtensionMethods.PixelDistance(pointToMove, seceondPoint);
+
+            double lengthDiff = c - length;
+            int dx = seceondPoint.X - pointToMove.X;
+            int dy = seceondPoint.Y - pointToMove.Y;
+
+            double p = (c - length) / c;
+
+            return new Point((int)(pointToMove.X + p * dx), (int)(pointToMove.Y + p * dy));
+
+        }
+
+        public static void ApplyConstraints(List<IConstraint> constraints, List<Point> lockedPoints)
+        {
+            //foreach (var c in constraints)
+            //{
+            //    c.EnforceConstraint(lockedPoints);
+            //}
         }
     }
 }

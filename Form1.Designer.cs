@@ -51,6 +51,7 @@ namespace PolygonEditor
             this.ButtonAddPolygon = new System.Windows.Forms.Button();
             this.ButtonAddVertex = new System.Windows.Forms.Button();
             this.ButtonRemoveVertex = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.formSplitter)).BeginInit();
             this.formSplitter.Panel1.SuspendLayout();
             this.formSplitter.Panel2.SuspendLayout();
@@ -319,6 +320,7 @@ namespace PolygonEditor
             this.tableLayoutPanel2.Controls.Add(this.ButtonAddPolygon, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.ButtonAddVertex, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.ButtonRemoveVertex, 1, 2);
+            this.tableLayoutPanel2.Controls.Add(this.button1, 0, 2);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 19);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -409,6 +411,16 @@ namespace PolygonEditor
             this.ButtonRemoveVertex.UseVisualStyleBackColor = true;
             this.ButtonRemoveVertex.Click += new System.EventHandler(this.ButtonRemoveVertex_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(3, 112);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -464,6 +476,7 @@ namespace PolygonEditor
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Button ButtonRemoveVertex;
         private System.Windows.Forms.Button ButtonAddVertex;
+        private System.Windows.Forms.Button button1;
     }
 }
 
