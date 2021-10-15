@@ -1,4 +1,5 @@
-﻿using PolygonEditor.RasterGraphics.Models;
+﻿using PolygonEditor.Constraints;
+using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
 using System.Collections.Generic;
@@ -21,12 +22,22 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
         private List<Circle> _helpCircles = new List<Circle>();
         private List<RasterObject> _rasterObjects;
         private PictureBox _drawingArea;
+        private ConstraintsEnforcer _constraintsEnforcer;
+        private List<RasterObject> rasterObjects;
+        private PictureBox drawingArea;
 
-        public PolgonMoveEdgeHandler(List<RasterObject> rasterObjects, PictureBox drawingArea)
+        public PolgonMoveEdgeHandler(List<RasterObject> rasterObjects, PictureBox drawingArea, ConstraintsEnforcer constraintsEnforcer)
         {
             _selector = new SelectionHandler(rasterObjects, null, drawingArea);
             _rasterObjects = rasterObjects;
             _drawingArea = drawingArea;
+            _constraintsEnforcer = constraintsEnforcer;
+        }
+
+        public PolgonMoveEdgeHandler(List<RasterObject> rasterObjects, PictureBox drawingArea)
+        {
+            this.rasterObjects = rasterObjects;
+            this.drawingArea = drawingArea;
         }
 
         public void Cancel()
@@ -94,6 +105,12 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
                     _polygonToEdit.MoveEdge(_edgeToMove.a.Value, _edgeToMove.b.Value, _previousPoint, mousePoint);
                     _previousPoint = mousePoint;
                     _edgeToMove = (a2, b2);
+
+
+                    _constraintsEnforcer.EnforcePolygonConstraints(_polygonToEdit, ExtensionMethods.GetVertexNumberFromPoint(_polygonToEdit, a2));
+                    _constraintsEnforcer.EnforcePolygonConstraints(_polygonToEdit, ExtensionMethods.GetVertexNumberFromPoint(_polygonToEdit, b2));
+
+
                     UpdateCircles();
                 }
             }

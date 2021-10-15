@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PolygonEditor.Constraints;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace PolygonEditor.RasterGraphics.Models

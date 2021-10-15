@@ -1,4 +1,6 @@
-﻿using PolygonEditor.RasterGraphics.Helpers;
+﻿using PolygonEditor.Constraints;
+using PolygonEditor.Constraints.PolygonConstraints;
+using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
     public class Polygon : RasterObject
     {
         public List<Point> Vertices { get; private set; }
+        public List<PolygonConstraint> Constraints { get; private set; } = new List<PolygonConstraint>();
 
         public Polygon(Color color) : base(color)
         {
@@ -48,6 +51,11 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 
         public void RemoveVertex(Point vertex)
         {
+            for(int i = 0; i < Vertices.Count; i++)
+            {
+                if (Vertices[i] == vertex)
+                    Constraints.RemoveAll(constraint => constraint.RelatedVertices.Contains(i));
+            }
             Vertices.Remove(vertex);
             Update();
         }
@@ -135,11 +143,15 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 
             if (a.HasValue && b.HasValue)
             {
-                Vertices.ForEach(v =>
+                for(int v = 0; v < Vertices.Count; v++)
                 {
-                    newVertices.Add(v);
-                    if (v == a.Value) newVertices.Add(vertexToAdd);
-                });
+                    newVertices.Add(Vertices[v]);
+                    if(Vertices[v] == a.Value)
+                    {
+                        newVertices.Add(vertexToAdd);
+                        Constraints.RemoveAll(constraint => constraint.RelatedVertices.Contains(v) && constraint.RelatedVertices.Contains(v+1));
+                    }
+                }
                 Vertices = newVertices;
             }
             Update();
@@ -148,6 +160,16 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         public override RasterObject Clone()
         {
             return new Polygon(this);
+        }
+
+        public void AddContraint(PolygonConstraint constraint)
+        {
+            Constraints.Add(constraint);
+        }
+
+        public void RemoveContraint(PolygonConstraint constraint)
+        {
+            Constraints.Remove(constraint);
         }
     }
 }

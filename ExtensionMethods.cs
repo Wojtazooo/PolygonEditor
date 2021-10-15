@@ -1,4 +1,5 @@
 ﻿using PolygonEditor.Constraints;
+using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -75,12 +76,22 @@ namespace PolygonEditor
 
         }
 
-        public static void ApplyConstraints(List<IConstraint> constraints, List<Point> lockedPoints)
+        //public static void ApplyConstraints(List<IConstraint> constraints, List<Point> lockedPoints)
+        //{
+        //    foreach (var c in constraints)
+        //    {
+        //        c.EnforceConstraint(lockedPoints);
+        //    }
+        //}
+
+        public static int GetVertexNumberFromPoint(Polygon polygon, Point vertexPoint)
         {
-            //foreach (var c in constraints)
-            //{
-            //    c.EnforceConstraint(lockedPoints);
-            //}
+            for(int i = 0; i < polygon.Vertices.Count; i++)
+            {
+                if (polygon.Vertices[i] == vertexPoint) return i;
+            }
+            return 0;
         }
+
     }
 }

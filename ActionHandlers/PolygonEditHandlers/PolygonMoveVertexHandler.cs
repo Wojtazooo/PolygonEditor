@@ -22,15 +22,15 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
         private PictureBox _drawingArea;
         private Polygon _polygonToEdit;
         private List<Circle> _helpCircles = new List<Circle>();
-        private List<IConstraint> _constraints; 
+        private ConstraintsEnforcer _constraintsEnforcer;
 
 
-        public MovePolygonVertexHandler(List<RasterObject> rasterObjects, PictureBox drawingArea, List<IConstraint> constraints)
+        public MovePolygonVertexHandler(List<RasterObject> rasterObjects, PictureBox drawingArea, ConstraintsEnforcer constraintsEnforcer)
         {
             _selector = new SelectionHandler(rasterObjects, null, drawingArea);
             _rasterObjects = rasterObjects;
             _drawingArea = drawingArea;
-            _constraints = constraints;
+            _constraintsEnforcer = constraintsEnforcer;
         }
 
         public void Cancel()
@@ -94,10 +94,7 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
                 {
                     _polygonToEdit.MoveVertex(_vertexToMove, mousePoint);
                     _vertexToMove = mousePoint;
-
-                    var lockedPoints = new List<Point>();
-                    lockedPoints.Add(mousePoint);
-                    ExtensionMethods.ApplyConstraints(_constraints, lockedPoints);
+                    _constraintsEnforcer.EnforcePolygonConstraints(_polygonToEdit, ExtensionMethods.GetVertexNumberFromPoint(_polygonToEdit, mousePoint));
                     UpdateCircles();
                 }
             }
