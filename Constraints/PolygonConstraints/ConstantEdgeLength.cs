@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,27 +41,46 @@ namespace PolygonEditor.Constraints.PolygonConstraints
             {
                 Point movedPoint = ExtensionMethods.MovePointToAchieveLength(_edgePoints.Item2, _edgePoints.Item1, _constantLength);
                 _polygon.MoveVertex(_edgePoints.Item2, movedPoint);
-
-                SetNextConstraints(RelatedVertices[1]);
             }
             else
             {
                 Point movedPoint = ExtensionMethods.MovePointToAchieveLength(_edgePoints.Item1, _edgePoints.Item2, _constantLength);
                 _polygon.MoveVertex(_edgePoints.Item1, movedPoint);
-                SetNextConstraints(RelatedVertices[0]);
             }
         }
 
-        private void SetNextConstraints(int movedVertex)
+        private Point RelationCenterPoint()
         {
-            nextPolygonConstraints = new List<PolygonConstraint>();
-            foreach (var c in _polygon.Constraints)
-            {
-                if (c.RelatedVertices.Contains(movedVertex))
-                {
-                    nextPolygonConstraints.Add(c);
-                }
-            }
+            return ExtensionMethods.CountMiddleOfSegment(
+                    _polygon.Vertices[RelatedVertices[0]],
+                    _polygon.Vertices[RelatedVertices[1]]);
+        }
+
+        public override void DrawConstraintInfo(Graphics g)
+        {
+            var stringSize = g.MeasureString(_constantLength.ToString(), Constants.CONSTRAINTS_FONT);
+            stringSize.Width += 2;
+            stringSize.Height += 2;
+
+            Point center = RelationCenterPoint();
+
+            Point leftUpperCorner = 
+                ExtensionMethods.FindLeftUpperCornerForRectangle(
+                    center,
+                    (int)stringSize.Width, 
+                    (int)stringSize.Height);
+
+            Rectangle rectangle = new Rectangle(leftUpperCorner, stringSize.ToSize());
+
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            g.DrawString(_constantLength.ToString(), Constants.CONSTRAINTS_FONT, Brushes.Black, rectangle);
+        }
+
+        public override Point GetCenterDrawingPoint()
+        {
+            return RelationCenterPoint();
         }
     }
 }

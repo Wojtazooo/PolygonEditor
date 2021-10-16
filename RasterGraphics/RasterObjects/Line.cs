@@ -60,5 +60,19 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         {
             return new Line(P1, P2, Color);
         }
+
+        public override void DrawConstraints(Graphics g)
+        {
+        }
+
+        public override bool RemoveConstraintByClick(Point mousePoint)
+        {
+            return false;
+        }
+
+        public override bool DetectConstraint(Point mousePoint)
+        {
+            return false;
+        }
     }
 }

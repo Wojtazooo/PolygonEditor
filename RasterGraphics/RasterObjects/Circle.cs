@@ -59,5 +59,20 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         {
             return new Circle(Center, Radius, Color);
         }
+
+        public override void DrawConstraints(Graphics g)
+        {
+        }
+
+        public override bool RemoveConstraintByClick(Point mousePoint)
+        {
+            return false;
+        }
+
+        public override bool DetectConstraint(Point mousePoint)
+        {
+            return false;
+        }
+
     }
 }

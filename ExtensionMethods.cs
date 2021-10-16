@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PolygonEditor
 {
@@ -91,6 +92,41 @@ namespace PolygonEditor
                 if (polygon.Vertices[i] == vertexPoint) return i;
             }
             return 0;
+        }
+
+        public static Point CountMiddleOfSegment(Point a, Point b)
+        {
+            int dx = a.X - b.X;
+            int dy = a.Y - b.Y;
+            return new Point(b.X + (int)(0.5 * dx), b.Y + (int)(0.5 * dy));
+        }
+
+        public static Point FindLeftUpperCornerForRectangle(Point center, int width, int height)
+        {
+            return new Point(center.X - (int)(width / 2), center.Y - (int)(height / 2));
+        }
+
+        public static string ShowDialog(string text, string caption, int initialValue)
+        {
+            Form prompt = new Form()
+            {
+                Width = 300,
+                Height = 150,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                Text = caption,
+                StartPosition = FormStartPosition.CenterScreen
+            };
+            Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
+            TextBox textBox = new TextBox() { Left = 50, Top = 40, Width = 200 };
+            textBox.Text = initialValue.ToString();
+            Button confirmation = new Button() { Text = "Ok", Left = 100, Width = 100, Top = 80, DialogResult = DialogResult.OK };
+            confirmation.Click += (sender, e) => { prompt.Close(); };
+            prompt.Controls.Add(textBox);
+            prompt.Controls.Add(confirmation);
+            prompt.Controls.Add(textLabel);
+            prompt.AcceptButton = confirmation;
+
+            return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
         }
 
     }

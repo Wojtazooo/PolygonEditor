@@ -3,6 +3,7 @@ using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +14,6 @@ namespace PolygonEditor.Constraints.PolygonConstraints
     {
         protected Polygon _polygon;
         public List<int> RelatedVertices;
-        public List<PolygonConstraint> nextPolygonConstraints;
-        public List<PolygonConstraint> polygonConstraints;
 
         public PolygonConstraint(Polygon polygon)
         {
@@ -26,5 +25,8 @@ namespace PolygonEditor.Constraints.PolygonConstraints
         {
             return _polygon;
         }
+
+        public abstract void DrawConstraintInfo(Graphics g);
+        public abstract Point GetCenterDrawingPoint();
     }
 }

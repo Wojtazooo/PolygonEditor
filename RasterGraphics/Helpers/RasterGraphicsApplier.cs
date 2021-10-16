@@ -17,23 +17,22 @@ namespace PolygonEditor.RasterGraphics.Helpers
             _rasterObjects = rasterObjects;
         }
 
+        private void ApplyConstraintsInfo(Bitmap bitmapToApply)
+        {
+            Graphics g = Graphics.FromImage(bitmapToApply);
+            foreach (var ro in _rasterObjects)
+            {
+                ro.DrawConstraints(g);
+            }
+            g.Flush();
+            g.Dispose();
+        }
+
         public void Apply()
         {
             bitmapToApply?.Dispose();
             bitmapToApply = new(_picture.Width, _picture.Height);
-
-
-            //RectangleF rectf = new RectangleF(70, 90, 90, 50);
-
-            //Graphics g = Graphics.FromImage(bitmapToApply);
-
-            //g.SmoothingMode = SmoothingMode.AntiAlias;
-            //g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            //g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            //g.DrawString("yourText", new Font("Tahoma", 12), Brushes.Black, rectf);
-
-            //g.Flush();
-
+            ApplyConstraintsInfo(bitmapToApply);
 
             foreach (var o in _rasterObjects)
             {

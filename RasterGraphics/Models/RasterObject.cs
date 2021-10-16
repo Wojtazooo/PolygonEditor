@@ -19,5 +19,9 @@ namespace PolygonEditor.RasterGraphics.Models
         abstract public Point? DetectObject(Point mousePoint, int radius);
         abstract public void MovePolygon(Point from, Point to);
         abstract public RasterObject Clone();
+        abstract public void DrawConstraints(Graphics g);
+        abstract public bool RemoveConstraintByClick(Point mousePoint);
+        abstract public bool DetectConstraint(Point mousePoint);
+
     }
 }

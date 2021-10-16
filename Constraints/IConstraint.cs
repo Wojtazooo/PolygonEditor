@@ -13,5 +13,7 @@ namespace PolygonEditor.Constraints
     {
         public void EnforceConstraint(Point constantPoint); 
         public RasterObject GetRasterObject();
+        public void DrawConstraintInfo(Graphics g);
+        public Point GetCenterDrawingPoint();
     }
 }

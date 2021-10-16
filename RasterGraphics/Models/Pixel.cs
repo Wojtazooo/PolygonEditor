@@ -72,5 +72,19 @@ namespace PolygonEditor.RasterGraphics.Models
         {
             return new Pixel(X, Y, Color);
         }
+
+        public override void DrawConstraints(Graphics g)
+        {
+        }
+
+        public override bool RemoveConstraintByClick(Point mousePoint)
+        {
+            return false;
+        }
+
+        public override bool DetectConstraint(Point mousePoint)
+        {
+            return false;
+        }
     }
 }

@@ -5,6 +5,7 @@ using PolygonEditor.RasterGraphics.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -170,6 +171,41 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         public void RemoveContraint(PolygonConstraint constraint)
         {
             Constraints.Remove(constraint);
+        }
+
+        public override void DrawConstraints(Graphics g) 
+        {
+            foreach(var c in Constraints)
+            {
+                c.DrawConstraintInfo(g);
+            }
+        }
+
+        public override bool RemoveConstraintByClick(Point mousePoint)
+        {
+            for(int i = 0; i < Constraints.Count; i++)
+            {
+                Point constraintCenterPoint = Constraints[i].GetCenterDrawingPoint();
+                if (ExtensionMethods.IsInCircle(constraintCenterPoint, mousePoint, Constants.DETECTION_RADIUS))
+                {
+                    Constraints.Remove(Constraints[i]);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public override bool DetectConstraint(Point mousePoint)
+        {
+            for(int i = 0; i < Constraints.Count; i++)
+            {
+                Point constraintCenterPoint = Constraints[i].GetCenterDrawingPoint();
+                if (ExtensionMethods.IsInCircle(constraintCenterPoint, mousePoint, Constants.DETECTION_RADIUS))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
