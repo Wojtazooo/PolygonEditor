@@ -1,5 +1,6 @@
 ﻿using PolygonEditor.ActionHandlers;
 using PolygonEditor.ActionHandlers.CircleEditHandlers;
+using PolygonEditor.ActionHandlers.ConstraintsActionHandlers;
 using PolygonEditor.ActionHandlers.PolygonEditHandlers;
 using PolygonEditor.Constraints;
 using PolygonEditor.Constraints.PolygonConstraints;
@@ -32,56 +33,6 @@ namespace PolygonEditor
             _constraintsEnforcer = new ConstraintsEnforcer(_rasterObjects);
             InitializeSelectedColor();
             InitializeRefreshTimer();
-            InitContraints();
-        }
-
-        public void InitContraints()
-        {
-
-            TestPolygon = new Polygon(Color.Red);
-
-            Point p1 = new Point(100, 100);
-            Point p2 = new Point(200, 100);
-            Point p3 = new Point(200, 200);
-            Point p4 = new Point(100, 200);
-            Point p5 = new Point(1100, 500);
-            Point p6 = new Point(600, 500);
-
-
-            TestPolygon.AddVertex(p1);
-            TestPolygon.AddVertex(p2);
-            TestPolygon.AddVertex(p3);
-            TestPolygon.AddVertex(p4);
-            TestPolygon.AddVertex(p5);
-            TestPolygon.AddVertex(p6);
-
-            //TestPolygon.AddVertex(p6);
-
-            _rasterObjects.Add(TestPolygon);
-
-
-            var TestConstraint = new ConstantEdgeLength(TestPolygon, p1,p2, 100);
-            var TestConstraint2 = new ConstantEdgeLength(TestPolygon, p4, p3, 100);
-            var TestConstraint3 = new ConstantEdgeLength(TestPolygon, p3, p4, 100);
-            var TestConstraint4 = new ConstantEdgeLength(TestPolygon, p4, p5, 100);
-            var TestConstraint5 = new ConstantEdgeLength(TestPolygon, p5, p1, 100);
-
-            //var TestConstraint4 = new ConstantEdgeLength(TestPolygon, p4, p1, 100);
-
-            //var TestConstraint4 = new ConstantEdgeLength(TestPolygon, p4, p1, 100);
-
-            // var TestConstraint4 = new ConstantEdgeLength(TestPolygon, p4, p1, 200);
-
-            TestPolygon.AddContraint(TestConstraint);
-            TestPolygon.AddContraint(TestConstraint2);
-
-            //constraints.Add(TestConstraint3);
-            //constraints.Add(TestConstraint4);
-            //constraints.Add(TestConstraint5);
-
-
-            //constraints.Add(TestConstraint4);
-
         }
 
         public void InitializeRefreshTimer()
@@ -169,22 +120,10 @@ namespace PolygonEditor
             _activeActionHandler = new AddCircleHandler(_rasterObjects, textBoxHelper, PictureBoxSelectedColor.BackColor, DrawingArea);
         }
 
-        private void ButtonRemoveVertex_Click(object sender, EventArgs e)
-        {
-            _activeActionHandler?.Finish();
-            _activeActionHandler = new PolygonRemoveVertexHandler(_rasterObjects, DrawingArea);
-        }
-
         private void ButtonMoveVertex_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
             _activeActionHandler = new MovePolygonVertexHandler(_rasterObjects, DrawingArea, _constraintsEnforcer);
-        }
-
-        private void MoveSegmentButton_Click(object sender, EventArgs e)
-        {
-            _activeActionHandler?.Finish();
-            _activeActionHandler = new PolgonMoveEdgeHandler(_rasterObjects, DrawingArea, _constraintsEnforcer);
         }
 
         private void DrawingArea_MouseUp(object sender, MouseEventArgs e)
@@ -209,8 +148,53 @@ namespace PolygonEditor
             _activeActionHandler = new PolygonAddVertexHandler(_rasterObjects, DrawingArea);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void ButtonConstantCenter_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void ButtonConstantRadius_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ButtonMoveEdge_Click(object sender, EventArgs e)
+        {
+            _activeActionHandler?.Finish();
+            _activeActionHandler = new PolgonMoveEdgeHandler(_rasterObjects, DrawingArea, _constraintsEnforcer);
+        }
+
+        private void ButtonRemoveVertex_Click_1(object sender, EventArgs e)
+        {
+            _activeActionHandler?.Finish();
+            _activeActionHandler = new PolygonRemoveVertexHandler(_rasterObjects, DrawingArea);
+        }
+
+        private void ButtonPerpendicular_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ButtonSameLength_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ButtonConstantLength_Click(object sender, EventArgs e)
+        {
+            _activeActionHandler?.Finish();
+            _activeActionHandler = new AddConstantEdgeLengthHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
+        }
+
+        private void ButtonRemoveConstraint_Click(object sender, EventArgs e)
+        {
+            _activeActionHandler?.Finish();
+            _activeActionHandler = new RemoveConstraintHandler(_rasterObjects, textBoxHelper,DrawingArea);
+        }
+
+        private void ButtonTangentLine_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
