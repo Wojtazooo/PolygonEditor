@@ -74,7 +74,7 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers
 
         private void HandleAddConstraint(int insertedLength, Polygon polygon, Point a, Point b)
         {
-            var constraint = new ConstantEdgeLength(polygon, a, b, insertedLength);
+            var constraint = new ConstantEdgeLengthConstraint(polygon, a, b, insertedLength);
         }
     }
 }

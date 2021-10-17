@@ -13,7 +13,7 @@ namespace PolygonEditor.Constraints.PolygonConstraints
     public abstract class PolygonConstraint : IConstraint
     {
         protected Polygon _polygon;
-        public List<int> RelatedVertices;
+        public List<int> RelatedVertices = new List<int>();
 
         public PolygonConstraint(Polygon polygon)
         {

@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace PolygonEditor.Constraints.PolygonConstraints
 {
-    public class ConstantEdgeLength : PolygonConstraint
+    public class ConstantEdgeLengthConstraint : PolygonConstraint
     {
         private int _constantLength;
 
-        public ConstantEdgeLength(Polygon polygon, Point v1, Point v2, int constantLength) : base(polygon)
+        public ConstantEdgeLengthConstraint(Polygon polygon, Point v1, Point v2, int constantLength) : base(polygon)
         {
             int numberOfV1 = 0;
             int numberOfV2 = 0;
@@ -29,7 +29,8 @@ namespace PolygonEditor.Constraints.PolygonConstraints
                 }
             }
 
-            RelatedVertices = new List<int> { numberOfV1, numberOfV2 };
+            RelatedVertices.Add(numberOfV1);
+            RelatedVertices.Add(numberOfV2);
             _constantLength = constantLength;
         }
 
