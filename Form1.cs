@@ -1,8 +1,10 @@
 ﻿using PolygonEditor.ActionHandlers;
 using PolygonEditor.ActionHandlers.CircleEditHandlers;
 using PolygonEditor.ActionHandlers.ConstraintsActionHandlers;
+using PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstraintsHandlers;
 using PolygonEditor.ActionHandlers.PolygonEditHandlers;
 using PolygonEditor.Constraints;
+using PolygonEditor.Constraints.CircleConstraints;
 using PolygonEditor.Constraints.PolygonConstraints;
 using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
@@ -22,8 +24,6 @@ namespace PolygonEditor
         private Timer _timer;
         private ConstraintsEnforcer _constraintsEnforcer;
         public Polygon TestPolygon;
-
-
 
         public MainForm()
         {
@@ -111,7 +111,7 @@ namespace PolygonEditor
  		private void ButtonMoveObject_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new MoveRasterObjectHandler(_rasterObjects, DrawingArea, textBoxHelper); 
+            _activeActionHandler = new MoveRasterObjectHandler(_rasterObjects, DrawingArea, textBoxHelper, _constraintsEnforcer); 
         }
 
         private void ButtonAddCircle_Click(object sender, EventArgs e)
@@ -139,7 +139,7 @@ namespace PolygonEditor
         private void ButtonEditRadius_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new CircleChangeRadiusHandler(_rasterObjects, DrawingArea, textBoxHelper);
+            _activeActionHandler = new CircleChangeRadiusHandler(_rasterObjects, DrawingArea, textBoxHelper, _constraintsEnforcer);
         }
 
         private void ButtonAddVertex_Click(object sender, EventArgs e)
@@ -150,12 +150,14 @@ namespace PolygonEditor
 
         private void ButtonConstantCenter_Click(object sender, EventArgs e)
         {
-
+            _activeActionHandler?.Finish();
+            _activeActionHandler = new AddConstantCenterHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
 
         private void ButtonConstantRadius_Click(object sender, EventArgs e)
         {
-
+            _activeActionHandler?.Finish();
+            _activeActionHandler = new AddConstantRadiusHandler(_rasterObjects,textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
 
         private void ButtonMoveEdge_Click(object sender, EventArgs e)

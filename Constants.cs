@@ -14,5 +14,6 @@ namespace PolygonEditor
         public const int CROSS_WIDTH = 20;
         public const int ADD_VERTEX_CIRCLE_RADIUS = 10;
         public static readonly Font CONSTRAINTS_FONT = new Font("Arial", 12);
+        public const int CENTER_POINT_RADIUS = 5;
     }
 }

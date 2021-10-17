@@ -104,7 +104,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             return (null, null);
         }
 
-        public override void MovePolygon(Point from, Point to)
+        public override void MoveRasterObject(Point from, Point to)
         {
             for(int v = 0; v < Vertices.Count; v++)
             {

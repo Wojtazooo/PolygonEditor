@@ -97,7 +97,7 @@ namespace PolygonEditor
             this.formSplitter.Panel2.Controls.Add(this.ShapeOptionsGroupBox);
             this.formSplitter.Panel2MinSize = 300;
             this.formSplitter.Size = new System.Drawing.Size(1584, 861);
-            this.formSplitter.SplitterDistance = 1048;
+            this.formSplitter.SplitterDistance = 1150;
             this.formSplitter.TabIndex = 0;
             // 
             // DrawingArea
@@ -107,7 +107,7 @@ namespace PolygonEditor
             this.DrawingArea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DrawingArea.Location = new System.Drawing.Point(0, 0);
             this.DrawingArea.Name = "DrawingArea";
-            this.DrawingArea.Size = new System.Drawing.Size(1048, 861);
+            this.DrawingArea.Size = new System.Drawing.Size(1150, 861);
             this.DrawingArea.TabIndex = 0;
             this.DrawingArea.TabStop = false;
             this.DrawingArea.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DrawingArea_MouseClick);
@@ -129,7 +129,7 @@ namespace PolygonEditor
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.Location = new System.Drawing.Point(11, 401);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(507, 134);
+            this.groupBox1.Size = new System.Drawing.Size(405, 134);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
@@ -150,7 +150,7 @@ namespace PolygonEditor
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(501, 112);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(399, 112);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // ButtonTangentLine
@@ -158,11 +158,12 @@ namespace PolygonEditor
             this.ButtonTangentLine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonTangentLine.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonTangentLine.Image = global::PolygonEditor.Properties.Resources.tangent;
             this.ButtonTangentLine.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonTangentLine.Location = new System.Drawing.Point(256, 63);
+            this.ButtonTangentLine.Location = new System.Drawing.Point(205, 63);
             this.ButtonTangentLine.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonTangentLine.Name = "ButtonTangentLine";
-            this.ButtonTangentLine.Size = new System.Drawing.Size(239, 37);
+            this.ButtonTangentLine.Size = new System.Drawing.Size(188, 37);
             this.ButtonTangentLine.TabIndex = 4;
             this.ButtonTangentLine.Text = "Tangent Line";
             this.ButtonTangentLine.UseVisualStyleBackColor = true;
@@ -173,11 +174,12 @@ namespace PolygonEditor
             this.ButtonRemoveConstraint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonRemoveConstraint.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonRemoveConstraint.Image = global::PolygonEditor.Properties.Resources.constraint;
             this.ButtonRemoveConstraint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.ButtonRemoveConstraint.Location = new System.Drawing.Point(6, 63);
             this.ButtonRemoveConstraint.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonRemoveConstraint.Name = "ButtonRemoveConstraint";
-            this.ButtonRemoveConstraint.Size = new System.Drawing.Size(238, 37);
+            this.ButtonRemoveConstraint.Size = new System.Drawing.Size(187, 37);
             this.ButtonRemoveConstraint.TabIndex = 3;
             this.ButtonRemoveConstraint.Text = "Remove constraint\r\n";
             this.ButtonRemoveConstraint.UseVisualStyleBackColor = true;
@@ -190,10 +192,10 @@ namespace PolygonEditor
             this.ButtonMoveObject.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonMoveObject.Image = global::PolygonEditor.Properties.Resources.move;
             this.ButtonMoveObject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonMoveObject.Location = new System.Drawing.Point(256, 6);
+            this.ButtonMoveObject.Location = new System.Drawing.Point(205, 6);
             this.ButtonMoveObject.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonMoveObject.Name = "ButtonMoveObject";
-            this.ButtonMoveObject.Size = new System.Drawing.Size(239, 37);
+            this.ButtonMoveObject.Size = new System.Drawing.Size(188, 37);
             this.ButtonMoveObject.TabIndex = 3;
             this.ButtonMoveObject.Text = "Move object";
             this.ButtonMoveObject.UseVisualStyleBackColor = true;
@@ -209,7 +211,7 @@ namespace PolygonEditor
             this.ButtonDeleteObject.Location = new System.Drawing.Point(6, 6);
             this.ButtonDeleteObject.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonDeleteObject.Name = "ButtonDeleteObject";
-            this.ButtonDeleteObject.Size = new System.Drawing.Size(238, 37);
+            this.ButtonDeleteObject.Size = new System.Drawing.Size(187, 37);
             this.ButtonDeleteObject.TabIndex = 2;
             this.ButtonDeleteObject.Text = "Delete object";
             this.ButtonDeleteObject.UseVisualStyleBackColor = true;
@@ -222,7 +224,7 @@ namespace PolygonEditor
             this.GroupBoxShapeSelect.Controls.Add(this.tableLayoutPanel3);
             this.GroupBoxShapeSelect.Location = new System.Drawing.Point(11, 12);
             this.GroupBoxShapeSelect.Name = "GroupBoxShapeSelect";
-            this.GroupBoxShapeSelect.Size = new System.Drawing.Size(507, 141);
+            this.GroupBoxShapeSelect.Size = new System.Drawing.Size(405, 141);
             this.GroupBoxShapeSelect.TabIndex = 3;
             this.GroupBoxShapeSelect.TabStop = false;
             this.GroupBoxShapeSelect.Text = "Circle Options";
@@ -243,7 +245,7 @@ namespace PolygonEditor
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 59F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(501, 119);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(399, 119);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // ButtonConstantCenter
@@ -251,11 +253,12 @@ namespace PolygonEditor
             this.ButtonConstantCenter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonConstantCenter.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonConstantCenter.Image = global::PolygonEditor.Properties.Resources.focus;
             this.ButtonConstantCenter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.ButtonConstantCenter.Location = new System.Drawing.Point(6, 66);
             this.ButtonConstantCenter.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonConstantCenter.Name = "ButtonConstantCenter";
-            this.ButtonConstantCenter.Size = new System.Drawing.Size(236, 37);
+            this.ButtonConstantCenter.Size = new System.Drawing.Size(185, 37);
             this.ButtonConstantCenter.TabIndex = 7;
             this.ButtonConstantCenter.Text = "Constant Center\r\n";
             this.ButtonConstantCenter.UseVisualStyleBackColor = true;
@@ -266,11 +269,12 @@ namespace PolygonEditor
             this.ButtonConstantRadius.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonConstantRadius.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonConstantRadius.Image = global::PolygonEditor.Properties.Resources.radius;
             this.ButtonConstantRadius.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonConstantRadius.Location = new System.Drawing.Point(254, 66);
+            this.ButtonConstantRadius.Location = new System.Drawing.Point(203, 66);
             this.ButtonConstantRadius.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonConstantRadius.Name = "ButtonConstantRadius";
-            this.ButtonConstantRadius.Size = new System.Drawing.Size(241, 37);
+            this.ButtonConstantRadius.Size = new System.Drawing.Size(190, 37);
             this.ButtonConstantRadius.TabIndex = 6;
             this.ButtonConstantRadius.Text = "Constant Radius\r\n";
             this.ButtonConstantRadius.UseVisualStyleBackColor = true;
@@ -283,10 +287,10 @@ namespace PolygonEditor
             this.ButtonEditRadius.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonEditRadius.Image = global::PolygonEditor.Properties.Resources.pencil;
             this.ButtonEditRadius.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonEditRadius.Location = new System.Drawing.Point(254, 6);
+            this.ButtonEditRadius.Location = new System.Drawing.Point(203, 6);
             this.ButtonEditRadius.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonEditRadius.Name = "ButtonEditRadius";
-            this.ButtonEditRadius.Size = new System.Drawing.Size(241, 37);
+            this.ButtonEditRadius.Size = new System.Drawing.Size(190, 37);
             this.ButtonEditRadius.TabIndex = 5;
             this.ButtonEditRadius.Text = "Edit Radius";
             this.ButtonEditRadius.UseVisualStyleBackColor = true;
@@ -302,7 +306,7 @@ namespace PolygonEditor
             this.ButtonAddCircle.Location = new System.Drawing.Point(6, 6);
             this.ButtonAddCircle.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonAddCircle.Name = "ButtonAddCircle";
-            this.ButtonAddCircle.Size = new System.Drawing.Size(236, 37);
+            this.ButtonAddCircle.Size = new System.Drawing.Size(185, 37);
             this.ButtonAddCircle.TabIndex = 1;
             this.ButtonAddCircle.Text = "Add Circle";
             this.ButtonAddCircle.UseVisualStyleBackColor = true;
@@ -319,7 +323,7 @@ namespace PolygonEditor
             this.textBoxHelper.Name = "textBoxHelper";
             this.textBoxHelper.PlaceholderText = "Help text";
             this.textBoxHelper.ReadOnly = true;
-            this.textBoxHelper.Size = new System.Drawing.Size(507, 181);
+            this.textBoxHelper.Size = new System.Drawing.Size(405, 181);
             this.textBoxHelper.TabIndex = 2;
             // 
             // GroupBoxColorOptions
@@ -330,7 +334,7 @@ namespace PolygonEditor
             this.GroupBoxColorOptions.Controls.Add(this.ButtonPickColor);
             this.GroupBoxColorOptions.Location = new System.Drawing.Point(11, 541);
             this.GroupBoxColorOptions.Name = "GroupBoxColorOptions";
-            this.GroupBoxColorOptions.Size = new System.Drawing.Size(507, 121);
+            this.GroupBoxColorOptions.Size = new System.Drawing.Size(405, 121);
             this.GroupBoxColorOptions.TabIndex = 1;
             this.GroupBoxColorOptions.TabStop = false;
             this.GroupBoxColorOptions.Text = "Color options";
@@ -371,7 +375,7 @@ namespace PolygonEditor
             this.ButtonPickColor.Location = new System.Drawing.Point(9, 25);
             this.ButtonPickColor.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonPickColor.Name = "ButtonPickColor";
-            this.ButtonPickColor.Size = new System.Drawing.Size(486, 37);
+            this.ButtonPickColor.Size = new System.Drawing.Size(384, 37);
             this.ButtonPickColor.TabIndex = 1;
             this.ButtonPickColor.Text = "Change Color";
             this.ButtonPickColor.UseVisualStyleBackColor = true;
@@ -386,7 +390,7 @@ namespace PolygonEditor
             this.ShapeOptionsGroupBox.Location = new System.Drawing.Point(13, 161);
             this.ShapeOptionsGroupBox.Margin = new System.Windows.Forms.Padding(5);
             this.ShapeOptionsGroupBox.Name = "ShapeOptionsGroupBox";
-            this.ShapeOptionsGroupBox.Size = new System.Drawing.Size(507, 232);
+            this.ShapeOptionsGroupBox.Size = new System.Drawing.Size(405, 232);
             this.ShapeOptionsGroupBox.TabIndex = 0;
             this.ShapeOptionsGroupBox.TabStop = false;
             this.ShapeOptionsGroupBox.Text = "Polygon Options";
@@ -413,7 +417,7 @@ namespace PolygonEditor
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(501, 210);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(399, 210);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // ButtonMoveEdge
@@ -423,10 +427,10 @@ namespace PolygonEditor
             this.ButtonMoveEdge.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonMoveEdge.Image = global::PolygonEditor.Properties.Resources.pencil;
             this.ButtonMoveEdge.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonMoveEdge.Location = new System.Drawing.Point(254, 58);
+            this.ButtonMoveEdge.Location = new System.Drawing.Point(204, 58);
             this.ButtonMoveEdge.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonMoveEdge.Name = "ButtonMoveEdge";
-            this.ButtonMoveEdge.Size = new System.Drawing.Size(241, 37);
+            this.ButtonMoveEdge.Size = new System.Drawing.Size(189, 37);
             this.ButtonMoveEdge.TabIndex = 8;
             this.ButtonMoveEdge.Text = "Move Edge";
             this.ButtonMoveEdge.UseVisualStyleBackColor = true;
@@ -442,7 +446,7 @@ namespace PolygonEditor
             this.ButtonRemoveVertex.Location = new System.Drawing.Point(6, 112);
             this.ButtonRemoveVertex.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonRemoveVertex.Name = "ButtonRemoveVertex";
-            this.ButtonRemoveVertex.Size = new System.Drawing.Size(236, 37);
+            this.ButtonRemoveVertex.Size = new System.Drawing.Size(186, 37);
             this.ButtonRemoveVertex.TabIndex = 4;
             this.ButtonRemoveVertex.Text = "Remove Vertex";
             this.ButtonRemoveVertex.UseVisualStyleBackColor = true;
@@ -453,11 +457,12 @@ namespace PolygonEditor
             this.ButtonConstantLength.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonConstantLength.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonConstantLength.Image = global::PolygonEditor.Properties.Resources.length;
             this.ButtonConstantLength.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonConstantLength.Location = new System.Drawing.Point(254, 166);
+            this.ButtonConstantLength.Location = new System.Drawing.Point(204, 166);
             this.ButtonConstantLength.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonConstantLength.Name = "ButtonConstantLength";
-            this.ButtonConstantLength.Size = new System.Drawing.Size(241, 37);
+            this.ButtonConstantLength.Size = new System.Drawing.Size(189, 37);
             this.ButtonConstantLength.TabIndex = 7;
             this.ButtonConstantLength.Text = "Constant Length\r\n";
             this.ButtonConstantLength.UseVisualStyleBackColor = true;
@@ -468,11 +473,12 @@ namespace PolygonEditor
             this.ButtonSameLength.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonSameLength.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonSameLength.Image = global::PolygonEditor.Properties.Resources.double_arrow;
             this.ButtonSameLength.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.ButtonSameLength.Location = new System.Drawing.Point(6, 166);
             this.ButtonSameLength.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonSameLength.Name = "ButtonSameLength";
-            this.ButtonSameLength.Size = new System.Drawing.Size(236, 37);
+            this.ButtonSameLength.Size = new System.Drawing.Size(186, 37);
             this.ButtonSameLength.TabIndex = 6;
             this.ButtonSameLength.Text = "Same Length";
             this.ButtonSameLength.UseVisualStyleBackColor = true;
@@ -485,10 +491,10 @@ namespace PolygonEditor
             this.ButtonMoveVertex.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonMoveVertex.Image = global::PolygonEditor.Properties.Resources.pencil;
             this.ButtonMoveVertex.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonMoveVertex.Location = new System.Drawing.Point(254, 6);
+            this.ButtonMoveVertex.Location = new System.Drawing.Point(204, 6);
             this.ButtonMoveVertex.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonMoveVertex.Name = "ButtonMoveVertex";
-            this.ButtonMoveVertex.Size = new System.Drawing.Size(241, 37);
+            this.ButtonMoveVertex.Size = new System.Drawing.Size(189, 37);
             this.ButtonMoveVertex.TabIndex = 1;
             this.ButtonMoveVertex.Text = "Move Vertex";
             this.ButtonMoveVertex.UseVisualStyleBackColor = true;
@@ -504,7 +510,7 @@ namespace PolygonEditor
             this.ButtonAddPolygon.Location = new System.Drawing.Point(6, 6);
             this.ButtonAddPolygon.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonAddPolygon.Name = "ButtonAddPolygon";
-            this.ButtonAddPolygon.Size = new System.Drawing.Size(236, 37);
+            this.ButtonAddPolygon.Size = new System.Drawing.Size(186, 37);
             this.ButtonAddPolygon.TabIndex = 0;
             this.ButtonAddPolygon.Text = "Add Polygon";
             this.ButtonAddPolygon.UseVisualStyleBackColor = true;
@@ -515,11 +521,12 @@ namespace PolygonEditor
             this.ButtonPerpendicular.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonPerpendicular.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonPerpendicular.Image = global::PolygonEditor.Properties.Resources.perpendicular_mathematical_symbol;
             this.ButtonPerpendicular.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonPerpendicular.Location = new System.Drawing.Point(254, 112);
+            this.ButtonPerpendicular.Location = new System.Drawing.Point(204, 112);
             this.ButtonPerpendicular.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonPerpendicular.Name = "ButtonPerpendicular";
-            this.ButtonPerpendicular.Size = new System.Drawing.Size(241, 37);
+            this.ButtonPerpendicular.Size = new System.Drawing.Size(189, 37);
             this.ButtonPerpendicular.TabIndex = 3;
             this.ButtonPerpendicular.Text = "Perpendicular";
             this.ButtonPerpendicular.UseVisualStyleBackColor = true;
@@ -535,7 +542,7 @@ namespace PolygonEditor
             this.ButtonAddVertex.Location = new System.Drawing.Point(6, 58);
             this.ButtonAddVertex.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonAddVertex.Name = "ButtonAddVertex";
-            this.ButtonAddVertex.Size = new System.Drawing.Size(236, 37);
+            this.ButtonAddVertex.Size = new System.Drawing.Size(186, 37);
             this.ButtonAddVertex.TabIndex = 4;
             this.ButtonAddVertex.Text = "Add Vertex";
             this.ButtonAddVertex.UseVisualStyleBackColor = true;

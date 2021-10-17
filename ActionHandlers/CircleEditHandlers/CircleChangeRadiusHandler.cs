@@ -1,4 +1,5 @@
-﻿using PolygonEditor.RasterGraphics.Models;
+﻿using PolygonEditor.Constraints;
+using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
 using System.Collections.Generic;
@@ -19,24 +20,24 @@ namespace PolygonEditor.ActionHandlers.CircleEditHandlers
         private Circle _circleToEdit;
         private bool _moving = false;
         private Line _helpRadius = null;
+        private ConstraintsEnforcer _constraintsEnforcer;
 
-        public CircleChangeRadiusHandler(List<RasterObject> rasterObjects, PictureBox drawingArea, TextBox helperTextBox)
+        public CircleChangeRadiusHandler(List<RasterObject> rasterObjects, PictureBox drawingArea, TextBox helperTextBox, ConstraintsEnforcer constraintEnforcer)
         {
             _selector = new SelectionHandler(rasterObjects, helperTextBox, drawingArea);
             _rasterObjects = rasterObjects;
             _drawingArea = drawingArea;
             _helperTextBox = helperTextBox;
+            _constraintsEnforcer = constraintEnforcer;
         }
 
         public void Cancel()
         {
-            _helpRadius = null;
             RemoveHelpRadius();
         }
 
         public void Finish()
         {
-            _helpRadius = null;
             RemoveHelpRadius();
         }
 
@@ -77,6 +78,7 @@ namespace PolygonEditor.ActionHandlers.CircleEditHandlers
                 {
                     int newRadius = (int)ExtensionMethods.PixelDistance(mousePoint, _circleToEdit.Center);
                     _circleToEdit.SetRadius(newRadius);
+                    _constraintsEnforcer.EnforceCircleConstraint(_circleToEdit);
                     UpdateHelpRadius(mousePoint);
                 }
             }
@@ -103,7 +105,8 @@ namespace PolygonEditor.ActionHandlers.CircleEditHandlers
 
         private void AddHelpRadius(Point mousePoint)
         {
-            _helpRadius = new Line(_circleToEdit.Center, mousePoint, Color.LightGray);
+            Point radiusPoint = new Point(_circleToEdit.Center.X + _circleToEdit.Radius, _circleToEdit.Center.Y);
+            _helpRadius = new Line(_circleToEdit.Center, radiusPoint, Color.Red);
             _rasterObjects.Add(_helpRadius);
         }
 
@@ -115,7 +118,8 @@ namespace PolygonEditor.ActionHandlers.CircleEditHandlers
 
         private void UpdateHelpRadius(Point mousePoint)
         {
-            _helpRadius.SetP2(mousePoint);
+            Point radiusPoint = new Point(_circleToEdit.Center.X + _circleToEdit.Radius, _circleToEdit.Center.Y);
+            _helpRadius.SetP2(radiusPoint);
         }
 
         private void handleCursorChange(Point mousePoint)

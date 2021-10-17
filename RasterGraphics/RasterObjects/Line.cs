@@ -49,7 +49,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             return null;
         }
 
-        public override void MovePolygon(Point from, Point to)
+        public override void MoveRasterObject(Point from, Point to)
         {
             Point newP1 = ExtensionMethods.MovePoint(P1, from, to);
             Point newP2 = ExtensionMethods.MovePoint(P2, from, to);

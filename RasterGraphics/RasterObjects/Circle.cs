@@ -1,4 +1,5 @@
-﻿using PolygonEditor.RasterGraphics.Helpers;
+﻿using PolygonEditor.Constraints.CircleConstraints;
+using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
     {
         public Point Center { get; private set; }
         public int Radius { get; private set; }
+
+        public List<CircleConstraint> Constraints { get; private set; } = new List<CircleConstraint>();
 
         public Circle(Point center, int radius, Color color): base(color)
         {
@@ -49,7 +52,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             return null;
         }
 
-        public override void MovePolygon(Point from, Point to)
+        public override void MoveRasterObject(Point from, Point to)
         {
             Point newCenter = ExtensionMethods.MovePoint(Center, from, to);
             this.SetCenter(newCenter);
@@ -62,17 +65,42 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 
         public override void DrawConstraints(Graphics g)
         {
+            foreach(var constraint in Constraints)
+            {
+                constraint.DrawConstraintInfo(g);
+            }
+        }
+
+        public void AddConstraint(CircleConstraint constraint)
+        {
+            Constraints.Add(constraint);
         }
 
         public override bool RemoveConstraintByClick(Point mousePoint)
         {
+            for (int i = 0; i < Constraints.Count; i++)
+            {
+                Point constraintCenterPoint = Constraints[i].GetCenterDrawingPoint();
+                if (ExtensionMethods.IsInCircle(constraintCenterPoint, mousePoint, Constants.DETECTION_RADIUS))
+                {
+                    Constraints.Remove(Constraints[i]);
+                    return true;
+                }
+            }
             return false;
         }
 
         public override bool DetectConstraint(Point mousePoint)
         {
+            for (int i = 0; i < Constraints.Count; i++)
+            {
+                Point constraintCenterPoint = Constraints[i].GetCenterDrawingPoint();
+                if (ExtensionMethods.IsInCircle(constraintCenterPoint, mousePoint, Constants.DETECTION_RADIUS))
+                {
+                    return true;
+                }
+            }
             return false;
         }
-
     }
 }

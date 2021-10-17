@@ -92,5 +92,13 @@ namespace PolygonEditor.Constraints
             }
         }
 
+        public void EnforceCircleConstraint(Circle circle)
+        {
+            foreach(var c in circle.Constraints)
+            {
+                c.EnforceConstraint(new Point());
+            }
+        }
+
     }
 }

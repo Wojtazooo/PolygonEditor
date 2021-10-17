@@ -3,30 +3,27 @@ using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PolygonEditor.Constraints.PolygonConstraints
+namespace PolygonEditor.Constraints.CircleConstraints
 {
-    public abstract class PolygonConstraint : IConstraint
+    public abstract class CircleConstraint : IConstraint
     {
-        protected Polygon _polygon;
-        public List<int> RelatedVertices;
+        protected Circle _circle;
 
-        public PolygonConstraint(Polygon polygon)
+        public CircleConstraint(Circle circle)
         {
-            _polygon = polygon;
-            _polygon.AddContraint(this);
+            _circle = circle;
+            _circle.AddConstraint(this);
         }
-        public abstract void EnforceConstraint(Point constantPoint);
 
         public RasterObject GetRasterObject()
         {
-            return _polygon;
+            return _circle;
         }
-
+        public abstract void EnforceConstraint(Point constantPoint);
         public abstract void DrawConstraintInfo(Graphics g);
         public abstract Point GetCenterDrawingPoint();
     }

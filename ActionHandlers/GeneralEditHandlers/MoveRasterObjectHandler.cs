@@ -1,4 +1,6 @@
-﻿using PolygonEditor.RasterGraphics.Models;
+﻿using PolygonEditor.Constraints;
+using PolygonEditor.RasterGraphics.Models;
+using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -18,13 +20,14 @@ namespace PolygonEditor.ActionHandlers
         private Point? _previousPoint;
         private PictureBox _drawingArea;
         private object _helperTextBox;
+        private ConstraintsEnforcer _constraintsEnforcer;
 
-        public MoveRasterObjectHandler(List<RasterObject> rasterObjects, PictureBox drawingArea, TextBox helperTextBox)
+        public MoveRasterObjectHandler(List<RasterObject> rasterObjects, PictureBox drawingArea, TextBox helperTextBox, ConstraintsEnforcer constraintsEnforcer)
         {
             _rasterObjects = rasterObjects;
             _drawingArea = drawingArea;
             _helperTextBox = helperTextBox;
-
+            _constraintsEnforcer = constraintsEnforcer;
         }
 
         public void Cancel()
@@ -74,7 +77,8 @@ namespace PolygonEditor.ActionHandlers
             else
             {
                 _drawingArea.Cursor = Cursors.Default;
-                _selectedObject.MovePolygon(_startedPoint.Value, mousePoint);
+                _selectedObject.MoveRasterObject(_startedPoint.Value, mousePoint);
+                if (_selectedObject is Circle) _constraintsEnforcer.EnforceCircleConstraint((Circle)_selectedObject); 
                 _selectedObject = null;
                 _rasterObjects.Remove(_copyObject);
             }
@@ -86,7 +90,7 @@ namespace PolygonEditor.ActionHandlers
             Point mousePoint = new Point(e.X, e.Y);
             if(_selectedObject != null)
             {
-                _copyObject.MovePolygon(_previousPoint.Value, mousePoint);
+                _copyObject.MoveRasterObject(_previousPoint.Value, mousePoint);
                 _previousPoint = mousePoint;
             }
             else
