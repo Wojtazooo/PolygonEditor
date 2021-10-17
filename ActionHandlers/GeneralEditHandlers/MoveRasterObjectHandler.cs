@@ -78,7 +78,14 @@ namespace PolygonEditor.ActionHandlers
             {
                 _drawingArea.Cursor = Cursors.Default;
                 _selectedObject.MoveRasterObject(_startedPoint.Value, mousePoint);
-                if (_selectedObject is Circle) _constraintsEnforcer.EnforceCircleConstraint((Circle)_selectedObject); 
+                if (_selectedObject is Circle) _constraintsEnforcer.EnforceCircleConstraint((Circle)_selectedObject);
+                _rasterObjects.ForEach(obj =>
+                {
+                    if (obj is Circle)
+                    {
+                        _constraintsEnforcer.EnforceCircleConstraint(((Circle)obj));
+                    }
+                });
                 _selectedObject = null;
                 _rasterObjects.Remove(_copyObject);
             }
@@ -91,6 +98,7 @@ namespace PolygonEditor.ActionHandlers
             if(_selectedObject != null)
             {
                 _copyObject.MoveRasterObject(_previousPoint.Value, mousePoint);
+                
                 _previousPoint = mousePoint;
             }
             else

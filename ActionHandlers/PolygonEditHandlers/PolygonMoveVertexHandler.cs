@@ -95,6 +95,13 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
                     _polygonToEdit.MoveVertex(_vertexToMove, mousePoint);
                     _vertexToMove = mousePoint;
                     _constraintsEnforcer.EnforcePolygonConstraints(_polygonToEdit, ExtensionMethods.GetVertexNumberFromPoint(_polygonToEdit, mousePoint));
+                    _rasterObjects.ForEach(obj =>
+                    {
+                        if(obj is Circle)
+                        {
+                            _constraintsEnforcer.EnforceCircleConstraint(((Circle)obj));
+                        }
+                    });
                     UpdateCircles();
                 }
             }

@@ -15,6 +15,7 @@ namespace PolygonEditor.Constraints.CircleConstraints
 
         public ConstantCenterConstraint(Circle circle, Point constantCenter) : base(circle)
         {
+            _circle.Constraints.RemoveAll(c => c is CircleTangentToPolygonConstraint);
             _constantCenter = constantCenter;
         }
 

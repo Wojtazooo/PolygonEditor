@@ -109,7 +109,13 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
 
                     _constraintsEnforcer.EnforcePolygonConstraints(_polygonToEdit, ExtensionMethods.GetVertexNumberFromPoint(_polygonToEdit, a2));
                     _constraintsEnforcer.EnforcePolygonConstraints(_polygonToEdit, ExtensionMethods.GetVertexNumberFromPoint(_polygonToEdit, b2));
-
+                    _rasterObjects.ForEach(obj =>
+                    {
+                        if (obj is Circle)
+                        {
+                            _constraintsEnforcer.EnforceCircleConstraint(((Circle)obj));
+                        }
+                    });
 
                     UpdateCircles();
                 }

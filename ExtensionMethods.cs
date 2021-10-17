@@ -96,6 +96,17 @@ namespace PolygonEditor
             return pointToGetRightAngle;
         }
 
+        public static Point FindCenterOfCircleTangentToEdge(Point v1, Point v2, int Radius)
+        {
+            int dx = v2.X - v1.X;
+            int dy = v1.Y - v2.Y;
+
+            Point w1 = CountMiddleOfSegment(v1, v2);
+            Point rightAnglePoint = new Point(w1.X + dy, w1.Y + dx);
+
+            return MovePointToAchieveLength(rightAnglePoint, w1, Radius);
+        }
+
         public static int GetVertexNumberFromPoint(Polygon polygon, Point vertexPoint)
         {
             for(int i = 0; i < polygon.Vertices.Count; i++)
@@ -139,6 +150,5 @@ namespace PolygonEditor
 
             return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
         }
-
     }
 }
