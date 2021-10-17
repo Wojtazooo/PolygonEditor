@@ -1,4 +1,5 @@
 ﻿using PolygonEditor.Constraints;
+using PolygonEditor.Constraints.PolygonConstraints;
 using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
@@ -17,6 +18,8 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrai
         private TextBox _helperTextBox;
         private PictureBox _drawingArea;
         private ConstraintsEnforcer _constraintsEnforcer;
+        private (Point? a, Point? b) firstSelectedLine;
+        private Cross _helpCross;
 
         public AddSameLengthHandler(List<RasterObject> rasterObjects, TextBox textBoxHelper, PictureBox drawingArea, ConstraintsEnforcer constraintsEnforcer)
         {
@@ -41,6 +44,51 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrai
                     else
                     {
                         _drawingArea.Cursor = Cursors.Default;
+                    }
+                }
+            }
+        }
+
+        public void HandleMouseClick(MouseEventArgs e)
+        {
+            Point mousePoint = new Point(e.X, e.Y);
+
+            for(int i = 0; i < _rasterObjects.Count; i++)
+            {
+                RasterObject rasterObj = _rasterObjects[i];
+                if (rasterObj is Polygon)
+                {
+                    Polygon polygon = (Polygon)rasterObj;
+                    var edge = polygon.isEdgeClicked(mousePoint);
+
+                    if(edge.a.HasValue && edge.b.HasValue)
+                    {
+
+
+                        if (!firstSelectedLine.a.HasValue)
+                        {
+                            _helpCross = new Cross(mousePoint, Constants.CROSS_WIDTH, Color.Green);
+                            _rasterObjects.Add(_helpCross);
+                            firstSelectedLine = (edge.a.Value, edge.b.Value);
+                            return;
+                        }
+                        else if(firstSelectedLine.a.HasValue && firstSelectedLine.b.HasValue && edge.a.Value == firstSelectedLine.a.Value && edge.b.Value == firstSelectedLine.b.Value)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            _rasterObjects.Remove(_helpCross);
+                            var relatedPoint = new List<Point> {
+                                firstSelectedLine.a.Value,
+                                firstSelectedLine.b.Value,
+                                edge.a.Value,
+                                edge.b.Value };
+                            _ = new SameLengthConstraint(polygon, relatedPoint);
+                            _constraintsEnforcer.EnforcePolygonConstraints(polygon, polygon.Vertices.IndexOf(edge.a.Value));
+                            firstSelectedLine = (null, null);
+                            return;
+                        }
                     }
                 }
             }

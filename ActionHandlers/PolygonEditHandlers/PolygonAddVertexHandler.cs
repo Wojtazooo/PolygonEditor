@@ -115,6 +115,7 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
 
         private void RemoveVertexCircles()
         {
+            if (_helpCircles == null) return;
             foreach (var c in _helpCircles)
             {
                 _rasterObjects.Remove(c);

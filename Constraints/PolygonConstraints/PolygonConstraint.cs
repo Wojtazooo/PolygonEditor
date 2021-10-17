@@ -18,7 +18,6 @@ namespace PolygonEditor.Constraints.PolygonConstraints
         public PolygonConstraint(Polygon polygon)
         {
             _polygon = polygon;
-            _polygon.AddContraint(this);
         }
         public abstract void EnforceConstraint(Point constantPoint);
 

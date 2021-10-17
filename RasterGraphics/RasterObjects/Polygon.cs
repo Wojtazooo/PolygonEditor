@@ -55,8 +55,18 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             for(int i = 0; i < Vertices.Count; i++)
             {
                 if (Vertices[i] == vertex)
+                {
                     Constraints.RemoveAll(constraint => constraint.RelatedVertices.Contains(i));
+                    Constraints.ForEach(c =>
+                    {
+                        if(c.RelatedVertices.TrueForAll(v => v > i))
+                        {
+                            c.RelatedVertices.ForEach(v => v--);
+                        }
+                    });
+                }
             }
+
             Vertices.Remove(vertex);
             Update();
         }
@@ -165,6 +175,13 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 
         public void AddContraint(PolygonConstraint constraint)
         {
+            foreach(var c in Constraints)
+            {
+                if(constraint.RelatedVertices.Contains(c.RelatedVertices[0]) && constraint.RelatedVertices.Contains(c.RelatedVertices[1]))
+                {
+                    return;
+                }
+            }
             Constraints.Add(constraint);
         }
 

@@ -2,6 +2,7 @@
 using PolygonEditor.ActionHandlers.CircleEditHandlers;
 using PolygonEditor.ActionHandlers.ConstraintsActionHandlers;
 using PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstraintsHandlers;
+using PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrainsHandlers;
 using PolygonEditor.ActionHandlers.PolygonEditHandlers;
 using PolygonEditor.Constraints;
 using PolygonEditor.Constraints.CircleConstraints;
@@ -41,12 +42,12 @@ namespace PolygonEditor
             TestPolygon = new Polygon(Color.Red);
 
             Point p1 = new Point(100, 100);
-            Point p2 = new Point(200, 100);
-            Point p3 = new Point(250, 150);
+            Point p2 = new Point(300,50);
+            Point p3 = new Point(400,50);
 
-            Point p4 = new Point(200, 200);
-            Point p5 = new Point(100, 200);
-            Point p6 = new Point(50, 150);
+            Point p4 = new Point(600,100);
+            //Point p5 = new Point(100, 200);
+            //Point p6 = new Point(50, 150);
 
 
 
@@ -60,10 +61,8 @@ namespace PolygonEditor
             TestPolygon.AddVertex(p2);
             TestPolygon.AddVertex(p3);
             TestPolygon.AddVertex(p4);
-            TestPolygon.AddVertex(p5);
-            TestPolygon.AddVertex(p6);
-
-
+            //TestPolygon.AddVertex(p5);
+            //TestPolygon.AddVertex(p6);
 
             //TestPolygon.AddVertex(p4);
             //TestPolygon.AddVertex(p5);
@@ -73,10 +72,10 @@ namespace PolygonEditor
             _rasterObjects.Add(TestPolygon);
 
 
-            List<Point> twoEdgesPoints = new List<Point> { p1, p2, p4,p5}; 
+            List<Point> twoEdgesPoints = new List<Point> { p1, p2, p3,p4};
 
-            _ = new SameLengthConstraint(TestPolygon, twoEdgesPoints);
-           // _ = new SameLengthConstraint(TestPolygon, new List<Point> { p4,p5,p1,p2});
+            _ = new RightAngleConstraint(TestPolygon, twoEdgesPoints);
+            // _ = new SameLengthConstraint(TestPolygon, new List<Point> { p4,p5,p1,p2});
             //var TestConstraint3 = new ConstantEdgeLength(TestPolygon, p3, p4, 100);
             //var TestConstraint4 = new ConstantEdgeLength(TestPolygon, p4, p5, 100);
             //var TestConstraint5 = new ConstantEdgeLength(TestPolygon, p5, p1, 100);
@@ -227,7 +226,8 @@ namespace PolygonEditor
 
         private void ButtonSameLength_Click(object sender, EventArgs e)
         {
-
+            _activeActionHandler?.Finish();
+            _activeActionHandler = new AddSameLengthHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
 
         private void ButtonConstantLength_Click(object sender, EventArgs e)

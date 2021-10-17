@@ -9,22 +9,20 @@ using System.Threading.Tasks;
 
 namespace PolygonEditor.Constraints.PolygonConstraints
 {
-    class SameLengthConstraint : PolygonConstraint
+    class RightAngleConstraint : PolygonConstraint
     {
-        public SameLengthConstraint(Polygon polygon, List<Point> relatedPoints) : base(polygon) 
+        public RightAngleConstraint(Polygon polygon, List<Point> relatedPoints) : base(polygon)
         {
-            foreach(var i in relatedPoints)
+            foreach (var i in relatedPoints)
             {
                 RelatedVertices.Add(_polygon.Vertices.IndexOf(i));
             }
             _polygon.AddContraint(this);
         }
-
         public override void DrawConstraintInfo(Graphics g)
         {
-            GraphicsApplier.ApplyString(g, "same length", GetCenterPointFirstEdge());
-            GraphicsApplier.ApplyString(g, "same length", GetCenterPointSecondEdge());
-
+            GraphicsApplier.ApplyString(g, "right angle", GetCenterPointFirstEdge());
+            GraphicsApplier.ApplyString(g, "right angle", GetCenterPointSecondEdge());
         }
 
         public override void EnforceConstraint(Point constantPoint)
@@ -32,17 +30,15 @@ namespace PolygonEditor.Constraints.PolygonConstraints
             (Point v1, Point v2) = (_polygon.Vertices[RelatedVertices[0]], _polygon.Vertices[RelatedVertices[1]]);
             (Point w1, Point w2) = (_polygon.Vertices[RelatedVertices[2]], _polygon.Vertices[RelatedVertices[3]]);
 
-            if(v1 == constantPoint || v2 == constantPoint)
+            if (v1 == constantPoint || v2 == constantPoint)
             {
-                int length = (int)ExtensionMethods.PixelDistance(v1, v2);
-                Point movedPoint = ExtensionMethods.MovePointToAchieveLength(w1,w2,length);
-                _polygon.MoveVertex(w1, movedPoint);
+                Point movedPoint = ExtensionMethods.MovePointToAchieveRightAngle(v1, v2, w1, w2);
+                _polygon.MoveVertex(w2, movedPoint);
             }
             else
             {
-                int length = (int)ExtensionMethods.PixelDistance(w1, w2);
-                Point movedPoint = ExtensionMethods.MovePointToAchieveLength(v1, v2, length);
-                _polygon.MoveVertex(v1, movedPoint);
+                Point movedPoint = ExtensionMethods.MovePointToAchieveRightAngle(w1,w2,v1,v2);
+                _polygon.MoveVertex(v2, movedPoint);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using PolygonEditor.RasterGraphics.RasterObjects;
+﻿using PolygonEditor.RasterGraphics.Helpers;
+using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -32,6 +33,7 @@ namespace PolygonEditor.Constraints.PolygonConstraints
             RelatedVertices.Add(numberOfV1);
             RelatedVertices.Add(numberOfV2);
             _constantLength = constantLength;
+            _polygon.AddContraint(this);
         }
 
         public override void EnforceConstraint(Point constantPoint)
@@ -59,24 +61,8 @@ namespace PolygonEditor.Constraints.PolygonConstraints
 
         public override void DrawConstraintInfo(Graphics g)
         {
-            var stringSize = g.MeasureString(_constantLength.ToString(), Constants.CONSTRAINTS_FONT);
-            stringSize.Width += 2;
-            stringSize.Height += 2;
-
             Point center = RelationCenterPoint();
-
-            Point leftUpperCorner = 
-                ExtensionMethods.FindLeftUpperCornerForRectangle(
-                    center,
-                    (int)stringSize.Width, 
-                    (int)stringSize.Height);
-
-            Rectangle rectangle = new Rectangle(leftUpperCorner, stringSize.ToSize());
-
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            g.DrawString(_constantLength.ToString(), Constants.CONSTRAINTS_FONT, Brushes.Black, rectangle);
+            GraphicsApplier.ApplyString(g, _constantLength.ToString(), center);
         }
 
         public override Point GetCenterDrawingPoint()

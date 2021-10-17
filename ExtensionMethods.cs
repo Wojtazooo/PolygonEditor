@@ -71,19 +71,30 @@ namespace PolygonEditor
             int dx = seceondPoint.X - pointToMove.X;
             int dy = seceondPoint.Y - pointToMove.Y;
 
-            double p = (c - length) / c;
+            double px = ((c - length) * dx) / c;
+            double py = ((c - length) * dy) / c;
 
-            return new Point((int)(pointToMove.X + p * dx), (int)(pointToMove.Y + p * dy));
-
+            return new Point((int)Math.Round(pointToMove.X + px,1), (int)Math.Round(pointToMove.Y + py, 1));
         }
 
-        //public static void ApplyConstraints(List<IConstraint> constraints, List<Point> lockedPoints)
-        //{
-        //    foreach (var c in constraints)
-        //    {
-        //        c.EnforceConstraint(lockedPoints);
-        //    }
-        //}
+        public static Point MovePointToAchieveRightAngle(Point constv1, Point constv2, Point constw1, Point w2)
+        {
+            int dx1 = constv2.X - constv1.X;
+            int dy1 = constv1.Y - constv2.Y;
+            int dx2 = w2.X - constw1.X;
+            int dy2 = w2.Y - constw1.Y;
+
+
+            if (dx1 == 0)
+            {
+                return new Point(constw1.X + (int)PixelDistance(constw1,w2), constw1.Y);
+            }
+
+            double tga = (dy1 * dy2) / dx1;
+
+            var pointToGetRightAngle = new Point((int)(constw1.X + tga), w2.Y);
+            return pointToGetRightAngle;
+        }
 
         public static int GetVertexNumberFromPoint(Polygon polygon, Point vertexPoint)
         {
