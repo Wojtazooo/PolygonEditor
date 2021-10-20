@@ -127,6 +127,7 @@ namespace PolygonEditor.RasterGraphics.Helpers
                     y--;
                 }
                 pixelsToReturn.Add(new Pixel(x, y, color));
+               // if (pixelsToReturn.Count > 10000) break;
             }
             return pixelsToReturn;
         }

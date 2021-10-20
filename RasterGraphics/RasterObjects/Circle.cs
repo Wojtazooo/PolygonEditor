@@ -13,12 +13,12 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 {
     public class Circle : RasterObject
     {
-        public Point Center { get; private set; }
+        public MyPoint Center { get; private set; }
         public int Radius { get; private set; }
 
         public List<CircleConstraint> Constraints { get; private set; } = new List<CircleConstraint>();
 
-        public Circle(Point center, int radius, Color color): base(color)
+        public Circle(MyPoint center, int radius, Color color): base(color)
         {
             Center = center;
             Radius = radius;
@@ -27,7 +27,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 
         public override void Update()
         {
-            _pixels = CircleGenerator.GetPixels(Center,Radius,Color);
+            _pixels = CircleGenerator.GetPixels(Center.GetPoint(),Radius,Color);
         }
 
         public void SetRadius(int newRadius)
@@ -36,13 +36,13 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             Update();
         }
 
-        public void SetCenter(Point center)
+        public void SetCenter(MyPoint center)
         {
             Center = center;
             Update();
         }
 
-        public override Point? DetectObject(Point mousePoint, int radius)
+        public override MyPoint DetectObject(MyPoint mousePoint, int radius)
         {
             if (ExtensionMethods.IsInCircle(mousePoint, Center, radius))
                 return Center;
@@ -52,9 +52,9 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             return null;
         }
 
-        public override void MoveRasterObject(Point from, Point to)
+        public override void MoveRasterObject(MyPoint from, MyPoint to)
         {
-            Point newCenter = ExtensionMethods.MovePoint(Center, from, to);
+            MyPoint newCenter = ExtensionMethods.MovePoint(Center, from, to);
             this.SetCenter(newCenter);
         }
 
@@ -76,11 +76,11 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             Constraints.Add(constraint);
         }
 
-        public override bool RemoveConstraintByClick(Point mousePoint)
+        public override bool RemoveConstraintByClick(MyPoint mousePoint)
         {
             for (int i = 0; i < Constraints.Count; i++)
             {
-                Point constraintCenterPoint = Constraints[i].GetCenterDrawingPoint();
+                MyPoint constraintCenterPoint = new MyPoint(Constraints[i].GetCenterDrawingPoint());
                 if (ExtensionMethods.IsInCircle(constraintCenterPoint, mousePoint, Constants.DETECTION_RADIUS))
                 {
                     Constraints.Remove(Constraints[i]);
@@ -90,11 +90,11 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             return false;
         }
 
-        public override bool DetectConstraint(Point mousePoint)
+        public override bool DetectConstraint(MyPoint mousePoint)
         {
             for (int i = 0; i < Constraints.Count; i++)
             {
-                Point constraintCenterPoint = Constraints[i].GetCenterDrawingPoint();
+                MyPoint constraintCenterPoint = new MyPoint(Constraints[i].GetCenterDrawingPoint());
                 if (ExtensionMethods.IsInCircle(constraintCenterPoint, mousePoint, Constants.DETECTION_RADIUS))
                 {
                     return true;

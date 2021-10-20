@@ -11,9 +11,9 @@ namespace PolygonEditor.Constraints.PolygonConstraints
 {
     class SameLengthConstraint : PolygonConstraint
     {
-        public SameLengthConstraint(Polygon polygon, List<Point> relatedPoints) : base(polygon) 
+        public SameLengthConstraint(Polygon polygon, List<MyPoint> relatedMyPoints) : base(polygon) 
         {
-            foreach(var i in relatedPoints)
+            foreach(var i in relatedMyPoints)
             {
                 RelatedVertices.Add(_polygon.Vertices.IndexOf(i));
             }
@@ -22,46 +22,46 @@ namespace PolygonEditor.Constraints.PolygonConstraints
 
         public override void DrawConstraintInfo(Graphics g)
         {
-            GraphicsApplier.ApplyString(g, "same length", GetCenterPointFirstEdge());
-            GraphicsApplier.ApplyString(g, "same length", GetCenterPointSecondEdge());
+            GraphicsApplier.ApplyString(g, "same length", GetCenterMyPointFirstEdge());
+            GraphicsApplier.ApplyString(g, "same length", GetCenterMyPointSecondEdge());
 
         }
 
-        public override void EnforceConstraint(Point constantPoint)
+        public override void EnforceConstraint(MyPoint constantMyPoint)
         {
-            (Point v1, Point v2) = (_polygon.Vertices[RelatedVertices[0]], _polygon.Vertices[RelatedVertices[1]]);
-            (Point w1, Point w2) = (_polygon.Vertices[RelatedVertices[2]], _polygon.Vertices[RelatedVertices[3]]);
+            (MyPoint v1, MyPoint v2) = (_polygon.Vertices[RelatedVertices[0]], _polygon.Vertices[RelatedVertices[1]]);
+            (MyPoint w1, MyPoint w2) = (_polygon.Vertices[RelatedVertices[2]], _polygon.Vertices[RelatedVertices[3]]);
 
-            if(v1 == constantPoint || v2 == constantPoint)
+            if(v1 == constantMyPoint || v2 == constantMyPoint)
             {
                 int length = (int)ExtensionMethods.PixelDistance(v1, v2);
-                Point movedPoint = ExtensionMethods.MovePointToAchieveLength(w1,w2,length);
-                _polygon.MoveVertex(w1, movedPoint);
+                MyPoint movedMyPoint = ExtensionMethods.MovePointToAchieveLength(w1,w2,length);
+                _polygon.MoveVertex(w1, movedMyPoint);
             }
             else
             {
                 int length = (int)ExtensionMethods.PixelDistance(w1, w2);
-                Point movedPoint = ExtensionMethods.MovePointToAchieveLength(v1, v2, length);
-                _polygon.MoveVertex(v1, movedPoint);
+                MyPoint movedMyPoint = ExtensionMethods.MovePointToAchieveLength(v1, v2, length);
+                _polygon.MoveVertex(v1, movedMyPoint);
             }
         }
 
-        public override Point GetCenterDrawingPoint()
+        public override MyPoint GetCenterDrawingPoint()
         {
-            return GetCenterPointFirstEdge();
+            return GetCenterMyPointFirstEdge();
         }
 
-        private Point GetCenterPointFirstEdge()
+        private MyPoint GetCenterMyPointFirstEdge()
         {
-            Point v1 = _polygon.Vertices[RelatedVertices[0]];
-            Point v2 = _polygon.Vertices[RelatedVertices[1]];
+            MyPoint v1 = _polygon.Vertices[RelatedVertices[0]];
+            MyPoint v2 = _polygon.Vertices[RelatedVertices[1]];
             return ExtensionMethods.CountMiddleOfSegment(v1, v2);
         }
 
-        private Point GetCenterPointSecondEdge()
+        private MyPoint GetCenterMyPointSecondEdge()
         {
-            Point v1 = _polygon.Vertices[RelatedVertices[2]];
-            Point v2 = _polygon.Vertices[RelatedVertices[3]];
+            MyPoint v1 = _polygon.Vertices[RelatedVertices[2]];
+            MyPoint v2 = _polygon.Vertices[RelatedVertices[3]];
             return ExtensionMethods.CountMiddleOfSegment(v1, v2);
         }
     }

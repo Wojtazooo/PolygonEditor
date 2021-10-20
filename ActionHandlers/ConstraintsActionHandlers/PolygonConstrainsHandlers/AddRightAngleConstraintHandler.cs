@@ -1,5 +1,6 @@
 ﻿using PolygonEditor.Constraints;
 using PolygonEditor.Constraints.PolygonConstraints;
+using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
@@ -18,7 +19,7 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrai
         private TextBox _helperTextBox;
         private readonly PictureBox _drawingArea;
         private ConstraintsEnforcer _constraintsEnforcer;
-        private (Point? a, Point? b) firstSelectedLine;
+        private (MyPoint a, MyPoint b) firstSelectedLine;
         private Cross _helpCross;
 
         public AddRightAngleConstraintHandler(List<RasterObject> rasterObjects, TextBox textBoxHelper, PictureBox drawingArea, ConstraintsEnforcer constraintsEnforcer)
@@ -31,13 +32,13 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrai
 
         public void HandleMouseMove(MouseEventArgs e)
         {
-            Point mousePoint = new Point(e.X, e.Y);
+            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
             foreach (var rasterObj in _rasterObjects)
             {
                 if (rasterObj is Polygon)
                 {
-                    var edge = ((Polygon)rasterObj).isEdgeClicked(mousePoint);
-                    if (edge.a.HasValue && edge.b.HasValue)
+                    var edge = ((Polygon)rasterObj).isEdgeClicked(mouseMyPoint);
+                    if (edge.a != null && edge.b != null)
                     {
                         _drawingArea.Cursor = Cursors.Hand;
                     }
@@ -51,7 +52,7 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrai
 
         public void HandleMouseClick(MouseEventArgs e)
         {
-            Point mousePoint = new Point(e.X, e.Y);
+            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
 
             for (int i = 0; i < _rasterObjects.Count; i++)
             {
@@ -59,31 +60,32 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrai
                 if (rasterObj is Polygon)
                 {
                     Polygon polygon = (Polygon)rasterObj;
-                    var edge = polygon.isEdgeClicked(mousePoint);
+                    var edge = polygon.isEdgeClicked(mouseMyPoint);
 
-                    if (edge.a.HasValue && edge.b.HasValue)
+                    if (edge.a != null && edge.b != null)
                     {
-                        if (!firstSelectedLine.a.HasValue)
+                        if (firstSelectedLine.a == null)
                         {
-                            _helpCross = new Cross(mousePoint, Constants.CROSS_WIDTH, Color.Green);
+                            _helpCross = new Cross(mouseMyPoint, Constants.CROSS_WIDTH, Color.Green);
                             _rasterObjects.Add(_helpCross);
-                            firstSelectedLine = (edge.a.Value, edge.b.Value);
+                            firstSelectedLine = (edge.a, edge.b);
                             return;
                         }
-                        else if (firstSelectedLine.a.HasValue && firstSelectedLine.b.HasValue && edge.a.Value == firstSelectedLine.a.Value && edge.b.Value == firstSelectedLine.b.Value)
+                        else if (firstSelectedLine.a != null && firstSelectedLine.b != null && edge.a == firstSelectedLine.a && edge.b == firstSelectedLine.b)
                         {
                             continue;
                         }
                         else
                         {
                             _rasterObjects.Remove(_helpCross);
-                            var relatedPoint = new List<Point> {
-                                firstSelectedLine.a.Value,
-                                firstSelectedLine.b.Value,
-                                edge.a.Value,
-                                edge.b.Value };
-                            _ = new RightAngleConstraint(polygon, relatedPoint);
-                            _constraintsEnforcer.EnforcePolygonConstraints(polygon, polygon.Vertices.IndexOf(edge.a.Value));
+                            var relatedMyPoint = new List<MyPoint> {
+                                firstSelectedLine.a,
+                                firstSelectedLine.b,
+                                edge.a,
+                                edge.b };
+                            _ = new RightAngleConstraint(polygon, relatedMyPoint);
+                            _ = new RightAngleConstraint(polygon, relatedMyPoint);
+                            _constraintsEnforcer.EnforcePolygonConstraints(polygon, polygon.Vertices.IndexOf(edge.a));
                             firstSelectedLine = (null, null);
                             return;
                         }

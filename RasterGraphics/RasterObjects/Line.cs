@@ -7,12 +7,12 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 {
     public class Line : RasterObject
     {
-        public Point P1 { get; private set; }
-        public Point P2 { get; private set; }
+        public MyPoint P1 { get; private set; }
+        public MyPoint P2 { get; private set; }
         
         public Line(Color color): base(color) { }
 
-        public Line(Point p1, Point p2, Color color): base(color)
+        public Line(MyPoint p1, MyPoint p2, Color color): base(color)
         {
             P1 = p1;
             P2 = p2;
@@ -20,19 +20,19 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             Update();
         }
 
-        public void SetP1(Point p1)
+        public void SetP1(MyPoint p1)
         {
             P1 = p1;
             Update();
         }
 
-        public void SetP2(Point p2)
+        public void SetP2(MyPoint p2)
         {
             P2 = p2;
             Update();
         }
 
-        public void SetP1AndP2(Point p1, Point p2)
+        public void SetP1AndP2(MyPoint p1, MyPoint p2)
         {
             P1 = p1;
             P2 = p2;
@@ -41,18 +41,18 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 
         public override void Update()
         {
-            _pixels = LineGenerator.GetPixels(P1, P2, Color);
+            _pixels = LineGenerator.GetPixels(P1.GetPoint(), P2.GetPoint(), Color);
         }
 
-        public override Point? DetectObject(Point mousePoint, int radius)
+        public override MyPoint DetectObject(MyPoint mousePoint, int radius)
         {
             return null;
         }
 
-        public override void MoveRasterObject(Point from, Point to)
+        public override void MoveRasterObject(MyPoint from, MyPoint to)
         {
-            Point newP1 = ExtensionMethods.MovePoint(P1, from, to);
-            Point newP2 = ExtensionMethods.MovePoint(P2, from, to);
+            MyPoint newP1 = ExtensionMethods.MovePoint(P1, from, to);
+            MyPoint newP2 = ExtensionMethods.MovePoint(P2, from, to);
             SetP1AndP2(newP1, newP2);
         }
 
@@ -65,12 +65,12 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         {
         }
 
-        public override bool RemoveConstraintByClick(Point mousePoint)
+        public override bool RemoveConstraintByClick(MyPoint mousePoint)
         {
             return false;
         }
 
-        public override bool DetectConstraint(Point mousePoint)
+        public override bool DetectConstraint(MyPoint mousePoint)
         {
             return false;
         }

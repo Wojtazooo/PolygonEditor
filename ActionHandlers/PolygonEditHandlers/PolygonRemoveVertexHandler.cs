@@ -1,4 +1,5 @@
-﻿using PolygonEditor.RasterGraphics.Models;
+﻿using PolygonEditor.RasterGraphics.Helpers;
+using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
 using System.Collections.Generic;
@@ -72,13 +73,13 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
             }
             else
             {
-                Point mousePoint = new Point(e.X, e.Y);
-                Point? detectedPoint = _polygonToEdit.DetectObject(mousePoint, Constants.CROSS_WIDTH);
-                if (detectedPoint != null)
+                MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
+                MyPoint detectedMyPoint = _polygonToEdit.DetectObject(mouseMyPoint, Constants.CROSS_WIDTH);
+                if (detectedMyPoint != null)
                 {
-                    _polygonToEdit.RemoveVertex(detectedPoint.Value);
+                    _polygonToEdit.RemoveVertex(detectedMyPoint);
                     for (int i = 0; i < _redCrosses.Count; i++)
-                        if (_redCrosses[i].Center == detectedPoint.Value)
+                        if (_redCrosses[i].Center == detectedMyPoint)
                         {
                             _rasterObjects.Remove(_redCrosses[i]);
                             _redCrosses.RemoveAt(i);
@@ -96,9 +97,9 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
             }
             else
             {
-                Point mousePoint = new Point(e.X, e.Y);
-                Point? detectedPoint = _polygonToEdit.DetectObject(mousePoint, Constants.CROSS_WIDTH);
-                if (detectedPoint != null && _polygonToEdit.Vertices.Contains(detectedPoint.Value))
+                MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
+                MyPoint detectedMyPoint = _polygonToEdit.DetectObject(mouseMyPoint, Constants.CROSS_WIDTH);
+                if (detectedMyPoint != null && _polygonToEdit.Vertices.Contains(detectedMyPoint))
                 {
                     _drawingArea.Cursor = Cursors.Hand;
                 }

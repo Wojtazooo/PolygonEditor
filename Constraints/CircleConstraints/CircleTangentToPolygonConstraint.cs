@@ -25,20 +25,20 @@ namespace PolygonEditor.Constraints.CircleConstraints
 
         public override void DrawConstraintInfo(Graphics g)
         {
-            Point center = ExtensionMethods.CountMiddleOfSegment(_polygon.Vertices[_v1], _polygon.Vertices[_v2]);
+            MyPoint center = ExtensionMethods.CountMiddleOfSegment(_polygon.Vertices[_v1], _polygon.Vertices[_v2]);
             GraphicsApplier.ApplyCircle(
                 g,
                 center,
                 Constants.DETECTION_RADIUS/2);
         }
 
-        public override void EnforceConstraint(Point constantPoint)
+        public override void EnforceConstraint(MyPoint constantMyPoint)
         {
-            Point newCenter = ExtensionMethods.FindCenterOfCircleTangentToEdge(_polygon.Vertices[_v1], _polygon.Vertices[_v2], _circle.Radius);
+            MyPoint newCenter = ExtensionMethods.FindCenterOfCircleTangentToEdge(_polygon.Vertices[_v1], _polygon.Vertices[_v2], _circle.Radius);
             _circle.SetCenter(newCenter);
         }
 
-        public override Point GetCenterDrawingPoint()
+        public override MyPoint GetCenterDrawingPoint()
         {
             return ExtensionMethods.CountMiddleOfSegment(_polygon.Vertices[_v1], _polygon.Vertices[_v2]);
         }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PolygonEditor.RasterGraphics.Helpers;
 
 namespace PolygonEditor.ActionHandlers
 {
@@ -61,20 +62,20 @@ namespace PolygonEditor.ActionHandlers
         {
             if(_circle != null)
             {
-                Point mousePoint = new Point(e.X, e.Y);
-                Point circleCenter = _circle.Center;
-                int newRadius = (int)ExtensionMethods.PixelDistance(mousePoint, circleCenter);
+                MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
+                MyPoint circleCenter = _circle.Center;
+                int newRadius = (int)ExtensionMethods.PixelDistance(mouseMyPoint, circleCenter);
                 _circle.SetRadius(newRadius);
-                _helpRadiusLine.SetP1AndP2(_circle.Center, mousePoint);
+                _helpRadiusLine.SetP1AndP2(_circle.Center, mouseMyPoint);
             }
         }
 
         public void HandleMouseClick(MouseEventArgs e)
         {
-            Point clickedPoint = new Point(e.X, e.Y);
+            MyPoint clickedMyPoint = new MyPoint(e.X, e.Y);
             if (_circle == null)
             {
-                _circle = new Circle(clickedPoint, 0, _color);
+                _circle = new Circle(clickedMyPoint, 0, _color);
                 _rasterObjects.Add(_circle);
             }
             else

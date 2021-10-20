@@ -1,5 +1,6 @@
 ﻿using PolygonEditor.Constraints;
 using PolygonEditor.Constraints.CircleConstraints;
+using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
@@ -30,13 +31,13 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstrain
 
         public void HandleMouseMove(MouseEventArgs e)
         {
-            Point mousePoint = new Point(e.X, e.Y);
+            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
             foreach (var rasterObj in _rasterObjects)
             {
                 if (rasterObj is Circle)
                 {
-                    var detectedPoint = ((Circle)rasterObj).DetectObject(mousePoint, Constants.DETECTION_RADIUS);
-                    if (detectedPoint.HasValue)
+                    var detectedMyPoint = ((Circle)rasterObj).DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS);
+                    if (detectedMyPoint != null)
                     {
                         _drawingArea.Cursor = Cursors.Hand;
                     }
@@ -50,7 +51,7 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstrain
 
         public void HandleMouseClick(MouseEventArgs e)
         {
-            Point mousePoint = new Point(e.X, e.Y);
+            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
 
             for (int i = 0; i < _rasterObjects.Count; i++)
             {
@@ -60,8 +61,8 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstrain
                     if (rasterObj is Circle)
                     {
                         Circle circle = (Circle)rasterObj;
-                        var detectedPoint = circle.DetectObject(mousePoint, Constants.DETECTION_RADIUS);
-                        if (detectedPoint.HasValue)
+                        var detectedMyPoint = circle.DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS);
+                        if (detectedMyPoint!= null)
                         {
                             selectedCircle = circle;
                         }
@@ -72,11 +73,11 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstrain
                     if(rasterObj is Polygon)
                     {
                         Polygon polygon = (Polygon)rasterObj;
-                        var edge = polygon.isEdgeClicked(mousePoint);
-                        if(edge.a.HasValue && edge.b.HasValue)
+                        var edge = polygon.isEdgeClicked(mouseMyPoint);
+                        if(edge.a != null && edge.b != null)
                         {
-                            int v1 = polygon.Vertices.FindIndex(v => v == edge.a.Value);
-                            int v2 = polygon.Vertices.FindIndex(v => v == edge.b.Value);
+                            int v1 = polygon.Vertices.FindIndex(v => v == edge.a);
+                            int v2 = polygon.Vertices.FindIndex(v => v == edge.b);
 
                             _ = new CircleTangentToPolygonConstraint(selectedCircle, polygon, v1,v2);
                             _constraintsEnforcer.EnforceCircleConstraint(selectedCircle);

@@ -1,4 +1,5 @@
-﻿using PolygonEditor.RasterGraphics.Models;
+﻿using PolygonEditor.RasterGraphics.Helpers;
+using PolygonEditor.RasterGraphics.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -24,19 +25,19 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers
 
         public void HandleMouseClick(MouseEventArgs e)
         {
-            Point mousePoint = new Point(e.X, e.Y);
+            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
             foreach (var rasterObj in _rasterObjects)
             {
-                if (rasterObj.RemoveConstraintByClick(mousePoint)) return;
+                if (rasterObj.RemoveConstraintByClick(mouseMyPoint)) return;
             }
         }
 
         public void HandleMouseMove(MouseEventArgs e)
         {
-            Point mousePoint = new Point(e.X, e.Y);
+            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
             foreach(var rasterObj in _rasterObjects)
             {
-                if (rasterObj.DetectConstraint(mousePoint))
+                if (rasterObj.DetectConstraint(mouseMyPoint))
                 { 
                     _drawingArea.Cursor = Cursors.Hand;
                 }

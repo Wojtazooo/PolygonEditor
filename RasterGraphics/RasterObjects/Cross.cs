@@ -11,15 +11,15 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 {
     class Cross : RasterObject
     {
-        public Point Center { get; private set; }
+        public MyPoint Center { get; private set; }
         public int Width { get; private set; }
-        public Cross(Point center, int width, Color color): base(color)
+        public Cross(MyPoint center, int width, Color color): base(color)
         {
             Center = center;
             Width = width;
             Update();
         }
-        public override Point? DetectObject(Point mousePoint, int radius)
+        public override MyPoint DetectObject(MyPoint mousePoint, int radius)
         {
             if (ExtensionMethods.IsInCircle(mousePoint, Center, radius))
                 return Center;
@@ -29,21 +29,21 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         public override void Update()
         {
             var firstLine = LineGenerator.GetPixels(
-                new Point(Center.X - Width / 2, Center.Y + Width / 2),
-                new Point(Center.X + Width / 2, Center.Y - Width / 2),
+                new MyPoint(Center.X - Width / 2, Center.Y + Width / 2).GetPoint(),
+                new MyPoint(Center.X + Width / 2, Center.Y - Width / 2).GetPoint(),
                 Color);
             var secondLine = LineGenerator.GetPixels(
-               new Point(Center.X - Width / 2, Center.Y - Width / 2),
-               new Point(Center.X + Width / 2, Center.Y + Width / 2),
+               new MyPoint(Center.X - Width / 2, Center.Y - Width / 2).GetPoint(),
+               new MyPoint(Center.X + Width / 2, Center.Y + Width / 2).GetPoint(),
                Color);
 
             _pixels.AddRange(firstLine);
             _pixels.AddRange(secondLine);
         }
 
-        public override void MoveRasterObject(Point from, Point to)
+        public override void MoveRasterObject(MyPoint from, MyPoint to)
         {
-            Point movedCenter = ExtensionMethods.MovePoint(Center, from, to);
+            MyPoint movedCenter = ExtensionMethods.MovePoint(Center, from, to);
             Center = movedCenter;
             Update();
         }
@@ -57,12 +57,12 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         {
         }
 
-        public override bool RemoveConstraintByClick(Point mousePoint)
+        public override bool RemoveConstraintByClick(MyPoint mousePoint)
         {
             return false;
         }
 
-        public override bool DetectConstraint(Point mousePoint)
+        public override bool DetectConstraint(MyPoint mousePoint)
         {
             return false;
         }

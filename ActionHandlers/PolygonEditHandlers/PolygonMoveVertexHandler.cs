@@ -1,4 +1,5 @@
 ﻿using PolygonEditor.Constraints;
+using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
@@ -13,9 +14,9 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
 {
     class MovePolygonVertexHandler : ActionHandler
     {
-        private Point _previousPoint;
-        private Point _vertexToMove;
-        private Point _startPoint;
+        private MyPoint _previousMyPoint;
+        private int _vertexToMove;
+        private MyPoint _startMyPoint;
         bool moving = false;
         private SelectionHandler _selector;
         private List<RasterObject> _rasterObjects;
@@ -68,15 +69,15 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
         {
             if(_polygonToEdit != null)
             {
-                Point mousePoint = new Point(e.X, e.Y);
-                Point? detectedPoint = _polygonToEdit.DetectObject(mousePoint, Constants.CROSS_WIDTH);
-                if (detectedPoint != null && _polygonToEdit.Vertices.Contains(detectedPoint.Value))
+                MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
+                MyPoint detectedMyPoint = _polygonToEdit.DetectObject(mouseMyPoint, Constants.CROSS_WIDTH);
+                if (detectedMyPoint != null && _polygonToEdit.Vertices.Contains(detectedMyPoint))
                 {
                     _drawingArea.Cursor = Cursors.SizeAll;
-                    _vertexToMove = detectedPoint.Value;
+                    _vertexToMove = _polygonToEdit.Vertices.FindIndex(p => p == detectedMyPoint);
                     moving = true;
-                    _previousPoint = mousePoint;
-                    _startPoint = mousePoint;
+                    _previousMyPoint = mouseMyPoint;
+                    _startMyPoint = mouseMyPoint;
                 }
             }
         }
@@ -89,12 +90,11 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
             }
             else
             {
-                Point mousePoint = new Point(e.X, e.Y);
+                MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
                 if (moving)
                 {
-                    _polygonToEdit.MoveVertex(_vertexToMove, mousePoint);
-                    _vertexToMove = mousePoint;
-                    _constraintsEnforcer.EnforcePolygonConstraints(_polygonToEdit, ExtensionMethods.GetVertexNumberFromPoint(_polygonToEdit, mousePoint));
+                    _polygonToEdit.MoveVertex(_polygonToEdit.Vertices[_vertexToMove], mouseMyPoint);
+                    _constraintsEnforcer.EnforcePolygonConstraints(_polygonToEdit, ExtensionMethods.GetVertexNumberFromPoint(_polygonToEdit, mouseMyPoint));
                     _rasterObjects.ForEach(obj =>
                     {
                         if(obj is Circle)

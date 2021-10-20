@@ -1,4 +1,5 @@
-﻿using PolygonEditor.RasterGraphics.Models;
+﻿using PolygonEditor.RasterGraphics.Helpers;
+using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
 using System.Collections.Generic;
@@ -74,18 +75,18 @@ namespace PolygonEditor.ActionHandlers
         {
             if(_polygon?.Vertices.Count >= 1)
             {
-                Point mousePoint = new Point(e.X, e.Y);
-                helpLine1.SetP1AndP2(_polygon.Vertices.First(), mousePoint);
-                helpLine2.SetP1AndP2(_polygon.Vertices.Last(), mousePoint);
+                MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
+                helpLine1.SetP1AndP2(_polygon.Vertices.First(), mouseMyPoint);
+                helpLine2.SetP1AndP2(_polygon.Vertices.Last(), mouseMyPoint);
             }
         }
 
         public void HandleMouseClick(MouseEventArgs e)
         {
-            Point clickedPoint = new Point(e.X, e.Y);
+            MyPoint clickedMyPoint = new MyPoint(e.X, e.Y);
             if (e.Button == MouseButtons.Left)
             {
-                _polygon.AddVertex(clickedPoint);
+                _polygon.AddVertex(clickedMyPoint);
             }
             else if (e.Button == MouseButtons.Right)
             {

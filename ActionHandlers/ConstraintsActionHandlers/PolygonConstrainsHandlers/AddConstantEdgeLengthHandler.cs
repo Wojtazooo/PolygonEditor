@@ -1,5 +1,6 @@
 ﻿using PolygonEditor.Constraints;
 using PolygonEditor.Constraints.PolygonConstraints;
+using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
@@ -29,7 +30,7 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers
 
         public void HandleMouseClick(MouseEventArgs e)
         {
-            Point mousePoint = new Point(e.X, e.Y);
+            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
 
             foreach (var rasterObj in _rasterObjects)
             {
@@ -37,15 +38,15 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers
                 {
                     Polygon polygon = (Polygon)rasterObj;
 
-                    var edge = polygon.isEdgeClicked(mousePoint);
-                    if (edge.a.HasValue && edge.b.HasValue)
+                    var edge = polygon.isEdgeClicked(mouseMyPoint);
+                    if (edge.a != null && edge.b != null)
                     {
-                        string value = ExtensionMethods.ShowDialog("Insert length", "Add constraint", (int)ExtensionMethods.PixelDistance(edge.a.Value, edge.b.Value));
+                        string value = ExtensionMethods.ShowDialog("Insert length", "Add constraint", (int)ExtensionMethods.PixelDistance(edge.a, edge.b));
                         int length;
                         if (value != null && int.TryParse(value, out length))
                         {
-                            HandleAddConstraint(length, polygon, edge.a.Value, edge.b.Value);
-                            _constraintsEnforcer.EnforcePolygonConstraints(polygon, polygon.Vertices.IndexOf(edge.a.Value));
+                            HandleAddConstraint(length, polygon, edge.a, edge.b);
+                            _constraintsEnforcer.EnforcePolygonConstraints(polygon, polygon.Vertices.IndexOf(edge.a));
                         }
                     }
                 }
@@ -54,13 +55,13 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers
 
         public void HandleMouseMove(MouseEventArgs e)
         {
-            Point mousePoint = new Point(e.X, e.Y);
+            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
             foreach (var rasterObj in _rasterObjects)
             {
                 if(rasterObj is Polygon)
                 {
-                    var edge = ((Polygon)rasterObj).isEdgeClicked(mousePoint);
-                    if(edge.a.HasValue && edge.b.HasValue)
+                    var edge = ((Polygon)rasterObj).isEdgeClicked(mouseMyPoint);
+                    if(edge.a != null && edge.b != null)
                     {
                         _drawingArea.Cursor = Cursors.Hand;
                     }
@@ -72,7 +73,7 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers
             }
         }
 
-        private void HandleAddConstraint(int insertedLength, Polygon polygon, Point a, Point b)
+        private void HandleAddConstraint(int insertedLength, Polygon polygon, MyPoint a, MyPoint b)
         {
             var constraint = new ConstantEdgeLengthConstraint(polygon, a, b, insertedLength);
         }

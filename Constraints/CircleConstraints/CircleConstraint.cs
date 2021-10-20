@@ -1,4 +1,5 @@
-﻿using PolygonEditor.RasterGraphics.Models;
+﻿using PolygonEditor.RasterGraphics.Helpers;
+using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
 using System.Collections.Generic;
@@ -23,8 +24,8 @@ namespace PolygonEditor.Constraints.CircleConstraints
         {
             return _circle;
         }
-        public abstract void EnforceConstraint(Point constantPoint);
+        public abstract void EnforceConstraint(MyPoint constantMyPoint);
         public abstract void DrawConstraintInfo(Graphics g);
-        public abstract Point GetCenterDrawingPoint();
+        public abstract MyPoint GetCenterDrawingPoint();
     }
 }

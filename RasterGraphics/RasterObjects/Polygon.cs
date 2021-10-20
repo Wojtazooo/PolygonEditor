@@ -14,15 +14,15 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 {
     public class Polygon : RasterObject
     {
-        public List<Point> Vertices { get; private set; }
+        public List<MyPoint> Vertices { get; private set; }
         public List<PolygonConstraint> Constraints { get; private set; } = new List<PolygonConstraint>();
 
         public Polygon(Color color) : base(color)
         {
-            Vertices = new List<Point>();
+            Vertices = new List<MyPoint>();
         }
 
-        public Polygon(List<Point> vertices, Color color) : base(color)
+        public Polygon(List<MyPoint> vertices, Color color) : base(color)
         {
             this.Vertices = vertices;
             Update();
@@ -30,7 +30,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 
         public Polygon(Polygon polygon) : base(polygon.Color)
         {
-            Vertices = new List<Point>(polygon.Vertices);
+            Vertices = new List<MyPoint>(polygon.Vertices);
             Update();
         }
 
@@ -39,18 +39,18 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             var polygonPixels = new List<Pixel>();
             for (int v = 0; v < Vertices.Count; v++)
             {
-                polygonPixels.AddRange(LineGenerator.GetPixels(Vertices[v], Vertices[(v + 1) % Vertices.Count], Color));
+                polygonPixels.AddRange(LineGenerator.GetPixels(Vertices[v].GetPoint(), Vertices[(v + 1) % Vertices.Count].GetPoint(), Color));
             }
             _pixels = polygonPixels;
         }
 
-        public void AddVertex(Point vertex)
+        public void AddVertex(MyPoint vertex)
         {
             Vertices.Add(vertex);
             Update();
         }
 
-        public void RemoveVertex(Point vertex)
+        public void RemoveVertex(MyPoint vertex)
         {
             for(int i = 0; i < Vertices.Count; i++)
             {
@@ -67,10 +67,11 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
                 }
             }
 
-            Vertices.Remove(vertex);
+            var pointToDelete = Vertices.Find(mp => mp == vertex);
+            Vertices.Remove(pointToDelete);
             Update();
         }
-        public override Point? DetectObject(Point mousePoint, int radius)
+        public override MyPoint DetectObject(MyPoint mousePoint, int radius)
         {
             foreach (var v in Vertices)
             {
@@ -80,8 +81,8 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 
             for (int v = 0; v < Vertices.Count; v++)
             {
-                Point currentV = Vertices[v];
-                Point nextV = Vertices[(v + 1) % Vertices.Count];
+                MyPoint currentV = Vertices[v];
+                MyPoint nextV = Vertices[(v + 1) % Vertices.Count];
                 if (ExtensionMethods.IsPointInSegment(mousePoint, currentV, nextV, radius))
                 {
                     return mousePoint;
@@ -90,7 +91,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             return null;
         }
 
-        public Point? isVertexClicked(Point mousePoint)
+        public MyPoint isVertexClicked(MyPoint mousePoint)
         {
             foreach (var v in Vertices)
             {
@@ -100,12 +101,12 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             return null;
         }
 
-        public (Point? a, Point? b) isEdgeClicked(Point mousePoint)
+        public (MyPoint a, MyPoint b) isEdgeClicked(MyPoint mousePoint)
         {
             for (int v = 0; v < Vertices.Count; v++)
             {
-                Point currentV = Vertices[v];
-                Point nextV = Vertices[(v + 1) % Vertices.Count];
+                MyPoint currentV = Vertices[v];
+                MyPoint nextV = Vertices[(v + 1) % Vertices.Count];
                 if (ExtensionMethods.IsPointInSegment(mousePoint, currentV, nextV, Constants.DETECTION_RADIUS))
                 {
                     return (currentV, nextV);
@@ -114,50 +115,52 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             return (null, null);
         }
 
-        public override void MoveRasterObject(Point from, Point to)
+        public override void MoveRasterObject(MyPoint from, MyPoint to)
         {
             for(int v = 0; v < Vertices.Count; v++)
             {
-                Point newV = ExtensionMethods.MovePoint(Vertices[v], from, to);
+                MyPoint newV = ExtensionMethods.MovePoint(Vertices[v], from, to);
                 Vertices[v] = newV;
             }
             Update();
         }
 
-        public void MoveVertex(Point vertex, Point to)
+        public MyPoint MoveVertex(MyPoint vertex, MyPoint to)
         {
-            if (!Vertices.Contains(vertex)) return;
+            if (!Vertices.Contains(vertex)) return vertex;
 
-            Point movedPoint = ExtensionMethods.MovePoint(vertex, vertex, to);
+            MyPoint movedPoint = ExtensionMethods.MovePoint(vertex, vertex, to);
             for(int i = 0; i < Vertices.Count; i++)
             {
                 if (Vertices[i] == vertex)
                     Vertices[i] = movedPoint;
             }
             Update();
+            return movedPoint;
         }
 
-        public void MoveEdge(Point endOfEdge1, Point endOfEdge2, Point from, Point to)
+        public (MyPoint, MyPoint) MoveEdge(MyPoint endOfEdge1, MyPoint endOfEdge2, MyPoint from, MyPoint to)
         {
-            int dx = to.X - from.X;
-            int dy = to.Y - from.Y;
-            Point newEdgeEnd1 = new Point(endOfEdge1.X + dx, endOfEdge1.Y + dy);
-            Point newEdgeEnd2 = new Point(endOfEdge2.X + dx, endOfEdge2.Y + dy);
+            double dx = to.X - from.X;
+            double dy = to.Y - from.Y;
+            MyPoint newEdgeEnd1 = new MyPoint(endOfEdge1.X + dx, endOfEdge1.Y + dy);
+            MyPoint newEdgeEnd2 = new MyPoint(endOfEdge2.X + dx, endOfEdge2.Y + dy);
             MoveVertex(endOfEdge1, newEdgeEnd1);
             MoveVertex(endOfEdge2, newEdgeEnd2);
+            return (newEdgeEnd1, newEdgeEnd2);
         }
 
-        public void AddVertexInsideEdge(Point vertexToAdd)
+        public void AddVertexInsideEdge(MyPoint vertexToAdd)
         {
-            (Point? a, Point? b) = isEdgeClicked(vertexToAdd);
-            List<Point> newVertices = new List<Point>();
+            (MyPoint a, MyPoint b) = isEdgeClicked(vertexToAdd);
+            List<MyPoint> newVertices = new List<MyPoint>();
 
-            if (a.HasValue && b.HasValue)
+            if (a != null && b != null)
             {
                 for(int v = 0; v < Vertices.Count; v++)
                 {
                     newVertices.Add(Vertices[v]);
-                    if(Vertices[v] == a.Value)
+                    if(Vertices[v] == a)
                     {
                         newVertices.Add(vertexToAdd);
                         Constraints.RemoveAll(constraint => constraint.RelatedVertices.Contains(v) && constraint.RelatedVertices.Contains(v+1));
@@ -175,13 +178,6 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 
         public void AddContraint(PolygonConstraint constraint)
         {
-            foreach(var c in Constraints)
-            {
-                if(constraint.RelatedVertices.Contains(c.RelatedVertices[0]) && constraint.RelatedVertices.Contains(c.RelatedVertices[1]))
-                {
-                    return;
-                }
-            }
             Constraints.Add(constraint);
         }
 
@@ -198,11 +194,11 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             }
         }
 
-        public override bool RemoveConstraintByClick(Point mousePoint)
+        public override bool RemoveConstraintByClick(MyPoint mousePoint)
         {
             for(int i = 0; i < Constraints.Count; i++)
             {
-                Point constraintCenterPoint = Constraints[i].GetCenterDrawingPoint();
+                MyPoint constraintCenterPoint = new MyPoint(Constraints[i].GetCenterDrawingPoint());
                 if (ExtensionMethods.IsInCircle(constraintCenterPoint, mousePoint, Constants.DETECTION_RADIUS))
                 {
                     Constraints.Remove(Constraints[i]);
@@ -212,11 +208,11 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             return false;
         }
 
-        public override bool DetectConstraint(Point mousePoint)
+        public override bool DetectConstraint(MyPoint mousePoint)
         {
             for(int i = 0; i < Constraints.Count; i++)
             {
-                Point constraintCenterPoint = Constraints[i].GetCenterDrawingPoint();
+                MyPoint constraintCenterPoint = new MyPoint(Constraints[i].GetCenterDrawingPoint());
                 if (ExtensionMethods.IsInCircle(constraintCenterPoint, mousePoint, Constants.DETECTION_RADIUS))
                 {
                     return true;

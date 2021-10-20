@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PolygonEditor.RasterGraphics.Helpers;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace PolygonEditor.RasterGraphics.Models
@@ -54,18 +55,18 @@ namespace PolygonEditor.RasterGraphics.Models
             return;
         }
 
-        public override Point? DetectObject(Point mousePoint, int radius)
+        public override MyPoint DetectObject(MyPoint mousePoint, int radius)
         {
-            Point thisPoint = new Point(X, Y);
+            MyPoint thisPoint = new MyPoint(X, Y);
             if (ExtensionMethods.IsInCircle(thisPoint, mousePoint, radius))
                 return thisPoint;
             return null;
         }
 
-        public override void MoveRasterObject(Point from, Point to)
+        public override void MoveRasterObject(MyPoint from, MyPoint to)
         {
             _pixels.Clear();
-            _pixels.Add(new Pixel(to, Color));
+            _pixels.Add(new Pixel(to.GetPoint(), Color));
         }
 
         public override RasterObject Clone()
@@ -77,12 +78,12 @@ namespace PolygonEditor.RasterGraphics.Models
         {
         }
 
-        public override bool RemoveConstraintByClick(Point mousePoint)
+        public override bool RemoveConstraintByClick(MyPoint mousePoint)
         {
             return false;
         }
 
-        public override bool DetectConstraint(Point mousePoint)
+        public override bool DetectConstraint(MyPoint mousePoint)
         {
             return false;
         }

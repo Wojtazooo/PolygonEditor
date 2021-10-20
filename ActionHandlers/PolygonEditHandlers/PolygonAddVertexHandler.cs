@@ -1,4 +1,5 @@
-﻿using PolygonEditor.RasterGraphics.Models;
+﻿using PolygonEditor.RasterGraphics.Helpers;
+using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,7 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
 
         public void HandleMouseClick(MouseEventArgs e)
         {
-            Point mousePoint = new Point(e.X, e.Y);
+            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
             if (_polygonToEdit == null)
             {
                 _selector.HandleMouseClick(e);
@@ -52,13 +53,13 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
                 {
                     _polygonToEdit = (Polygon)_selector.clickedRasterObject;
                     _selector.Cancel();
-                    AddCirclePointer(mousePoint);
+                    AddCirclePointer(mouseMyPoint);
                     AddVertexCircles();
                 }
             }
             else
             {
-                _polygonToEdit.AddVertexInsideEdge(mousePoint);
+                _polygonToEdit.AddVertexInsideEdge(mouseMyPoint);
                 UpdateVertexCircles();
             }
         }
@@ -71,12 +72,12 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
             }
             else
             {
-                Point mousePoint = new Point(e.X, e.Y);
-                (Point? a, Point? b) = _polygonToEdit.isEdgeClicked(mousePoint);
-                if(a.HasValue && b.HasValue)
+                MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
+                (MyPoint a, MyPoint b) = _polygonToEdit.isEdgeClicked(mouseMyPoint);
+                if(a != null && b != null)
                 {
-                    if (_helpAddCircle == null) AddCirclePointer(mousePoint);
-                    else UpdateCirclePointer(mousePoint);
+                    if (_helpAddCircle == null) AddCirclePointer(mouseMyPoint);
+                    else UpdateCirclePointer(mouseMyPoint);
                 }
                 else
                 {
@@ -85,9 +86,9 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
             }
         }
 
-        public void AddCirclePointer(Point mousePoint)
+        public void AddCirclePointer(MyPoint mouseMyPoint)
         {
-            _helpAddCircle = new Circle(mousePoint, Constants.ADD_VERTEX_CIRCLE_RADIUS, Color.Green);
+            _helpAddCircle = new Circle(mouseMyPoint, Constants.ADD_VERTEX_CIRCLE_RADIUS, Color.Green);
             _rasterObjects.Add(_helpAddCircle);
         }
 
@@ -97,9 +98,9 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
             _helpAddCircle = null;
         }
 
-        public void UpdateCirclePointer(Point mousePoint)
+        public void UpdateCirclePointer(MyPoint mouseMyPoint)
         {
-            _helpAddCircle.SetCenter(mousePoint);
+            _helpAddCircle.SetCenter(mouseMyPoint);
         }
 
         private void AddVertexCircles()

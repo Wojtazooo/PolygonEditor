@@ -1,4 +1,5 @@
 ﻿using PolygonEditor.Constraints;
+using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
@@ -13,9 +14,9 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
 {
     class PolgonMoveEdgeHandler : ActionHandler
     {
-        private Point _previousPoint;
-        private (Point? a, Point? b) _edgeToMove;
-        private Point _startPoint;
+        private MyPoint _previousMyPoint;
+        private (int a, int b) _edgeToMove;
+        private MyPoint _startMyPoint;
         bool moving = false;
         private SelectionHandler _selector;
         private Polygon _polygonToEdit;
@@ -74,16 +75,16 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
         {
             if (_polygonToEdit != null)
             {
-                Point mousePoint = new Point(e.X, e.Y);
-                (Point? a, Point? b) = _polygonToEdit.isEdgeClicked(mousePoint);
+                MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
+                (MyPoint a, MyPoint b) = _polygonToEdit.isEdgeClicked(mouseMyPoint);
                 
                 if(a != null && b != null)
                 {
                     _drawingArea.Cursor = Cursors.SizeAll;
-                    _edgeToMove = (a.Value, b.Value);
+                    _edgeToMove = (_polygonToEdit.Vertices.FindIndex(p => p == a), _polygonToEdit.Vertices.FindIndex(p => p == b));
                     moving = true;
-                    _previousPoint = mousePoint;
-                    _startPoint = mousePoint;
+                    _previousMyPoint = mouseMyPoint;
+                    _startMyPoint = mouseMyPoint;
                 }
             }
         }
@@ -96,16 +97,14 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
             }
             else
             {
-                Point mousePoint = new Point(e.X, e.Y);
+                MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
                 if (moving)
                 {
-                    Point a2 = ExtensionMethods.MovePoint(_edgeToMove.a.Value, _previousPoint, mousePoint);
-                    Point b2 = ExtensionMethods.MovePoint(_edgeToMove.b.Value, _previousPoint, mousePoint);
+                    MyPoint a2 = ExtensionMethods.MovePoint(_polygonToEdit.Vertices[_edgeToMove.a], _previousMyPoint, mouseMyPoint);
+                    MyPoint b2 = ExtensionMethods.MovePoint(_polygonToEdit.Vertices[_edgeToMove.b], _previousMyPoint, mouseMyPoint);
 
-                    _polygonToEdit.MoveEdge(_edgeToMove.a.Value, _edgeToMove.b.Value, _previousPoint, mousePoint);
-                    _previousPoint = mousePoint;
-                    _edgeToMove = (a2, b2);
-
+                    (a2, b2) = _polygonToEdit.MoveEdge(_polygonToEdit.Vertices[_edgeToMove.a], _polygonToEdit.Vertices[_edgeToMove.b], _previousMyPoint, mouseMyPoint);
+                    _previousMyPoint = mouseMyPoint;
 
                     _constraintsEnforcer.EnforcePolygonConstraints(_polygonToEdit, ExtensionMethods.GetVertexNumberFromPoint(_polygonToEdit, a2));
                     _constraintsEnforcer.EnforcePolygonConstraints(_polygonToEdit, ExtensionMethods.GetVertexNumberFromPoint(_polygonToEdit, b2));

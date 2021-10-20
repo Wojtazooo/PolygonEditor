@@ -1,4 +1,5 @@
 ﻿using PolygonEditor.Constraints.PolygonConstraints;
+using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
@@ -50,8 +51,11 @@ namespace PolygonEditor.Constraints
                 }
             }
 
-            while (leftConstraints.Count > 0 && (nextI || nextJ))
+            int iterationCounter = 0;
+
+            while (leftConstraints.Count > 0 && (nextI || nextJ) && iterationCounter < 10)
             {
+                iterationCounter++;
                 // operacje dla i
                 if (nextI)
                 {
@@ -96,7 +100,7 @@ namespace PolygonEditor.Constraints
         {
             foreach(var c in circle.Constraints)
             {
-                c.EnforceConstraint(new Point());
+                c.EnforceConstraint(new MyPoint());
             }
         }
 

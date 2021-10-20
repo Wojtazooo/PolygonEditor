@@ -14,7 +14,7 @@ namespace PolygonEditor.Constraints.PolygonConstraints
     {
         private int _constantLength;
 
-        public ConstantEdgeLengthConstraint(Polygon polygon, Point v1, Point v2, int constantLength) : base(polygon)
+        public ConstantEdgeLengthConstraint(Polygon polygon, MyPoint v1, MyPoint v2, int constantLength) : base(polygon)
         {
             int numberOfV1 = 0;
             int numberOfV2 = 0;
@@ -36,23 +36,23 @@ namespace PolygonEditor.Constraints.PolygonConstraints
             _polygon.AddContraint(this);
         }
 
-        public override void EnforceConstraint(Point constantPoint)
+        public override void EnforceConstraint(MyPoint constantMyPoint)
         {
-            (Point, Point) _edgePoints = (_polygon.Vertices[RelatedVertices[0]], _polygon.Vertices[RelatedVertices[1]]);
+            (MyPoint, MyPoint) _edgeMyPoints = (_polygon.Vertices[RelatedVertices[0]], _polygon.Vertices[RelatedVertices[1]]);
 
-            if (constantPoint == _edgePoints.Item1)
+            if (constantMyPoint == _edgeMyPoints.Item1)
             {
-                Point movedPoint = ExtensionMethods.MovePointToAchieveLength(_edgePoints.Item2, _edgePoints.Item1, _constantLength);
-                _polygon.MoveVertex(_edgePoints.Item2, movedPoint);
+                MyPoint movedMyPoint = ExtensionMethods.MovePointToAchieveLength(_edgeMyPoints.Item2, _edgeMyPoints.Item1, _constantLength);
+                _polygon.MoveVertex(_edgeMyPoints.Item2, movedMyPoint);
             }
             else
             {
-                Point movedPoint = ExtensionMethods.MovePointToAchieveLength(_edgePoints.Item1, _edgePoints.Item2, _constantLength);
-                _polygon.MoveVertex(_edgePoints.Item1, movedPoint);
+                MyPoint movedMyPoint = ExtensionMethods.MovePointToAchieveLength(_edgeMyPoints.Item1, _edgeMyPoints.Item2, _constantLength);
+                _polygon.MoveVertex(_edgeMyPoints.Item1, movedMyPoint);
             }
         }
 
-        private Point RelationCenterPoint()
+        private MyPoint RelationCenterMyPoint()
         {
             return ExtensionMethods.CountMiddleOfSegment(
                     _polygon.Vertices[RelatedVertices[0]],
@@ -61,13 +61,13 @@ namespace PolygonEditor.Constraints.PolygonConstraints
 
         public override void DrawConstraintInfo(Graphics g)
         {
-            Point center = RelationCenterPoint();
+            MyPoint center = RelationCenterMyPoint();
             GraphicsApplier.ApplyString(g, _constantLength.ToString(), center);
         }
 
-        public override Point GetCenterDrawingPoint()
+        public override MyPoint GetCenterDrawingPoint()
         {
-            return RelationCenterPoint();
+            return RelationCenterMyPoint();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using PolygonEditor.RasterGraphics.Models;
+﻿using PolygonEditor.RasterGraphics.Helpers;
+using PolygonEditor.RasterGraphics.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -43,10 +44,10 @@ namespace PolygonEditor.ActionHandlers
 
         public void HandleMouseMove(MouseEventArgs e)
         {
-            Point mousePoint = new Point(e.X, e.Y);
+            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
             for (int i = 0; i < _rasterObjects.Count; i++)
             {
-                var point = _rasterObjects[i].DetectObject(mousePoint, Constants.DETECTION_RADIUS);
+                var point = _rasterObjects[i].DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS);
                 if (point != null)
                 {
                     _drawingArea.Cursor = Cursors.Hand;

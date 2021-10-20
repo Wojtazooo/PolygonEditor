@@ -1,4 +1,5 @@
 ﻿using PolygonEditor.Constraints;
+using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
 using System.Collections.Generic;
@@ -12,21 +13,21 @@ namespace PolygonEditor
 {
     public static class ExtensionMethods
     {
-        public static double PixelDistance(Point p1, Point p2)
+        public static double PixelDistance(MyPoint p1, MyPoint p2)
         {
-            int dx = p1.X - p2.X;
-            int dy = p1.Y - p2.Y;
+            double dx = p1.X - p2.X;
+            double dy = p1.Y - p2.Y;
             return Math.Sqrt(Math.Pow(dx, 2) + Math.Pow(dy, 2));
         }
 
-        public static bool IsInCircle(Point point, Point circleCenter, int radius)
+        public static bool IsInCircle(MyPoint point, MyPoint circleCenter, double radius)
         {
-            int dx = point.X - circleCenter.X;
-            int dy = point.Y - circleCenter.Y;
+            double dx = point.X - circleCenter.X;
+            double dy = point.Y - circleCenter.Y;
             return (Math.Pow(dx, 2) + Math.Pow(dy, 2) <= Math.Pow(radius, 2));
         }
 
-        public static double CountDistanceFromCircleCenterToLine(Point circleCenter, Point p1, Point p2)
+        public static double CountDistanceFromCircleCenterToLine(MyPoint circleCenter, MyPoint p1, MyPoint p2)
         {
             if (p1.X == p2.X) 
                 return Math.Abs(p1.X - circleCenter.X);
@@ -41,7 +42,7 @@ namespace PolygonEditor
             return height;
         }
 
-        public static bool IsPointInSegment(Point circleCenter, Point p1, Point p2, int detectionRadius)
+        public static bool IsPointInSegment(MyPoint circleCenter, MyPoint p1, MyPoint p2, int detectionRadius)
         {
             if (p1.X == p2.X) return Math.Abs(p1.X - circleCenter.X) < detectionRadius;
 
@@ -56,58 +57,77 @@ namespace PolygonEditor
             return height <= detectionRadius && a > b && a > c;
         }
 
-        public static Point MovePoint(Point pointToMove, Point mouseFrom, Point mouseTo)
+        public static MyPoint MovePoint(MyPoint pointToMove, MyPoint mouseFrom, MyPoint mouseTo)
         {
-            int dx = mouseTo.X - mouseFrom.X;
-            int dy = mouseTo.Y - mouseFrom.Y;
-            return new Point(pointToMove.X + dx, pointToMove.Y + dy);
+            double dx = mouseTo.X - mouseFrom.X;
+            double dy = mouseTo.Y - mouseFrom.Y;
+            return new MyPoint(pointToMove.X + dx, pointToMove.Y + dy);
         }
 
-        public static Point MovePointToAchieveLength(Point pointToMove, Point seceondPoint, int length)
+        public static MyPoint MovePointToAchieveLength(MyPoint pointToMove, MyPoint seceondPoint, double length)
         {
             double c = ExtensionMethods.PixelDistance(pointToMove, seceondPoint);
 
             double lengthDiff = c - length;
-            int dx = seceondPoint.X - pointToMove.X;
-            int dy = seceondPoint.Y - pointToMove.Y;
+            double dx = seceondPoint.X - pointToMove.X;
+            double dy = seceondPoint.Y - pointToMove.Y;
+
+            if (c == 0) return pointToMove;
 
             double px = ((c - length) * dx) / c;
             double py = ((c - length) * dy) / c;
 
-            return new Point((int)Math.Round(pointToMove.X + px,1), (int)Math.Round(pointToMove.Y + py, 1));
+            return new MyPoint(pointToMove.X + px, pointToMove.Y + py);
         }
 
-        public static Point MovePointToAchieveRightAngle(Point constv1, Point constv2, Point constw1, Point w2)
+        public static MyPoint MovePointToAchieveRightAngle(MyPoint constv1, MyPoint constv2, MyPoint constw1, MyPoint w2)
         {
-            int dx1 = constv2.X - constv1.X;
-            int dy1 = constv1.Y - constv2.Y;
-            int dx2 = w2.X - constw1.X;
-            int dy2 = w2.Y - constw1.Y;
+            double length = PixelDistance(constw1, w2);
+            double dx1 = constv2.X - constv1.X;
+            double dy1 = constv2.Y - constv1.Y;
+            double dx2 = w2.X - constw1.X;
+            double dy2 = w2.Y - constw1.Y;
+            
+            MyPoint rightAngle = new MyPoint(constw1.X - dy1, constw1.Y + dx1);
+            MyPoint rightAngleSecond = new MyPoint(constw1.X + dy1, constw1.Y - dx1);
+
+            if (PixelDistance(w2, rightAngle) < PixelDistance(w2, rightAngleSecond)) return MovePointToAchieveLength(rightAngle, constw1, length);
+            else return MovePointToAchieveLength(rightAngleSecond, constw1, length);
+
+            //var pointToGetRightAngle = MovePointToAchieveLength(rightAngle, constw1, length);
 
 
-            if (dx1 == 0)
-            {
-                return new Point(constw1.X + (int)PixelDistance(constw1,w2), constw1.Y);
-            }
+            //double length = PixelDistance(constw1, w2);
 
-            double tga = (dy1 * dy2) / dx1;
+            //double dx1 = constv2.X - constv1.X;
+            //double dy1 = constv1.Y - constv2.Y;
+            //double dx2 = w2.X - constw1.X;
+            //double dy2 = w2.Y - constw1.Y;
 
-            var pointToGetRightAngle = new Point((int)(constw1.X + tga), w2.Y);
-            return pointToGetRightAngle;
+            //if (dx1 <= 100 && dx1 >= -100)
+            //{
+            //    return new MyPoint(constw1.X + length, constw1.Y);
+            //}
+
+            //double tga = (dy1 * dy2) / dx1;
+
+            //var pointToGetRightAngle = new MyPoint(constw1.X + tga, w2.Y);
+            //pointToGetRightAngle = MovePointToAchieveLength(pointToGetRightAngle, constw1, length);
+            //return pointToGetRightAngle;
         }
 
-        public static Point FindCenterOfCircleTangentToEdge(Point v1, Point v2, int Radius)
+        public static MyPoint FindCenterOfCircleTangentToEdge(MyPoint v1, MyPoint v2, int Radius)
         {
-            int dx = v2.X - v1.X;
-            int dy = v1.Y - v2.Y;
+            double dx = v2.X - v1.X;
+            double dy = v1.Y - v2.Y;
 
-            Point w1 = CountMiddleOfSegment(v1, v2);
-            Point rightAnglePoint = new Point(w1.X + dy, w1.Y + dx);
+            MyPoint w1 = CountMiddleOfSegment(v1, v2);
+            MyPoint rightAnglePoint = new MyPoint(w1.X + dy, w1.Y + dx);
 
             return MovePointToAchieveLength(rightAnglePoint, w1, Radius);
         }
 
-        public static int GetVertexNumberFromPoint(Polygon polygon, Point vertexPoint)
+        public static int GetVertexNumberFromPoint(Polygon polygon, MyPoint vertexPoint)
         {
             for(int i = 0; i < polygon.Vertices.Count; i++)
             {
@@ -116,16 +136,16 @@ namespace PolygonEditor
             return 0;
         }
 
-        public static Point CountMiddleOfSegment(Point a, Point b)
+        public static MyPoint CountMiddleOfSegment(MyPoint a, MyPoint b)
         {
-            int dx = a.X - b.X;
-            int dy = a.Y - b.Y;
-            return new Point(b.X + (int)(0.5 * dx), b.Y + (int)(0.5 * dy));
+            double dx = a.X - b.X;
+            double dy = a.Y - b.Y;
+            return new MyPoint(b.X + (0.5 * dx), b.Y + (0.5 * dy));
         }
 
-        public static Point FindLeftUpperCornerForRectangle(Point center, int width, int height)
+        public static MyPoint FindLeftUpperCornerForRectangle(MyPoint center, int width, int height)
         {
-            return new Point(center.X - (int)(width / 2), center.Y - (int)(height / 2));
+            return new MyPoint(center.X - (int)(width / 2), center.Y - (int)(height / 2));
         }
 
         public static string ShowDialog(string text, string caption, int initialValue)

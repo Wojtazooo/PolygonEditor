@@ -1,5 +1,6 @@
 ﻿using PolygonEditor.Constraints;
 using PolygonEditor.Constraints.CircleConstraints;
+using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
@@ -29,7 +30,7 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers
 
         public void HandleMouseClick(MouseEventArgs e)
         {
-            Point mousePoint = new Point(e.X, e.Y);
+            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
 
             foreach (var rasterObj in _rasterObjects)
             {
@@ -37,8 +38,8 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers
                 {
                     Circle circle = (Circle)rasterObj;
 
-                    var detectedPoint = circle.DetectObject(mousePoint, Constants.DETECTION_RADIUS);
-                    if (detectedPoint.HasValue)
+                    var detectedMyPoint = circle.DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS);
+                    if (detectedMyPoint != null)
                     {
                         string value = ExtensionMethods.ShowDialog("Insert length", "Add constraint", circle.Radius);
                         int length;
@@ -54,12 +55,12 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers
 
         public void HandleMouseMove(MouseEventArgs e)
         {
-            Point mousePoint = new Point(e.X, e.Y);
+            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
             foreach (var rasterObj in _rasterObjects)
             {
                 if (rasterObj is Circle)
                 {
-                    if (rasterObj.DetectObject(mousePoint, Constants.DETECTION_RADIUS).HasValue)
+                    if (rasterObj.DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS) != null)
                     {
                         _drawingArea.Cursor = Cursors.Hand;
                         return;

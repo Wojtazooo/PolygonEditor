@@ -1,4 +1,5 @@
 ﻿using PolygonEditor.Constraints;
+using PolygonEditor.RasterGraphics.Helpers;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -16,12 +17,12 @@ namespace PolygonEditor.RasterGraphics.Models
             Update();
         }
         abstract public void Update();
-        abstract public Point? DetectObject(Point mousePoint, int radius);
-        abstract public void MoveRasterObject(Point from, Point to);
+        abstract public MyPoint DetectObject(MyPoint mousePoint, int radius);
+        abstract public void MoveRasterObject(MyPoint from, MyPoint to);
         abstract public RasterObject Clone();
         abstract public void DrawConstraints(Graphics g);
-        abstract public bool RemoveConstraintByClick(Point mousePoint);
-        abstract public bool DetectConstraint(Point mousePoint);
+        abstract public bool RemoveConstraintByClick(MyPoint mousePoint);
+        abstract public bool DetectConstraint(MyPoint mousePoint);
 
     }
 }

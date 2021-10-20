@@ -21,20 +21,20 @@ namespace PolygonEditor.Constraints.CircleConstraints
 
         public override void DrawConstraintInfo(Graphics g)
         {
-            Point center = GetCenterDrawingPoint();
+            MyPoint center = GetCenterDrawingPoint();
             center.Y -= 10;
             GraphicsApplier.ApplyString(g, _radiusLength.ToString(), center);
-            g.DrawLine(Pens.Black, _circle.Center, new Point(_circle.Center.X + _radiusLength, _circle.Center.Y));
+            g.DrawLine(Pens.Black, _circle.Center.GetPoint(), new MyPoint(_circle.Center.X + _radiusLength, _circle.Center.Y).GetPoint());
         }
 
-        public override void EnforceConstraint(Point constantPoint)
+        public override void EnforceConstraint(MyPoint constantMyPoint)
         {
             _circle.SetRadius(_radiusLength);
         }
 
-        public override Point GetCenterDrawingPoint()
+        public override MyPoint GetCenterDrawingPoint()
         {
-            return ExtensionMethods.CountMiddleOfSegment(_circle.Center, new Point(_circle.Center.X + _radiusLength, _circle.Center.Y));
+            return ExtensionMethods.CountMiddleOfSegment(_circle.Center, new MyPoint(_circle.Center.X + _radiusLength, _circle.Center.Y));
         }
     }
 }

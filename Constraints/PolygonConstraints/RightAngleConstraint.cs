@@ -11,9 +11,9 @@ namespace PolygonEditor.Constraints.PolygonConstraints
 {
     class RightAngleConstraint : PolygonConstraint
     {
-        public RightAngleConstraint(Polygon polygon, List<Point> relatedPoints) : base(polygon)
+        public RightAngleConstraint(Polygon polygon, List<MyPoint> relatedMyPoints) : base(polygon)
         {
-            foreach (var i in relatedPoints)
+            foreach (var i in relatedMyPoints)
             {
                 RelatedVertices.Add(_polygon.Vertices.IndexOf(i));
             }
@@ -21,43 +21,63 @@ namespace PolygonEditor.Constraints.PolygonConstraints
         }
         public override void DrawConstraintInfo(Graphics g)
         {
-            GraphicsApplier.ApplyString(g, "right angle", GetCenterPointFirstEdge());
-            GraphicsApplier.ApplyString(g, "right angle", GetCenterPointSecondEdge());
+            GraphicsApplier.ApplyString(g, "right angle", GetCenterMyPointFirstEdge());
+            GraphicsApplier.ApplyString(g, "right angle", GetCenterMyPointSecondEdge());
         }
 
-        public override void EnforceConstraint(Point constantPoint)
+        public override void EnforceConstraint(MyPoint constantMyPoint)
         {
-            (Point v1, Point v2) = (_polygon.Vertices[RelatedVertices[0]], _polygon.Vertices[RelatedVertices[1]]);
-            (Point w1, Point w2) = (_polygon.Vertices[RelatedVertices[2]], _polygon.Vertices[RelatedVertices[3]]);
+            (MyPoint v1, MyPoint v2) = (_polygon.Vertices[RelatedVertices[0]], _polygon.Vertices[RelatedVertices[1]]);
+            (MyPoint w1, MyPoint w2) = (_polygon.Vertices[RelatedVertices[2]], _polygon.Vertices[RelatedVertices[3]]);
 
-            if (v1 == constantPoint || v2 == constantPoint)
+            if (v1 == w1 || v1 == v2 || v2 == w1 || v2 == w2)
             {
-                Point movedPoint = ExtensionMethods.MovePointToAchieveRightAngle(v1, v2, w1, w2);
-                _polygon.MoveVertex(w2, movedPoint);
+                EnforceConstraintWhenOnlyThreePoints( v1,  v2,  w1,  w2);
+                return;
+            }
+
+            if (v1 == constantMyPoint || v2 == constantMyPoint)
+            {
+                MyPoint movedMyPoint = ExtensionMethods.MovePointToAchieveRightAngle(v1, v2, w1, w2);
+                _polygon.MoveVertex(w2, movedMyPoint);
             }
             else
             {
-                Point movedPoint = ExtensionMethods.MovePointToAchieveRightAngle(w1,w2,v1,v2);
-                _polygon.MoveVertex(v2, movedPoint);
+                MyPoint movedMyPoint = ExtensionMethods.MovePointToAchieveRightAngle(w1,w2,v1,v2);
+                _polygon.MoveVertex(v2, movedMyPoint);
             }
         }
 
-        public override Point GetCenterDrawingPoint()
+        private void EnforceConstraintWhenOnlyThreePoints(MyPoint v1, MyPoint v2, MyPoint w1, MyPoint w2)
         {
-            return GetCenterPointFirstEdge();
+            if(v1 == w1 || v2 == w2)
+            {
+                MyPoint movedMyPoint = ExtensionMethods.MovePointToAchieveRightAngle(v1, v2, w1, w2);
+                _polygon.MoveVertex(w2, movedMyPoint);
+            }
+            else if(v2 == w1 || v2 == w2)
+            {
+                MyPoint movedMyPoint = ExtensionMethods.MovePointToAchieveRightAngle(w1, w2, v2, v1);
+                _polygon.MoveVertex(v1, movedMyPoint);
+            }
         }
 
-        private Point GetCenterPointFirstEdge()
+        public override MyPoint GetCenterDrawingPoint()
         {
-            Point v1 = _polygon.Vertices[RelatedVertices[0]];
-            Point v2 = _polygon.Vertices[RelatedVertices[1]];
+            return GetCenterMyPointFirstEdge();
+        }
+
+        private MyPoint GetCenterMyPointFirstEdge()
+        {
+            MyPoint v1 = _polygon.Vertices[RelatedVertices[0]];
+            MyPoint v2 = _polygon.Vertices[RelatedVertices[1]];
             return ExtensionMethods.CountMiddleOfSegment(v1, v2);
         }
 
-        private Point GetCenterPointSecondEdge()
+        private MyPoint GetCenterMyPointSecondEdge()
         {
-            Point v1 = _polygon.Vertices[RelatedVertices[2]];
-            Point v2 = _polygon.Vertices[RelatedVertices[3]];
+            MyPoint v1 = _polygon.Vertices[RelatedVertices[2]];
+            MyPoint v2 = _polygon.Vertices[RelatedVertices[3]];
             return ExtensionMethods.CountMiddleOfSegment(v1, v2);
         }
     }
