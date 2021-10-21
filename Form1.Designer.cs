@@ -46,9 +46,10 @@ namespace PolygonEditor
             this.ButtonAddCircle = new System.Windows.Forms.Button();
             this.textBoxHelper = new System.Windows.Forms.TextBox();
             this.GroupBoxColorOptions = new System.Windows.Forms.GroupBox();
-            this.LabelCurrentColor = new System.Windows.Forms.Label();
-            this.PictureBoxSelectedColor = new System.Windows.Forms.PictureBox();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.ButtonPickColor = new System.Windows.Forms.Button();
+            this.PictureBoxSelectedColor = new System.Windows.Forms.PictureBox();
+            this.LabelCurrentColor = new System.Windows.Forms.Label();
             this.ShapeOptionsGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.ButtonMoveEdge = new System.Windows.Forms.Button();
@@ -69,6 +70,7 @@ namespace PolygonEditor
             this.GroupBoxShapeSelect.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.GroupBoxColorOptions.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxSelectedColor)).BeginInit();
             this.ShapeOptionsGroupBox.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -127,12 +129,12 @@ namespace PolygonEditor
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
-            this.groupBox1.Location = new System.Drawing.Point(11, 401);
+            this.groupBox1.Location = new System.Drawing.Point(11, 389);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(405, 134);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.groupBox1.Text = "General Options";
             // 
             // tableLayoutPanel1
             // 
@@ -224,7 +226,7 @@ namespace PolygonEditor
             this.GroupBoxShapeSelect.Controls.Add(this.tableLayoutPanel3);
             this.GroupBoxShapeSelect.Location = new System.Drawing.Point(11, 12);
             this.GroupBoxShapeSelect.Name = "GroupBoxShapeSelect";
-            this.GroupBoxShapeSelect.Size = new System.Drawing.Size(405, 141);
+            this.GroupBoxShapeSelect.Size = new System.Drawing.Size(405, 129);
             this.GroupBoxShapeSelect.TabIndex = 3;
             this.GroupBoxShapeSelect.TabStop = false;
             this.GroupBoxShapeSelect.Text = "Circle Options";
@@ -243,9 +245,9 @@ namespace PolygonEditor
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 59F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(399, 119);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(399, 107);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // ButtonConstantCenter
@@ -255,7 +257,7 @@ namespace PolygonEditor
             this.ButtonConstantCenter.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonConstantCenter.Image = global::PolygonEditor.Properties.Resources.focus;
             this.ButtonConstantCenter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonConstantCenter.Location = new System.Drawing.Point(6, 66);
+            this.ButtonConstantCenter.Location = new System.Drawing.Point(6, 59);
             this.ButtonConstantCenter.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonConstantCenter.Name = "ButtonConstantCenter";
             this.ButtonConstantCenter.Size = new System.Drawing.Size(185, 37);
@@ -271,7 +273,7 @@ namespace PolygonEditor
             this.ButtonConstantRadius.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonConstantRadius.Image = global::PolygonEditor.Properties.Resources.radius;
             this.ButtonConstantRadius.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonConstantRadius.Location = new System.Drawing.Point(203, 66);
+            this.ButtonConstantRadius.Location = new System.Drawing.Point(203, 59);
             this.ButtonConstantRadius.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonConstantRadius.Name = "ButtonConstantRadius";
             this.ButtonConstantRadius.Size = new System.Drawing.Size(190, 37);
@@ -314,56 +316,49 @@ namespace PolygonEditor
             // 
             // textBoxHelper
             // 
-            this.textBoxHelper.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxHelper.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxHelper.Enabled = false;
             this.textBoxHelper.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBoxHelper.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.textBoxHelper.Location = new System.Drawing.Point(11, 668);
+            this.textBoxHelper.Location = new System.Drawing.Point(11, 608);
+            this.textBoxHelper.Margin = new System.Windows.Forms.Padding(5);
             this.textBoxHelper.Multiline = true;
             this.textBoxHelper.Name = "textBoxHelper";
             this.textBoxHelper.PlaceholderText = "Help text";
             this.textBoxHelper.ReadOnly = true;
-            this.textBoxHelper.Size = new System.Drawing.Size(405, 181);
+            this.textBoxHelper.Size = new System.Drawing.Size(405, 241);
             this.textBoxHelper.TabIndex = 2;
             // 
             // GroupBoxColorOptions
             // 
-            this.GroupBoxColorOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.GroupBoxColorOptions.Controls.Add(this.LabelCurrentColor);
-            this.GroupBoxColorOptions.Controls.Add(this.PictureBoxSelectedColor);
-            this.GroupBoxColorOptions.Controls.Add(this.ButtonPickColor);
-            this.GroupBoxColorOptions.Location = new System.Drawing.Point(11, 541);
+            this.GroupBoxColorOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.GroupBoxColorOptions.Controls.Add(this.tableLayoutPanel4);
+            this.GroupBoxColorOptions.Location = new System.Drawing.Point(11, 529);
             this.GroupBoxColorOptions.Name = "GroupBoxColorOptions";
-            this.GroupBoxColorOptions.Size = new System.Drawing.Size(405, 121);
+            this.GroupBoxColorOptions.Size = new System.Drawing.Size(405, 71);
             this.GroupBoxColorOptions.TabIndex = 1;
             this.GroupBoxColorOptions.TabStop = false;
             this.GroupBoxColorOptions.Text = "Color options";
             // 
-            // LabelCurrentColor
+            // tableLayoutPanel4
             // 
-            this.LabelCurrentColor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.LabelCurrentColor.AutoSize = true;
-            this.LabelCurrentColor.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.LabelCurrentColor.Location = new System.Drawing.Point(69, 67);
-            this.LabelCurrentColor.MinimumSize = new System.Drawing.Size(0, 37);
-            this.LabelCurrentColor.Name = "LabelCurrentColor";
-            this.LabelCurrentColor.Size = new System.Drawing.Size(113, 37);
-            this.LabelCurrentColor.TabIndex = 3;
-            this.LabelCurrentColor.Text = "Selected Color:";
-            this.LabelCurrentColor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // PictureBoxSelectedColor
-            // 
-            this.PictureBoxSelectedColor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.PictureBoxSelectedColor.Location = new System.Drawing.Point(188, 67);
-            this.PictureBoxSelectedColor.MaximumSize = new System.Drawing.Size(37, 37);
-            this.PictureBoxSelectedColor.MinimumSize = new System.Drawing.Size(37, 37);
-            this.PictureBoxSelectedColor.Name = "PictureBoxSelectedColor";
-            this.PictureBoxSelectedColor.Size = new System.Drawing.Size(37, 37);
-            this.PictureBoxSelectedColor.TabIndex = 2;
-            this.PictureBoxSelectedColor.TabStop = false;
+            this.tableLayoutPanel4.ColumnCount = 3;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 56.73352F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43.26648F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel4.Controls.Add(this.ButtonPickColor, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.PictureBoxSelectedColor, 2, 0);
+            this.tableLayoutPanel4.Controls.Add(this.LabelCurrentColor, 1, 0);
+            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 19);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 1;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(399, 49);
+            this.tableLayoutPanel4.TabIndex = 4;
             // 
             // ButtonPickColor
             // 
@@ -372,14 +367,40 @@ namespace PolygonEditor
             this.ButtonPickColor.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonPickColor.Image = global::PolygonEditor.Properties.Resources.color_wheel;
             this.ButtonPickColor.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonPickColor.Location = new System.Drawing.Point(9, 25);
+            this.ButtonPickColor.Location = new System.Drawing.Point(6, 6);
             this.ButtonPickColor.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonPickColor.Name = "ButtonPickColor";
-            this.ButtonPickColor.Size = new System.Drawing.Size(384, 37);
+            this.ButtonPickColor.Size = new System.Drawing.Size(186, 37);
             this.ButtonPickColor.TabIndex = 1;
             this.ButtonPickColor.Text = "Change Color";
             this.ButtonPickColor.UseVisualStyleBackColor = true;
             this.ButtonPickColor.Click += new System.EventHandler(this.ButtonPickColor_Click);
+            // 
+            // PictureBoxSelectedColor
+            // 
+            this.PictureBoxSelectedColor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PictureBoxSelectedColor.Location = new System.Drawing.Point(352, 3);
+            this.PictureBoxSelectedColor.MaximumSize = new System.Drawing.Size(37, 37);
+            this.PictureBoxSelectedColor.MinimumSize = new System.Drawing.Size(37, 37);
+            this.PictureBoxSelectedColor.Name = "PictureBoxSelectedColor";
+            this.PictureBoxSelectedColor.Size = new System.Drawing.Size(37, 37);
+            this.PictureBoxSelectedColor.TabIndex = 2;
+            this.PictureBoxSelectedColor.TabStop = false;
+            // 
+            // LabelCurrentColor
+            // 
+            this.LabelCurrentColor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.LabelCurrentColor.AutoSize = true;
+            this.LabelCurrentColor.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.LabelCurrentColor.Location = new System.Drawing.Point(201, 0);
+            this.LabelCurrentColor.MinimumSize = new System.Drawing.Size(0, 37);
+            this.LabelCurrentColor.Name = "LabelCurrentColor";
+            this.LabelCurrentColor.Size = new System.Drawing.Size(145, 37);
+            this.LabelCurrentColor.TabIndex = 3;
+            this.LabelCurrentColor.Text = "Selected Color:";
+            this.LabelCurrentColor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ShapeOptionsGroupBox
             // 
@@ -387,7 +408,7 @@ namespace PolygonEditor
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ShapeOptionsGroupBox.Controls.Add(this.tableLayoutPanel2);
             this.ShapeOptionsGroupBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ShapeOptionsGroupBox.Location = new System.Drawing.Point(13, 161);
+            this.ShapeOptionsGroupBox.Location = new System.Drawing.Point(11, 149);
             this.ShapeOptionsGroupBox.Margin = new System.Windows.Forms.Padding(5);
             this.ShapeOptionsGroupBox.Name = "ShapeOptionsGroupBox";
             this.ShapeOptionsGroupBox.Size = new System.Drawing.Size(405, 232);
@@ -571,7 +592,8 @@ namespace PolygonEditor
             this.GroupBoxShapeSelect.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.GroupBoxColorOptions.ResumeLayout(false);
-            this.GroupBoxColorOptions.PerformLayout();
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxSelectedColor)).EndInit();
             this.ShapeOptionsGroupBox.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -611,6 +633,7 @@ namespace PolygonEditor
         private System.Windows.Forms.Button ButtonSameLength;
         private System.Windows.Forms.Button ButtonTangentLine;
         private System.Windows.Forms.Button ButtonRemoveConstraint;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
     }
 }
 
