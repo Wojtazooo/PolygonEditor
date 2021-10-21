@@ -28,19 +28,26 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
 
         public void Cancel()
         {
+            _polygonToEdit = null;
+            _selector = new SelectionHandler(_rasterObjects, null, _drawingArea);
             RemoveCirclePointer();
             RemoveVertexCircles();
         }
 
         public void Finish()
         {
+            _polygonToEdit = null;
+            _selector = new SelectionHandler(_rasterObjects, null, _drawingArea);
             RemoveCirclePointer();
             RemoveVertexCircles();
         }
 
         public void Submit()
         {
+            _polygonToEdit = null;
+            _selector = new SelectionHandler(_rasterObjects, null, _drawingArea);
             RemoveCirclePointer();
+            RemoveVertexCircles();
         }
 
         public void HandleMouseClick(MouseEventArgs e)
