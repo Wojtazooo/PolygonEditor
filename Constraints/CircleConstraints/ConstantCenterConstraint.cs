@@ -21,7 +21,7 @@ namespace PolygonEditor.Constraints.CircleConstraints
 
         public override void DrawConstraintInfo(Graphics g)
         {
-            MyPoint center = _circle.Center;
+            MyPoint center = new MyPoint(_circle.Center);
             GraphicsApplier.ApplyCircle(g, center, Constants.CENTER_POINT_RADIUS);
             center.Y -= 20;
             GraphicsApplier.ApplyString(g, $"({_constantCenter.X},{_constantCenter.Y})", center);
