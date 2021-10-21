@@ -11,8 +11,13 @@ namespace PolygonEditor.Constraints.PolygonConstraints
 {
     class RightAngleConstraint : PolygonConstraint
     {
+        private static int _constraintCounter = 0;
+        public int Id { get; private set; }
+
         public RightAngleConstraint(Polygon polygon, List<MyPoint> relatedMyPoints) : base(polygon)
         {
+            _constraintCounter++;
+            Id = _constraintCounter;
             foreach (var i in relatedMyPoints)
             {
                 RelatedVertices.Add(_polygon.Vertices.IndexOf(i));
@@ -21,8 +26,8 @@ namespace PolygonEditor.Constraints.PolygonConstraints
         }
         public override void DrawConstraintInfo(Graphics g)
         {
-            GraphicsApplier.ApplyString(g, "right angle", GetCenterMyPointFirstEdge());
-            GraphicsApplier.ApplyString(g, "right angle", GetCenterMyPointSecondEdge());
+            GraphicsApplier.ApplyString(g, $"|_ {Id}", GetCenterMyPointFirstEdge());
+            GraphicsApplier.ApplyString(g, $"|_  {Id}", GetCenterMyPointSecondEdge());
         }
 
         public override void EnforceConstraint(MyPoint constantMyPoint)

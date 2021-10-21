@@ -11,9 +11,13 @@ namespace PolygonEditor.Constraints.PolygonConstraints
 {
     class SameLengthConstraint : PolygonConstraint
     {
+        private static int _constraintCounter = 0;
+        public int Id { get; private set; }
         public SameLengthConstraint(Polygon polygon, List<MyPoint> relatedMyPoints) : base(polygon) 
         {
-            foreach(var i in relatedMyPoints)
+            _constraintCounter++;
+            Id = _constraintCounter;
+            foreach (var i in relatedMyPoints)
             {
                 RelatedVertices.Add(_polygon.Vertices.IndexOf(i));
             }
@@ -22,8 +26,8 @@ namespace PolygonEditor.Constraints.PolygonConstraints
 
         public override void DrawConstraintInfo(Graphics g)
         {
-            GraphicsApplier.ApplyString(g, "same length", GetCenterMyPointFirstEdge());
-            GraphicsApplier.ApplyString(g, "same length", GetCenterMyPointSecondEdge());
+            GraphicsApplier.ApplyString(g, $"== {Id}", GetCenterMyPointFirstEdge());
+            GraphicsApplier.ApplyString(g, $"== {Id}", GetCenterMyPointSecondEdge());
 
         }
 

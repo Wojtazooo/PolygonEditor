@@ -93,7 +93,7 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrai
                                 firstSelectedLine.b,
                                };
                             _ = new SameLengthConstraint(polygon, relatedMyPoint);
-                            _ = new SameLengthConstraint(polygon, relatedMyPoint2);
+                           // _ = new SameLengthConstraint(polygon, relatedMyPoint2);
                             _constraintsEnforcer.EnforcePolygonConstraints(polygon, polygon.Vertices.IndexOf(edge.a));
                             firstSelectedLine = (null, null);
                             return;

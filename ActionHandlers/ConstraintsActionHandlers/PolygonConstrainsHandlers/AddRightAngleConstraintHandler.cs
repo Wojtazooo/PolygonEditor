@@ -84,7 +84,7 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrai
                                 edge.a,
                                 edge.b };
                             _ = new RightAngleConstraint(polygon, relatedMyPoint);
-                            _ = new RightAngleConstraint(polygon, relatedMyPoint);
+                           // _ = new RightAngleConstraint(polygon, relatedMyPoint);
                             _constraintsEnforcer.EnforcePolygonConstraints(polygon, polygon.Vertices.IndexOf(edge.a));
                             firstSelectedLine = (null, null);
                             return;
