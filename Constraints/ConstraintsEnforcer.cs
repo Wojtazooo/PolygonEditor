@@ -98,10 +98,9 @@ namespace PolygonEditor.Constraints
 
         public void EnforceCircleConstraint(Circle circle)
         {
-            foreach(var c in circle.Constraints)
-            {
-                c.EnforceConstraint(new MyPoint());
-            }
+            circle.ConstantCenterConstraint?.EnforceConstraint(null);
+            circle.ConstantRadiusConstraint?.EnforceConstraint(null);
+            circle.tangentToPolygonConstraint?.EnforceConstraint(null);
         }
 
     }

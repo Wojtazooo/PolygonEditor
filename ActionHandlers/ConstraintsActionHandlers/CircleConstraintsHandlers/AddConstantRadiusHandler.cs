@@ -41,7 +41,14 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers
                     var detectedMyPoint = circle.DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS);
                     if (detectedMyPoint != null)
                     {
-                        string value = ExtensionMethods.ShowDialog("Insert length", "Add constraint", circle.Radius);
+                        if(circle.ConstantCenterConstraint != null && circle.tangentToPolygonConstraint != null)
+                        {
+                            MessageBox.Show("Circle contains constant center and is tangent to Polygon. Can't add constant radius", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+
+                        string value = ExtensionMethods.ShowDialogToInsertValue("Insert length", "Add constraint", circle.Radius);
                         int length;
                         if (value != null && int.TryParse(value, out length))
                         {

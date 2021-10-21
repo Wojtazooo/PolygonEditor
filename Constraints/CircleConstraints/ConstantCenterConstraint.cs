@@ -9,13 +9,12 @@ using System.Threading.Tasks;
 
 namespace PolygonEditor.Constraints.CircleConstraints
 {
-    class ConstantCenterConstraint : CircleConstraint
+    public class ConstantCenterConstraint : CircleConstraint
     {
         private MyPoint _constantCenter;
 
         public ConstantCenterConstraint(Circle circle, MyPoint constantCenter) : base(circle)
         {
-            _circle.Constraints.RemoveAll(c => c is CircleTangentToPolygonConstraint);
             _constantCenter = constantCenter;
         }
 
@@ -24,7 +23,8 @@ namespace PolygonEditor.Constraints.CircleConstraints
             MyPoint center = new MyPoint(_circle.Center);
             GraphicsApplier.ApplyCircle(g, center, Constants.CENTER_POINT_RADIUS);
             center.Y -= 20;
-            GraphicsApplier.ApplyString(g, $"({_constantCenter.X},{_constantCenter.Y})", center);
+            Point circleCenterToDraw = _constantCenter.GetPoint();
+            GraphicsApplier.ApplyString(g, $"({circleCenterToDraw.X},{circleCenterToDraw.Y})", center);
         }
 
         public override void EnforceConstraint(MyPoint constantMyPoint)
@@ -35,6 +35,11 @@ namespace PolygonEditor.Constraints.CircleConstraints
         public override MyPoint GetCenterDrawingPoint()
         {
             return (new MyPoint(_circle.Center.X, _circle.Center.Y - 10));
+        }
+
+        public override void SetConstraintOnObject()
+        {
+            _circle.SetConstantCenterConstraint(this);
         }
     }
 }

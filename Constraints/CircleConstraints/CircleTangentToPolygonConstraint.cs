@@ -9,23 +9,27 @@ using System.Threading.Tasks;
 
 namespace PolygonEditor.Constraints.CircleConstraints
 {
-    class CircleTangentToPolygonConstraint : CircleConstraint
+    public class CircleTangentToPolygonConstraint : CircleConstraint
     {
-        private Polygon _polygon;
-        private int _v1;
-        private int _v2;
+        public Polygon Polygon { get; private set; }
+        public int V1 { get; private set; }
+        public int V2 { get; private set; }
 
         public CircleTangentToPolygonConstraint(Circle circle, Polygon polygon, int v1, int v2): base(circle)
         {
-            _circle.Constraints.RemoveAll(c => c is ConstantCenterConstraint);
-            _polygon = polygon;
-            _v1 = v1;
-            _v2 = v2;
+            Polygon = polygon;
+            V1 = v1;
+            V2 = v2;
         }
 
         public override void DrawConstraintInfo(Graphics g)
         {
-            MyPoint center = ExtensionMethods.CountMiddleOfSegment(_polygon.Vertices[_v1], _polygon.Vertices[_v2]);
+            MyPoint center = ExtensionMethods.FindPointWhereCircleStickToLine(
+                Polygon.Vertices[V1],
+                Polygon.Vertices[V2],
+                _circle
+                );
+
             GraphicsApplier.ApplyCircle(
                 g,
                 center,
@@ -34,13 +38,26 @@ namespace PolygonEditor.Constraints.CircleConstraints
 
         public override void EnforceConstraint(MyPoint constantMyPoint)
         {
-            MyPoint newCenter = ExtensionMethods.FindCenterOfCircleTangentToEdge(_polygon.Vertices[_v1], _polygon.Vertices[_v2], _circle.Radius);
-            _circle.SetCenter(newCenter);
+            if(_circle.ConstantCenterConstraint == null)
+            {
+                MyPoint newCenter = ExtensionMethods.FindCenterOfCircleTangentToEdge(Polygon.Vertices[V1], Polygon.Vertices[V2], _circle.Radius);
+                _circle.SetCenter(newCenter);
+            }
+            else
+            {
+                var newRadius = 2*ExtensionMethods.CountDistanceFromCircleCenterToLine(_circle.Center, Polygon.Vertices[V1], Polygon.Vertices[V2]);
+                _circle.SetRadius((int)Math.Round(newRadius));
+            }
         }
 
         public override MyPoint GetCenterDrawingPoint()
         {
-            return ExtensionMethods.CountMiddleOfSegment(_polygon.Vertices[_v1], _polygon.Vertices[_v2]);
+            return ExtensionMethods.CountMiddleOfSegment(Polygon.Vertices[V1], Polygon.Vertices[V2]);
+        }
+
+        public override void SetConstraintOnObject()
+        {
+            _circle.SetTangentConstraint(this);
         }
     }
 }

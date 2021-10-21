@@ -27,5 +27,6 @@ namespace PolygonEditor.Constraints.CircleConstraints
         public abstract void EnforceConstraint(MyPoint constantMyPoint);
         public abstract void DrawConstraintInfo(Graphics g);
         public abstract MyPoint GetCenterDrawingPoint();
+        public abstract void SetConstraintOnObject();
     }
 }

@@ -85,35 +85,12 @@ namespace PolygonEditor
             double length = PixelDistance(constw1, w2);
             double dx1 = constv2.X - constv1.X;
             double dy1 = constv2.Y - constv1.Y;
-            double dx2 = w2.X - constw1.X;
-            double dy2 = w2.Y - constw1.Y;
             
             MyPoint rightAngle = new MyPoint(constw1.X - dy1, constw1.Y + dx1);
             MyPoint rightAngleSecond = new MyPoint(constw1.X + dy1, constw1.Y - dx1);
 
             if (PixelDistance(w2, rightAngle) < PixelDistance(w2, rightAngleSecond)) return MovePointToAchieveLength(rightAngle, constw1, length);
             else return MovePointToAchieveLength(rightAngleSecond, constw1, length);
-
-            //var pointToGetRightAngle = MovePointToAchieveLength(rightAngle, constw1, length);
-
-
-            //double length = PixelDistance(constw1, w2);
-
-            //double dx1 = constv2.X - constv1.X;
-            //double dy1 = constv1.Y - constv2.Y;
-            //double dx2 = w2.X - constw1.X;
-            //double dy2 = w2.Y - constw1.Y;
-
-            //if (dx1 <= 100 && dx1 >= -100)
-            //{
-            //    return new MyPoint(constw1.X + length, constw1.Y);
-            //}
-
-            //double tga = (dy1 * dy2) / dx1;
-
-            //var pointToGetRightAngle = new MyPoint(constw1.X + tga, w2.Y);
-            //pointToGetRightAngle = MovePointToAchieveLength(pointToGetRightAngle, constw1, length);
-            //return pointToGetRightAngle;
         }
 
         public static MyPoint FindCenterOfCircleTangentToEdge(MyPoint v1, MyPoint v2, int Radius)
@@ -143,12 +120,30 @@ namespace PolygonEditor
             return new MyPoint(b.X + (0.5 * dx), b.Y + (0.5 * dy));
         }
 
+        public static MyPoint FindPointWhereCircleStickToLine(MyPoint v1, MyPoint v2, Circle circle)
+        {
+            double dx = v2.X - v1.X;
+            double dy = v2.Y - v1.Y;
+
+            MyPoint rightAngle = new MyPoint(circle.Center.X - dy, circle.Center.Y + dx);
+            MyPoint rightAngleSecond = new MyPoint(circle.Center.X + dy, circle.Center.Y - dx);
+
+            if(PixelDistance(v1, rightAngle) < PixelDistance(v1, rightAngleSecond))
+            {
+                return MovePointToAchieveLength(rightAngle, circle.Center, circle.Radius);
+            }
+            else
+            {
+                return MovePointToAchieveLength(rightAngleSecond, circle.Center, circle.Radius);
+            }
+        }
+
         public static MyPoint FindLeftUpperCornerForRectangle(MyPoint center, int width, int height)
         {
             return new MyPoint(center.X - (int)(width / 2), center.Y - (int)(height / 2));
         }
 
-        public static string ShowDialog(string text, string caption, int initialValue)
+        public static string ShowDialogToInsertValue(string text, string caption, int initialValue)
         {
             Form prompt = new Form()
             {

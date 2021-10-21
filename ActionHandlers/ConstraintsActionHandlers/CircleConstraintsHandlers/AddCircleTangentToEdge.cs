@@ -64,6 +64,11 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstrain
                         var detectedMyPoint = circle.DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS);
                         if (detectedMyPoint!= null)
                         {
+                            if (circle.ConstantRadiusConstraint != null && circle.ConstantCenterConstraint != null)
+                            {
+                                MessageBox.Show("Circle contains constant radius and constant center. Can't make it tangent to polygon", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
                             selectedCircle = circle;
                         }
                     }
@@ -76,6 +81,7 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstrain
                         var edge = polygon.isEdgeClicked(mouseMyPoint);
                         if(edge.a != null && edge.b != null)
                         {
+                            
                             int v1 = polygon.Vertices.FindIndex(v => v == edge.a);
                             int v2 = polygon.Vertices.FindIndex(v => v == edge.b);
 

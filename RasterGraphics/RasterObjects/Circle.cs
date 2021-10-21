@@ -16,7 +16,9 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         public MyPoint Center { get; private set; }
         public int Radius { get; private set; }
 
-        public List<CircleConstraint> Constraints { get; private set; } = new List<CircleConstraint>();
+        public CircleTangentToPolygonConstraint tangentToPolygonConstraint { get; private set; }
+        public ConstantCenterConstraint ConstantCenterConstraint { get; private set; }
+        public ConstantRadiusConstraint ConstantRadiusConstraint { get; private set; }
 
         public Circle(MyPoint center, int radius, Color color): base(color)
         {
@@ -65,40 +67,63 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 
         public override void DrawConstraints(Graphics g)
         {
-            foreach(var constraint in Constraints)
-            {
-                constraint.DrawConstraintInfo(g);
-            }
+            tangentToPolygonConstraint?.DrawConstraintInfo(g);
+            ConstantRadiusConstraint?.DrawConstraintInfo(g);
+            ConstantCenterConstraint?.DrawConstraintInfo(g);
         }
 
         public void AddConstraint(CircleConstraint constraint)
         {
-            Constraints.Add(constraint);
+            constraint.SetConstraintOnObject();
+        }
+        
+        public void SetTangentConstraint(CircleTangentToPolygonConstraint constraint)
+        {
+            tangentToPolygonConstraint = constraint;
         }
 
+        public void SetConstantCenterConstraint(ConstantCenterConstraint constraint)
+        {
+            ConstantCenterConstraint = constraint;
+        }
+
+        public void SetConstantRadiusConstraint(ConstantRadiusConstraint constraint)
+        {
+            ConstantRadiusConstraint = constraint;
+        }
         public override bool RemoveConstraintByClick(MyPoint mousePoint)
         {
-            for (int i = 0; i < Constraints.Count; i++)
+            if(ConstantRadiusConstraint != null && ExtensionMethods.IsInCircle(ConstantRadiusConstraint?.GetCenterDrawingPoint(), mousePoint, Constants.DETECTION_RADIUS))
             {
-                MyPoint constraintCenterPoint = new MyPoint(Constraints[i].GetCenterDrawingPoint());
-                if (ExtensionMethods.IsInCircle(constraintCenterPoint, mousePoint, Constants.DETECTION_RADIUS))
-                {
-                    Constraints.Remove(Constraints[i]);
-                    return true;
-                }
+                ConstantRadiusConstraint = null;
+                return true;
+            }
+            if (ConstantCenterConstraint != null && ExtensionMethods.IsInCircle(ConstantCenterConstraint?.GetCenterDrawingPoint(), mousePoint, Constants.DETECTION_RADIUS))
+            {
+                ConstantCenterConstraint = null;
+                return true;
+            }
+            if (tangentToPolygonConstraint != null && ExtensionMethods.IsInCircle(tangentToPolygonConstraint?.GetCenterDrawingPoint(), mousePoint, Constants.DETECTION_RADIUS))
+            {
+                tangentToPolygonConstraint = null;
+                return true;
             }
             return false;
         }
 
         public override bool DetectConstraint(MyPoint mousePoint)
         {
-            for (int i = 0; i < Constraints.Count; i++)
+            if (ConstantRadiusConstraint != null && ExtensionMethods.IsInCircle(ConstantRadiusConstraint?.GetCenterDrawingPoint(), mousePoint, Constants.DETECTION_RADIUS))
             {
-                MyPoint constraintCenterPoint = new MyPoint(Constraints[i].GetCenterDrawingPoint());
-                if (ExtensionMethods.IsInCircle(constraintCenterPoint, mousePoint, Constants.DETECTION_RADIUS))
-                {
-                    return true;
-                }
+                return true;
+            }
+            if (ConstantCenterConstraint != null && ExtensionMethods.IsInCircle(ConstantCenterConstraint?.GetCenterDrawingPoint(), mousePoint, Constants.DETECTION_RADIUS))
+            {
+                return true;
+            }
+            if (tangentToPolygonConstraint != null && ExtensionMethods.IsInCircle(tangentToPolygonConstraint?.GetCenterDrawingPoint(), mousePoint, Constants.DETECTION_RADIUS))
+            {
+                return true;
             }
             return false;
         }

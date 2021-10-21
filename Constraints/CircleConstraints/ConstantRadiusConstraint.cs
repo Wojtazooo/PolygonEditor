@@ -36,5 +36,10 @@ namespace PolygonEditor.Constraints.CircleConstraints
         {
             return ExtensionMethods.CountMiddleOfSegment(_circle.Center, new MyPoint(_circle.Center.X + _radiusLength, _circle.Center.Y));
         }
+
+        public override void SetConstraintOnObject()
+        {
+            _circle.SetConstantRadiusConstraint(this);
+        }
     }
 }

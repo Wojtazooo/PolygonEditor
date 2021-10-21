@@ -41,7 +41,7 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers
                     var edge = polygon.isEdgeClicked(mouseMyPoint);
                     if (edge.a != null && edge.b != null)
                     {
-                        string value = ExtensionMethods.ShowDialog("Insert length", "Add constraint", (int)ExtensionMethods.PixelDistance(edge.a, edge.b));
+                        string value = ExtensionMethods.ShowDialogToInsertValue("Insert length", "Add constraint", (int)ExtensionMethods.PixelDistance(edge.a, edge.b));
                         int length;
                         if (value != null && int.TryParse(value, out length))
                         {
