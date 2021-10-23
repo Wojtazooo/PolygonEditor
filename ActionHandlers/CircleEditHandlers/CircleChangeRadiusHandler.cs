@@ -9,63 +9,60 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PolygonEditor.ActionHandlers.GeneralEditHandlers;
+using PolygonEditor.GlobalHelpers;
 
 namespace PolygonEditor.ActionHandlers.CircleEditHandlers
 {
     class CircleChangeRadiusHandler : ActionHandler
     {
-        private PictureBox _drawingArea;
-        private TextBox _helperTextBox;
-        private List<RasterObject> _rasterObjects;
         private SelectionHandler _selector;
         private Circle _circleToEdit;
         private bool _moving = false;
         private Line _helpRadius = null;
-        private ConstraintsEnforcer _constraintsEnforcer;
 
-        public CircleChangeRadiusHandler(List<RasterObject> rasterObjects, PictureBox drawingArea, TextBox helperTextBox, ConstraintsEnforcer constraintEnforcer)
+        public CircleChangeRadiusHandler(List<RasterObject> rasterObjects, PictureBox drawingArea, TextBox helperTextBox, ConstraintsEnforcer constraintsEnforcer): 
+            base(rasterObjects, helperTextBox, drawingArea, constraintsEnforcer)
         {
-            _selector = new SelectionHandler(rasterObjects, helperTextBox, drawingArea);
-            _rasterObjects = rasterObjects;
-            _drawingArea = drawingArea;
-            _helperTextBox = helperTextBox;
-            _constraintsEnforcer = constraintEnforcer;
+            _selector = new SelectionHandler(rasterObjects, helperTextBox, drawingArea, constraintsEnforcer);
+            AddInstructions(InstructionTexts.ChangeCircleRadiusInstruction);
         }
 
-        public void Cancel()
+        public override void Cancel()
         {
             RemoveHelpRadius();
         }
 
-        public void Finish()
+        public override void Finish()
         {
             RemoveHelpRadius();
+            base.Finish();
         }
 
-        public void Submit()
+        public override void Submit()
         {
             _circleToEdit = null;
-            _selector = new SelectionHandler(_rasterObjects, null, _drawingArea);
+            _selector = new SelectionHandler(RasterObjects, HelperTextBox, DrawingArea, ConstraintsEnforcer);
             RemoveHelpRadius();
         }
 
 
-        public void HandleMouseClick(MouseEventArgs e)
+        public override void HandleMouseClick(MouseEventArgs e)
         {
             if (_circleToEdit == null)
             {
                 _selector.HandleMouseClick(e);
-                if (_selector.clickedRasterObject is Circle)
+                if (_selector.ClickedRasterObject is Circle)
                 {
                     MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
-                    _circleToEdit = (Circle)_selector.clickedRasterObject;
+                    _circleToEdit = (Circle)_selector.ClickedRasterObject;
                     _selector.Cancel();
                     AddHelpRadius(mouseMyPoint);
                 }
             }
         }
 
-        public void HandleMouseMove(MouseEventArgs e)
+        public override void HandleMouseMove(MouseEventArgs e)
         {
             if (_circleToEdit == null)
             {
@@ -79,19 +76,19 @@ namespace PolygonEditor.ActionHandlers.CircleEditHandlers
                 {
                     int newRadius = (int)ExtensionMethods.PixelDistance(mouseMyPoint, _circleToEdit.Center);
                     _circleToEdit.SetRadius(newRadius);
-                    _constraintsEnforcer.EnforceCircleConstraint(_circleToEdit);
+                    ConstraintsEnforcer.EnforceCircleConstraint(_circleToEdit);
                     UpdateHelpRadius(mouseMyPoint);
                 }
             }
         }
 
-        public void HandleMouseUp(MouseEventArgs e)
+        public override void HandleMouseUp(MouseEventArgs e)
         {
             _moving = false;
-            _drawingArea.Cursor = Cursors.Default;
+            DrawingArea.Cursor = Cursors.Default;
         }
 
-        public void HandleMouseDown(MouseEventArgs e)
+        public override void HandleMouseDown(MouseEventArgs e)
         {
             if (_circleToEdit != null)
             {
@@ -108,12 +105,12 @@ namespace PolygonEditor.ActionHandlers.CircleEditHandlers
         {
             MyPoint radiusMyPoint = new MyPoint(_circleToEdit.Center.X + _circleToEdit.Radius, _circleToEdit.Center.Y);
             _helpRadius = new Line(_circleToEdit.Center, radiusMyPoint, Color.Red);
-            _rasterObjects.Add(_helpRadius);
+            RasterObjects.Add(_helpRadius);
         }
 
         private void RemoveHelpRadius()
         {
-            _rasterObjects.Remove(_helpRadius);
+            RasterObjects.Remove(_helpRadius);
             _helpRadius = null;
         }
 
@@ -128,11 +125,11 @@ namespace PolygonEditor.ActionHandlers.CircleEditHandlers
             MyPoint detectedMyPoint = _circleToEdit.DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS);
             if (detectedMyPoint != null)
             {
-                _drawingArea.Cursor = Cursors.Hand;
+                DrawingArea.Cursor = Cursors.Hand;
             }
             else
             {
-                _drawingArea.Cursor = Cursors.Default;
+                DrawingArea.Cursor = Cursors.Default;
             }
         }
     }

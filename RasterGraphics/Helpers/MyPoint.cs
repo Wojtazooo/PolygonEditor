@@ -57,7 +57,7 @@ namespace PolygonEditor.RasterGraphics.Helpers
             return !(a == b);
         }
 
-        public virtual bool Equals(MyPoint other) => other?.X == X && other?.Y == Y;
+        protected virtual bool Equals(MyPoint other) => other?.X == X && other?.Y == Y;
 
         public override string ToString()
         {

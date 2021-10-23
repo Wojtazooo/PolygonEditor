@@ -1,71 +1,51 @@
-﻿using PolygonEditor.RasterGraphics.Helpers;
-using PolygonEditor.RasterGraphics.Models;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using PolygonEditor.Constraints;
+using PolygonEditor.GlobalHelpers;
+using PolygonEditor.RasterGraphics.Helpers;
+using PolygonEditor.RasterGraphics.Models;
 
-namespace PolygonEditor.ActionHandlers
+namespace PolygonEditor.ActionHandlers.GeneralEditHandlers
 {
     class SelectionHandler : ActionHandler
     {
-        private List<RasterObject> _rasterObjects;
-        private TextBox _helperTextBox;
-        public RasterObject detectedRasterObject { get; private set; }
-        public RasterObject clickedRasterObject { get; private set; }
+        private RasterObject DetectedRasterObject { get; set; }
+        public RasterObject ClickedRasterObject { get; private set; }
 
-        private PictureBox _drawingArea;
-
-        public SelectionHandler(List<RasterObject> rasterObjects, TextBox textBoxHelper, PictureBox drawingArea)
+        public SelectionHandler(List<RasterObject> rasterObjects, TextBox helperTextBox, PictureBox drawingArea, ConstraintsEnforcer constraintsEnforcer)
+            : base(rasterObjects, helperTextBox, drawingArea, constraintsEnforcer)
         {
-            _rasterObjects = rasterObjects;
-            _helperTextBox = textBoxHelper;
-            _drawingArea = drawingArea;
-            InsertInstructions();
         }
 
-        public void Cancel()
+        public override void Cancel()
         {
-            detectedRasterObject = null;
-            clickedRasterObject = null;
-            _drawingArea.Cursor = Cursors.Default;
+            DetectedRasterObject = null;
+            ClickedRasterObject = null;
+            DrawingArea.Cursor = Cursors.Default;
         }
 
-        public void HandleMouseClick(MouseEventArgs e)
+        public override void HandleMouseClick(MouseEventArgs e)
         {
-            if(detectedRasterObject != null)
+            if(DetectedRasterObject != null)
             {
-                clickedRasterObject = detectedRasterObject;
+                ClickedRasterObject = DetectedRasterObject;
             }
         }
 
-        public void HandleMouseMove(MouseEventArgs e)
+        public override void HandleMouseMove(MouseEventArgs e)
         {
             MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
-            for (int i = 0; i < _rasterObjects.Count; i++)
+            for (int i = 0; i < RasterObjects.Count; i++)
             {
-                var point = _rasterObjects[i].DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS);
+                var point = RasterObjects[i].DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS);
                 if (point != null)
                 {
-                    _drawingArea.Cursor = Cursors.Hand;
-                    detectedRasterObject = _rasterObjects[i];
+                    DrawingArea.Cursor = Cursors.Hand;
+                    DetectedRasterObject = RasterObjects[i];
                     return;
                 }
             }
             Cancel();
-        }
-
-        public void InsertInstructions()
-        {
-            //_helperTextBox.Lines = InstructionTexts.Selection;
-        }
-
-        public void RemoveInstructions()
-        {
-            //_helperTextBox.Lines = null;
         }
     }
 }

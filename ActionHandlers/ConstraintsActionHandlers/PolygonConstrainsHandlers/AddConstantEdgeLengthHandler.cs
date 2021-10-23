@@ -10,29 +10,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PolygonEditor.GlobalHelpers;
 
 namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers
 {
     class AddConstantEdgeLengthHandler : ActionHandler
     {
-        private List<RasterObject> _rasterObjects;
-        private TextBox _helperTextBox;
-        private PictureBox _drawingArea;
-        private ConstraintsEnforcer _constraintsEnforcer;
-
-        public AddConstantEdgeLengthHandler(List<RasterObject> rasterObjects, TextBox textBoxHelper, PictureBox drawingArea, ConstraintsEnforcer constraintsEnforcer)
+        public AddConstantEdgeLengthHandler(List<RasterObject> rasterObjects, TextBox helperTextBox, PictureBox drawingArea, ConstraintsEnforcer constraintsEnforcer)
+            : base(rasterObjects, helperTextBox, drawingArea, constraintsEnforcer)
         {
-            _rasterObjects = rasterObjects;
-            _helperTextBox = textBoxHelper;
-            _drawingArea = drawingArea;
-            _constraintsEnforcer = constraintsEnforcer;
+            AddInstructions(InstructionTexts.AddConstantEdgeLengthConstraintInstruction);
         }
 
-        public void HandleMouseClick(MouseEventArgs e)
+        public override void HandleMouseClick(MouseEventArgs e)
         {
             MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
 
-            foreach (var rasterObj in _rasterObjects)
+            foreach (var rasterObj in RasterObjects)
             {
                 if (rasterObj is Polygon)
                 {
@@ -46,36 +40,36 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers
                         if (value != null && int.TryParse(value, out length))
                         {
                             HandleAddConstraint(length, polygon, edge.a, edge.b);
-                            _constraintsEnforcer.EnforcePolygonConstraints(polygon, polygon.Vertices.IndexOf(edge.a));
+                            ConstraintsEnforcer.EnforcePolygonConstraints(polygon, polygon.Vertices.IndexOf(edge.a));
                         }
                     }
                 }
             }
         }
 
-        public void HandleMouseMove(MouseEventArgs e)
+        public override void HandleMouseMove(MouseEventArgs e)
         {
             MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
-            foreach (var rasterObj in _rasterObjects)
+            foreach (var rasterObj in RasterObjects)
             {
-                if(rasterObj is Polygon)
+                if (rasterObj is Polygon)
                 {
                     var edge = ((Polygon)rasterObj).isEdgeClicked(mouseMyPoint);
-                    if(edge.a != null && edge.b != null)
+                    if (edge.a != null && edge.b != null)
                     {
-                        _drawingArea.Cursor = Cursors.Hand;
+                        DrawingArea.Cursor = Cursors.Hand;
                     }
                     else
                     {
-                        _drawingArea.Cursor = Cursors.Default;
+                        DrawingArea.Cursor = Cursors.Default;
                     }
                 }
             }
         }
 
-        private void HandleAddConstraint(int insertedLength, Polygon polygon, MyPoint a, MyPoint b)
+        private static void HandleAddConstraint(int insertedLength, Polygon polygon, MyPoint a, MyPoint b)
         {
-            var constraint = new ConstantEdgeLengthConstraint(polygon, a, b, insertedLength);
+            _ = new ConstantEdgeLengthConstraint(polygon, a, b, insertedLength);
         }
     }
 }

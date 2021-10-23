@@ -1,56 +1,44 @@
-﻿using PolygonEditor.RasterGraphics.Models;
-using PolygonEditor.RasterGraphics.RasterObjects;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using PolygonEditor.Constraints;
+using PolygonEditor.GlobalHelpers;
+using PolygonEditor.RasterGraphics.Models;
 
-namespace PolygonEditor.ActionHandlers
+namespace PolygonEditor.ActionHandlers.GeneralEditHandlers
 {
     public class RemoveRasterObjectHandler : ActionHandler
     {
-        private List<RasterObject> _rasterObjects;
-        private TextBox _helperTextBox;
-        private PictureBox _drawingArea;
-        private SelectionHandler _selectionHandler;
+        private readonly SelectionHandler _selectionHandler;
 
-        public RemoveRasterObjectHandler(List<RasterObject> rasterObjects, TextBox textBoxHelper, PictureBox drawingArea)
+        public RemoveRasterObjectHandler(List<RasterObject> rasterObjects, TextBox helperTextBox, PictureBox drawingArea, ConstraintsEnforcer constraintsEnforcer)
+        : base(rasterObjects, helperTextBox, drawingArea, constraintsEnforcer)
         {
-            _rasterObjects = rasterObjects;
-            _helperTextBox = textBoxHelper;
-            _drawingArea = drawingArea;
-            _selectionHandler = new SelectionHandler(rasterObjects, textBoxHelper, drawingArea);
+            _selectionHandler = new SelectionHandler(rasterObjects, helperTextBox, drawingArea, constraintsEnforcer);
+            AddInstructions(InstructionTexts.RemoveRasterObjectInstruction);
         }
 
-        public void Cancel()
+        public override void Cancel()
         {
-            _drawingArea.Cursor = Cursors.Default;
+            DrawingArea.Cursor = Cursors.Default;
         }
 
-        public void Finish()
+        public override void Finish()
         {
             Cancel();
+            base.Finish();
         }
 
-        public bool HandleKeybordKeyClick(KeyEventArgs e)
-        {
-            return false;
-        }
-
-        public void HandleMouseClick(MouseEventArgs e)
+        public override void HandleMouseClick(MouseEventArgs e)
         {
             _selectionHandler.HandleMouseClick(e);
-            if(_selectionHandler.clickedRasterObject != null)
+            if(_selectionHandler.ClickedRasterObject != null)
             {
-                _rasterObjects.Remove(_selectionHandler.clickedRasterObject);
+                RasterObjects.Remove(_selectionHandler.ClickedRasterObject);
                 _selectionHandler.Cancel();
             }
         }
 
-        public void HandleMouseMove(MouseEventArgs e)
+        public override void HandleMouseMove(MouseEventArgs e)
         {
             _selectionHandler.HandleMouseMove(e);
         }

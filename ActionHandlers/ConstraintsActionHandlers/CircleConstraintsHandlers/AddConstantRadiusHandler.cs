@@ -1,80 +1,74 @@
-﻿using PolygonEditor.Constraints;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
+using PolygonEditor.Constraints;
 using PolygonEditor.Constraints.CircleConstraints;
+using PolygonEditor.GlobalHelpers;
 using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers
+namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstraintsHandlers
 {
     class AddConstantRadiusHandler : ActionHandler
     {
-        private List<RasterObject> _rasterObjects;
-        private TextBox _helperTextBox;
-        private readonly PictureBox _drawingArea;
-        private ConstraintsEnforcer _constraintsEnforcer;
-
-        public AddConstantRadiusHandler(List<RasterObject> rasterObjects, TextBox textBoxHelper, PictureBox drawingArea, ConstraintsEnforcer constraintsEnforcer)
+        public AddConstantRadiusHandler(List<RasterObject> rasterObjects, TextBox textBoxHelper, PictureBox drawingArea,
+            ConstraintsEnforcer constraintsEnforcer)
+            : base(rasterObjects, textBoxHelper, drawingArea, constraintsEnforcer)
         {
-            _rasterObjects = rasterObjects;
-            _helperTextBox = textBoxHelper;
-            _drawingArea = drawingArea;
-            _constraintsEnforcer = constraintsEnforcer;
+            ConstraintsEnforcer = constraintsEnforcer;
+            AddInstructions(InstructionTexts.AddConstantRadiusCircleConstraintInstruction);
         }
 
-        public void HandleMouseClick(MouseEventArgs e)
+        public override void HandleMouseClick(MouseEventArgs e)
         {
             MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
 
-            foreach (var rasterObj in _rasterObjects)
+            foreach (var rasterObj in RasterObjects)
             {
                 if (rasterObj is Circle)
                 {
-                    Circle circle = (Circle)rasterObj;
+                    Circle circle = (Circle) rasterObj;
 
                     var detectedMyPoint = circle.DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS);
                     if (detectedMyPoint != null)
                     {
-                        if(circle.ConstantCenterConstraint != null && circle.tangentToPolygonConstraint != null)
+                        if (circle.ConstantCenterConstraint != null && circle.tangentToPolygonConstraint != null)
                         {
-                            MessageBox.Show("Circle contains constant center and is tangent to Polygon. Can't add constant radius", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(
+                                "Circle contains constant center and is tangent to Polygon. Can't add constant radius",
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
 
 
-                        string value = ExtensionMethods.ShowDialogToInsertValue("Insert length", "Add constraint", circle.Radius);
+                        string value =
+                            ExtensionMethods.ShowDialogToInsertValue("Insert length", "Add constraint", circle.Radius);
                         int length;
                         if (value != null && int.TryParse(value, out length))
                         {
                             _ = new ConstantRadiusConstraint(circle, length);
-                            _constraintsEnforcer.EnforceCircleConstraint(circle);
+                            ConstraintsEnforcer.EnforceCircleConstraint(circle);
                         }
                     }
                 }
             }
         }
 
-        public void HandleMouseMove(MouseEventArgs e)
+        public override void HandleMouseMove(MouseEventArgs e)
         {
             MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
-            foreach (var rasterObj in _rasterObjects)
+            foreach (var rasterObj in RasterObjects)
             {
                 if (rasterObj is Circle)
                 {
                     if (rasterObj.DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS) != null)
                     {
-                        _drawingArea.Cursor = Cursors.Hand;
+                        DrawingArea.Cursor = Cursors.Hand;
                         return;
                     }
                     else
                     {
-                        _drawingArea.Cursor = Cursors.Default;
+                        DrawingArea.Cursor = Cursors.Default;
                     }
                 }
             }

@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using PolygonEditor.ActionHandlers.GeneralEditHandlers;
 
 namespace PolygonEditor
 {
@@ -71,16 +72,17 @@ namespace PolygonEditor
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (_activeActionHandler != null && _activeActionHandler.HandleKeybordKeyClick(e)) return;
-            
+            if (_activeActionHandler != null && _activeActionHandler.HandleKeyboardKeyClick(e)) return;
+
             if (e.KeyCode == Keys.Escape)
             {
-                _activeActionHandler?.Cancel();
+                _activeActionHandler?.Finish();
                 _activeActionHandler = null;
             }
-            if(e.KeyCode == Keys.Delete)
+
+            if (e.KeyCode == Keys.Delete)
             {
-                ButtonDeleteObject_Click(null,null);
+                ButtonDeleteObject_Click(null, null);
             }
         }
 
@@ -91,42 +93,51 @@ namespace PolygonEditor
 
         private void DrawingArea_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-                _activeActionHandler?.HandleMouseClick(e);
-            else if (e.Button == MouseButtons.Right)
+            switch (e.Button)
             {
-                _activeActionHandler?.Submit();
+                case MouseButtons.Left:
+                    _activeActionHandler?.HandleMouseClick(e);
+                    break;
+                case MouseButtons.Right:
+                    _activeActionHandler?.Submit();
+                    break;
             }
         }
 
         private void ButtonAddPolygon_Click(object sender, System.EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new AddPolygonHandler(_rasterObjects, textBoxHelper, PictureBoxSelectedColor.BackColor, DrawingArea);
+
+            _activeActionHandler = new AddPolygonHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer,
+                PictureBoxSelectedColor.BackColor);
         }
 
         private void ButtonDeleteObject_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new RemoveRasterObjectHandler(_rasterObjects, textBoxHelper, DrawingArea);
+            _activeActionHandler =
+                new RemoveRasterObjectHandler(_rasterObjects,textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
 
- 		private void ButtonMoveObject_Click(object sender, EventArgs e)
+        private void ButtonMoveObject_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new MoveRasterObjectHandler(_rasterObjects, DrawingArea, textBoxHelper, _constraintsEnforcer); 
+            _activeActionHandler =
+                new MoveRasterObjectHandler(_rasterObjects, DrawingArea, textBoxHelper, _constraintsEnforcer);
         }
 
         private void ButtonAddCircle_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new AddCircleHandler(_rasterObjects, textBoxHelper, PictureBoxSelectedColor.BackColor, DrawingArea);
+            _activeActionHandler = new AddCircleHandler(_rasterObjects, textBoxHelper, DrawingArea,
+                _constraintsEnforcer, PictureBoxSelectedColor.BackColor);
         }
 
         private void ButtonMoveVertex_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new MovePolygonVertexHandler(_rasterObjects, DrawingArea, _constraintsEnforcer);
+            _activeActionHandler =
+                new MovePolygonVertexHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
 
         private void DrawingArea_MouseUp(object sender, MouseEventArgs e)
@@ -142,67 +153,78 @@ namespace PolygonEditor
         private void ButtonEditRadius_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new CircleChangeRadiusHandler(_rasterObjects, DrawingArea, textBoxHelper, _constraintsEnforcer);
+            _activeActionHandler =
+                new CircleChangeRadiusHandler(_rasterObjects, DrawingArea, textBoxHelper, _constraintsEnforcer);
         }
 
         private void ButtonAddVertex_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new PolygonAddVertexHandler(_rasterObjects, DrawingArea);
+            _activeActionHandler =
+                new PolygonAddVertexHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
 
         private void ButtonConstantCenter_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new AddConstantCenterHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
+            _activeActionHandler =
+                new AddConstantCenterHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
 
         private void ButtonConstantRadius_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new AddConstantRadiusHandler(_rasterObjects,textBoxHelper, DrawingArea, _constraintsEnforcer);
+            _activeActionHandler =
+                new AddConstantRadiusHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
 
         private void ButtonMoveEdge_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new PolgonMoveEdgeHandler(_rasterObjects, DrawingArea, _constraintsEnforcer);
+            _activeActionHandler =
+                new PolygonMoveEdgeHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
 
         private void ButtonRemoveVertex_Click_1(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new PolygonRemoveVertexHandler(_rasterObjects, DrawingArea);
+            _activeActionHandler =
+                new PolygonRemoveVertexHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
 
         private void ButtonPerpendicular_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new AddRightAngleConstraintHandler(_rasterObjects,textBoxHelper,DrawingArea, _constraintsEnforcer);
+            _activeActionHandler =
+                new AddRightAngleConstraintHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
 
         private void ButtonSameLength_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new AddSameLengthHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
+            _activeActionHandler =
+                new AddSameLengthHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
 
         private void ButtonConstantLength_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new AddConstantEdgeLengthHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
+            _activeActionHandler =
+                new AddConstantEdgeLengthHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
 
         private void ButtonRemoveConstraint_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new RemoveConstraintHandler(_rasterObjects, textBoxHelper,DrawingArea);
+            _activeActionHandler =
+                new RemoveConstraintHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
 
         private void ButtonTangentLine_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
-            _activeActionHandler = new AddCircleTangentToEdge(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
+            _activeActionHandler =
+                new AddCircleTangentToEdge(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
     }
 }

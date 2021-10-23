@@ -1,4 +1,5 @@
-﻿using PolygonEditor.RasterGraphics.Helpers;
+﻿using PolygonEditor.Constraints;
+using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using System;
 using System.Collections.Generic;
@@ -7,43 +8,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PolygonEditor.GlobalHelpers;
 
 namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers
 {
     class RemoveConstraintHandler : ActionHandler
     {
-        private List<RasterObject> _rasterObjects;
-        private TextBox _helperTextBox;
-        private PictureBox _drawingArea;
-
-        public RemoveConstraintHandler(List<RasterObject> rasterObjects, TextBox textBoxHelper, PictureBox drawingArea)
+        public RemoveConstraintHandler(List<RasterObject> rasterObjects, TextBox helperTextBox, PictureBox drawingArea, ConstraintsEnforcer constraintsEnforcer)
+        : base(rasterObjects, helperTextBox, drawingArea, constraintsEnforcer)
         {
-            _rasterObjects = rasterObjects;
-            _helperTextBox = textBoxHelper;
-            _drawingArea = drawingArea;
+            AddInstructions(InstructionTexts.RemoveConstraintInstruction);
         }
 
-        public void HandleMouseClick(MouseEventArgs e)
+        public override void HandleMouseClick(MouseEventArgs e)
         {
             MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
-            foreach (var rasterObj in _rasterObjects)
+            foreach (var rasterObj in RasterObjects)
             {
                 if (rasterObj.RemoveConstraintByClick(mouseMyPoint)) return;
             }
         }
 
-        public void HandleMouseMove(MouseEventArgs e)
+        public override void HandleMouseMove(MouseEventArgs e)
         {
             MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
-            foreach(var rasterObj in _rasterObjects)
+            foreach(var rasterObj in RasterObjects)
             {
                 if (rasterObj.DetectConstraint(mouseMyPoint))
                 { 
-                    _drawingArea.Cursor = Cursors.Hand;
+                    DrawingArea.Cursor = Cursors.Hand;
                 }
                 else
                 {
-                    _drawingArea.Cursor = Cursors.Default;
+                    DrawingArea.Cursor = Cursors.Default;
                 }
             }
         }

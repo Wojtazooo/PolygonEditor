@@ -8,23 +8,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PolygonEditor.ActionHandlers.GeneralEditHandlers;
+using PolygonEditor.Constraints;
+using PolygonEditor.GlobalHelpers;
 
 namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
 {
     class PolygonRemoveVertexHandler : ActionHandler
     {
         List<Cross> _redCrosses;
-        private PictureBox _drawingArea;
         private Polygon _polygonToEdit;
-        private List<RasterObject> _rasterObjects;
         private SelectionHandler _selector;
 
-        public PolygonRemoveVertexHandler(List<RasterObject> rasterObjects, PictureBox drawingArea) 
+        public PolygonRemoveVertexHandler(List<RasterObject> rasterObjects, TextBox helperTextBox, PictureBox drawingArea, ConstraintsEnforcer constraintsEnforcer)
+            :base(rasterObjects, helperTextBox, drawingArea, constraintsEnforcer)
         {
-            _selector = new SelectionHandler(rasterObjects, null, drawingArea);
-            _rasterObjects = rasterObjects;
             _redCrosses = new List<Cross>();
-            _drawingArea = drawingArea;
+            InitSelector();
+            AddInstructions(InstructionTexts.RemoveVertexInstruction);
+        }
+        
+        private void InitSelector()
+        {
+            _selector = new SelectionHandler(RasterObjects, HelperTextBox, DrawingArea, ConstraintsEnforcer);
         }
 
         private void AddCrosses()
@@ -33,41 +39,42 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
             {
                 _redCrosses.Add(new Cross(point, Constants.CROSS_WIDTH, Color.Red));
             }
-            _rasterObjects.AddRange(_redCrosses);
+            RasterObjects.AddRange(_redCrosses);
         }
 
         private void RemoveCrosses()
         {
-            _redCrosses.ForEach(cross => _rasterObjects.Remove(cross));
+            _redCrosses.ForEach(cross => RasterObjects.Remove(cross));
 
         }
 
-        public void Cancel()
+        public override void Cancel()
         {
             RemoveCrosses();
         }
 
-        public void Submit()
+        public override void Submit()
         {
-            _selector = new SelectionHandler(_rasterObjects, null, _drawingArea);
+            InitSelector();
             _polygonToEdit = null;
             RemoveCrosses();
             _redCrosses = new List<Cross>();
         }
 
-        public void Finish()
+        public override void Finish()
         {
             RemoveCrosses();
+            base.Finish(); 
         }
 
-        public void HandleMouseClick(MouseEventArgs e) 
+        public override void HandleMouseClick(MouseEventArgs e) 
         {
             if(_polygonToEdit == null)
             {
                 _selector.HandleMouseClick(e);
-                if (_selector.clickedRasterObject is Polygon)
+                if (_selector.ClickedRasterObject is Polygon)
                 {
-                    _polygonToEdit = (Polygon)_selector.clickedRasterObject;
+                    _polygonToEdit = (Polygon)_selector.ClickedRasterObject;
                     AddCrosses();
                 }
             }
@@ -81,14 +88,14 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
                     for (int i = 0; i < _redCrosses.Count; i++)
                         if (_redCrosses[i].Center == detectedMyPoint)
                         {
-                            _rasterObjects.Remove(_redCrosses[i]);
+                            RasterObjects.Remove(_redCrosses[i]);
                             _redCrosses.RemoveAt(i);
                         }
                 }
             }
         }
 
-        public void HandleMouseMove(MouseEventArgs e) 
+        public override void HandleMouseMove(MouseEventArgs e) 
         {
             if(_polygonToEdit == null)
             {
@@ -101,11 +108,11 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
                 MyPoint detectedMyPoint = _polygonToEdit.DetectObject(mouseMyPoint, Constants.CROSS_WIDTH);
                 if (detectedMyPoint != null && _polygonToEdit.Vertices.Contains(detectedMyPoint))
                 {
-                    _drawingArea.Cursor = Cursors.Hand;
+                    DrawingArea.Cursor = Cursors.Hand;
                 }
                 else
                 {
-                    _drawingArea.Cursor = Cursors.Default;
+                    DrawingArea.Cursor = Cursors.Default;
                 }
             }
         }

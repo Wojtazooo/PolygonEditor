@@ -10,30 +10,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PolygonEditor.GlobalHelpers;
 
 namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstraintsHandlers
 {
     class AddConstantCenterHandler : ActionHandler
     {
-        private List<RasterObject> _rasterObjects;
-        private TextBox _helperTextBox;
-        private PictureBox _drawingArea;
-        private ConstraintsEnforcer _constraintsEnforcer;
-
-
         public AddConstantCenterHandler(List<RasterObject> rasterObjects, TextBox textBoxHelper, PictureBox drawingArea, ConstraintsEnforcer constraintsEnforcer)
+            :base(rasterObjects, textBoxHelper, drawingArea, constraintsEnforcer)
         {
-            _rasterObjects = rasterObjects;
-            _helperTextBox = textBoxHelper;
-            _drawingArea = drawingArea;
-            _constraintsEnforcer = constraintsEnforcer;
+            ConstraintsEnforcer = constraintsEnforcer;
+            AddInstructions(InstructionTexts.AddConstantCenterCircleConstraintInstruction);
         }
 
-        public void HandleMouseClick(MouseEventArgs e)
+        public override void HandleMouseClick(MouseEventArgs e)
         {
             MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
 
-            foreach (var rasterObj in _rasterObjects)
+            foreach (var rasterObj in RasterObjects)
             {
                 if (rasterObj is Circle)
                 {
@@ -54,21 +48,21 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstrain
             }
         }
 
-        public void HandleMouseMove(MouseEventArgs e)
+        public override void HandleMouseMove(MouseEventArgs e)
         {
             MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
-            foreach (var rasterObj in _rasterObjects)
+            foreach (var rasterObj in RasterObjects)
             {
                 if (rasterObj is Circle)
                 {
                     if (rasterObj.DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS) != null)
                     {
-                        _drawingArea.Cursor = Cursors.Hand;
+                        DrawingArea.Cursor = Cursors.Hand;
                         return;
                     }
                     else
                     {
-                        _drawingArea.Cursor = Cursors.Default;
+                        DrawingArea.Cursor = Cursors.Default;
                     }
                 }
             }

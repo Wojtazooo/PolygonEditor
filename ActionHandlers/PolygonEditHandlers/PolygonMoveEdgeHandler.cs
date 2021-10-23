@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,27 +15,21 @@ using PolygonEditor.GlobalHelpers;
 
 namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
 {
-    class MovePolygonVertexHandler : ActionHandler
+    internal class PolygonMoveEdgeHandler : ActionHandler
     {
         private MyPoint _previousMyPoint;
-        private int _vertexToMove;
+        private (int a, int b) _edgeToMove;
         private MyPoint _startMyPoint;
-        private bool _moving = false;
+        bool _moving = false;
         private SelectionHandler _selector;
         private Polygon _polygonToEdit;
         private List<Circle> _helpCircles = new List<Circle>();
 
-
-        public MovePolygonVertexHandler(List<RasterObject> rasterObjects, TextBox helperTextBox, PictureBox drawingArea, ConstraintsEnforcer constraintsEnforcer)
-            :base(rasterObjects, helperTextBox, drawingArea, constraintsEnforcer)
+        public PolygonMoveEdgeHandler(List<RasterObject> rasterObjects, TextBox helperTextBox, PictureBox drawingArea, ConstraintsEnforcer constraintsEnforcer)
+        :base(rasterObjects, helperTextBox, drawingArea, constraintsEnforcer)
         {
-            InitSelector();
-            AddInstructions(InstructionTexts.MoveVertexInstruction);
-        }
-
-        private void InitSelector()
-        {
-            _selector = new SelectionHandler(RasterObjects, HelperTextBox, DrawingArea, ConstraintsEnforcer);
+            _selector = new SelectionHandler(rasterObjects, helperTextBox, drawingArea, constraintsEnforcer);
+            AddInstructions(InstructionTexts.MoveEdgeInstruction);
         }
 
         public override void Cancel()
@@ -47,17 +42,16 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
             RemoveCircles();
             base.Finish();
         }
-
         public override void Submit()
         {
             RemoveCircles();
             _polygonToEdit = null;
-            InitSelector();
+            _selector = new SelectionHandler(RasterObjects, HelperTextBox, DrawingArea, ConstraintsEnforcer);
         }
 
         public override void HandleMouseClick(MouseEventArgs e)
         {
-            if (_polygonToEdit == null)
+            if(_polygonToEdit == null)
             {
                 _selector.HandleMouseClick(e);
                 if (_selector.ClickedRasterObject is Polygon)
@@ -71,43 +65,44 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
 
         public override void HandleMouseDown(MouseEventArgs e)
         {
-            if(_polygonToEdit != null)
-            {
-                MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
-                MyPoint detectedMyPoint = _polygonToEdit.DetectObject(mouseMyPoint, Constants.CROSS_WIDTH);
-                if (detectedMyPoint != null && _polygonToEdit.Vertices.Contains(detectedMyPoint))
-                {
-                    DrawingArea.Cursor = Cursors.SizeAll;
-                    _vertexToMove = _polygonToEdit.Vertices.FindIndex(p => p == detectedMyPoint);
-                    _moving = true;
-                    _previousMyPoint = mouseMyPoint;
-                    _startMyPoint = mouseMyPoint;
-                }
-            }
+            var mouseMyPoint = new MyPoint(e.X, e.Y);
+            if (_polygonToEdit == null) return;
+            var (a, b) = _polygonToEdit.isEdgeClicked(mouseMyPoint);
+            if (a == null || b == null) return;
+            DrawingArea.Cursor = Cursors.SizeAll;
+            _edgeToMove = (_polygonToEdit.Vertices.FindIndex(p => p == a), _polygonToEdit.Vertices.FindIndex(p => p == b));
+            _moving = true;
+            _previousMyPoint = mouseMyPoint;
+            _startMyPoint = mouseMyPoint;
         }
 
         public override void HandleMouseMove(MouseEventArgs e)
         {
-            if(_polygonToEdit == null)
+            if (_polygonToEdit == null)
             {
                 _selector.HandleMouseMove(e);
             }
             else
             {
-                MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
-                if (_moving)
+                var mouseMyPoint = new MyPoint(e.X, e.Y);
+                if (!_moving) return;
+                var a2 = ExtensionMethods.MovePoint(_polygonToEdit.Vertices[_edgeToMove.a], _previousMyPoint, mouseMyPoint);
+                var b2 = ExtensionMethods.MovePoint(_polygonToEdit.Vertices[_edgeToMove.b], _previousMyPoint, mouseMyPoint);
+
+                (a2, b2) = _polygonToEdit.MoveEdge(_polygonToEdit.Vertices[_edgeToMove.a], _polygonToEdit.Vertices[_edgeToMove.b], _previousMyPoint, mouseMyPoint);
+                _previousMyPoint = mouseMyPoint;
+
+                ConstraintsEnforcer.EnforcePolygonConstraints(_polygonToEdit, ExtensionMethods.GetVertexNumberFromPoint(_polygonToEdit, a2));
+                ConstraintsEnforcer.EnforcePolygonConstraints(_polygonToEdit, ExtensionMethods.GetVertexNumberFromPoint(_polygonToEdit, b2));
+                RasterObjects.ForEach(obj =>
                 {
-                    _polygonToEdit.MoveVertex(_polygonToEdit.Vertices[_vertexToMove], mouseMyPoint);
-                    ConstraintsEnforcer.EnforcePolygonConstraints(_polygonToEdit, ExtensionMethods.GetVertexNumberFromPoint(_polygonToEdit, mouseMyPoint));
-                    RasterObjects.ForEach(obj =>
+                    if (obj is Circle)
                     {
-                        if(obj is Circle)
-                        {
-                            ConstraintsEnforcer.EnforceCircleConstraint(((Circle)obj));
-                        }
-                    });
-                    UpdateCircles();
-                }
+                        ConstraintsEnforcer.EnforceCircleConstraint(((Circle)obj));
+                    }
+                });
+
+                UpdateCircles();
             }
         }
 
@@ -120,7 +115,7 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
         private void AddCircles()
         {
             _helpCircles = new List<Circle>();
-            foreach(var v in _polygonToEdit.Vertices)
+            foreach (var v in _polygonToEdit.Vertices)
             {
                 var helpCircle = new Circle(v, Constants.DETECTION_RADIUS, _polygonToEdit.Color);
                 _helpCircles.Add(helpCircle);
@@ -130,7 +125,7 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
 
         private void RemoveCircles()
         {
-            foreach(var c in _helpCircles)
+            foreach (var c in _helpCircles)
             {
                 RasterObjects.Remove(c);
             }

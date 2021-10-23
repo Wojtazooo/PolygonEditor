@@ -1,92 +1,78 @@
-﻿using PolygonEditor.RasterGraphics.Models;
-using PolygonEditor.RasterGraphics.RasterObjects;
-using PolygonEditor;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using PolygonEditor.Constraints;
+using PolygonEditor.GlobalHelpers;
 using PolygonEditor.RasterGraphics.Helpers;
+using PolygonEditor.RasterGraphics.Models;
+using PolygonEditor.RasterGraphics.RasterObjects;
 
-namespace PolygonEditor.ActionHandlers
+namespace PolygonEditor.ActionHandlers.CircleEditHandlers
 {
-    class AddCircleHandler : ActionHandler
+    internal class AddCircleHandler : ActionHandler
     {
         private Circle _circle;
-        private Color _color;
+        private readonly Color _color;
         private Line _helpRadiusLine = new Line(Color.DarkGray);
-        private List<RasterObject> _rasterObjects;
-        private TextBox _helperTextBox;
-        private PictureBox _drawingArea;
 
-        public AddCircleHandler(List<RasterObject> rasterObjects, TextBox helperTextBox, Color circleColor, PictureBox drawingArea)
+        public AddCircleHandler(
+            List<RasterObject> rasterObjects,
+            TextBox helperTextBox,
+            PictureBox drawingArea,
+            ConstraintsEnforcer constraintsEnforcer,
+            Color circleColor
+        )
+            : base(rasterObjects, helperTextBox, drawingArea, constraintsEnforcer)
         {
-            _rasterObjects = rasterObjects;
-            _rasterObjects.Add(_helpRadiusLine);
-            _helperTextBox = helperTextBox;
+            RasterObjects.Add(_helpRadiusLine);
             _color = circleColor;
-            _drawingArea = drawingArea;
-            _drawingArea.Cursor = Cursors.Cross;
+            DrawingArea.Cursor = Cursors.Cross;
+            AddInstructions(InstructionTexts.AddCircleInstruction);
         }
 
-        public void Submit()
+        public override void Submit()
         {
-            _rasterObjects.Remove(_helpRadiusLine);
+            RasterObjects.Remove(_helpRadiusLine);
             _helpRadiusLine = new Line(Color.DarkGray);
-            _rasterObjects.Add(_helpRadiusLine);
+            RasterObjects.Add(_helpRadiusLine);
             _circle = null;
         }
 
-        public void Cancel()
+        public override void Cancel()
         {
-            _rasterObjects.Remove(_circle);
+            RasterObjects.Remove(_circle);
             Submit();
         }
 
-        public void Finish()
+        public override void Finish()
         {
-            _rasterObjects.Remove(_helpRadiusLine);
-            RemoveInstruction();
-            _drawingArea.Cursor = Cursors.Default;
+            RasterObjects.Remove(_helpRadiusLine);
+            DrawingArea.Cursor = Cursors.Default;
+            base.Finish();
         }
 
-        private void RemoveInstruction()
+        public override void HandleMouseMove(MouseEventArgs e)
         {
-            _helperTextBox.Lines = null;
-            _helperTextBox.ForeColor = Color.White;
+            if (_circle == null) return;
+            var mouseMyPoint = new MyPoint(e.X, e.Y);
+            var circleCenter = _circle.Center;
+            var newRadius = (int) ExtensionMethods.PixelDistance(mouseMyPoint, circleCenter);
+            _circle.SetRadius(newRadius);
+            _helpRadiusLine.SetP1AndP2(_circle.Center, mouseMyPoint);
         }
 
-        public void HandleMouseMove(MouseEventArgs e)
+        public override void HandleMouseClick(MouseEventArgs e)
         {
-            if(_circle != null)
-            {
-                MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
-                MyPoint circleCenter = _circle.Center;
-                int newRadius = (int)ExtensionMethods.PixelDistance(mouseMyPoint, circleCenter);
-                _circle.SetRadius(newRadius);
-                _helpRadiusLine.SetP1AndP2(_circle.Center, mouseMyPoint);
-            }
-        }
-
-        public void HandleMouseClick(MouseEventArgs e)
-        {
-            MyPoint clickedMyPoint = new MyPoint(e.X, e.Y);
+            var clickedMyPoint = new MyPoint(e.X, e.Y);
             if (_circle == null)
             {
                 _circle = new Circle(clickedMyPoint, 0, _color);
-                _rasterObjects.Add(_circle);
+                RasterObjects.Add(_circle);
             }
             else
             {
                 Submit();
             }
-        }
-
-        public bool HandleKeybordKeyClick(KeyEventArgs e)
-        {
-            return false;
         }
     }
 }

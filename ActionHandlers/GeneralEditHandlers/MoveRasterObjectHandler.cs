@@ -1,56 +1,43 @@
-﻿using PolygonEditor.Constraints;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
+using PolygonEditor.Constraints;
+using PolygonEditor.GlobalHelpers;
 using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace PolygonEditor.ActionHandlers
+namespace PolygonEditor.ActionHandlers.GeneralEditHandlers
 {
     class MoveRasterObjectHandler : ActionHandler
     {
-        private List<RasterObject> _rasterObjects;
         private RasterObject _selectedObject;
         private MyPoint _previousMyPoint;
-        private PictureBox _drawingArea;
-        private TextBox _helperTextBox;
-        private ConstraintsEnforcer _constraintsEnforcer;
 
         public MoveRasterObjectHandler(List<RasterObject> rasterObjects, PictureBox drawingArea, TextBox helperTextBox, ConstraintsEnforcer constraintsEnforcer)
+        : base(rasterObjects, helperTextBox, drawingArea, constraintsEnforcer)
+
         {
-            _rasterObjects = rasterObjects;
-            _drawingArea = drawingArea;
-            _helperTextBox = helperTextBox;
-            _constraintsEnforcer = constraintsEnforcer;
+            AddInstructions(InstructionTexts.MoveRasterObjectInstruction);
         }
 
-        public void Cancel()
+        public override void Cancel()
         {
             _selectedObject = null;
-            _drawingArea.Cursor = Cursors.Default;
+            DrawingArea.Cursor = Cursors.Default;
         }
 
-        public void Finish()
+        public override void Finish()
         {
             Cancel();
+            base.Finish();
         }
 
-        public bool HandleKeybordKeyClick(KeyEventArgs e)
-        {
-            return false;
-        }
-
-        public void HandleMouseDown(MouseEventArgs e)
+        public override void HandleMouseDown(MouseEventArgs e)
         {
             MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
             if (_selectedObject == null)
             {
-                foreach (var obj in _rasterObjects)
+                foreach (var obj in RasterObjects)
                 {
                     MyPoint detectedMyPoint = obj.DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS);
                     if (detectedMyPoint != null)
@@ -62,16 +49,16 @@ namespace PolygonEditor.ActionHandlers
 
                 if (_selectedObject != null)
                 {
-                    _drawingArea.Cursor = Cursors.SizeAll;
+                    DrawingArea.Cursor = Cursors.SizeAll;
                 }
             }
         }
-        public void HandleMouseUp(MouseEventArgs e)
+        public override void HandleMouseUp(MouseEventArgs e)
         {
             _selectedObject = null;
         }
 
-        public void HandleMouseMove(MouseEventArgs e)
+        public override void HandleMouseMove(MouseEventArgs e)
         {
             MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
             if(_selectedObject != null)
@@ -83,13 +70,13 @@ namespace PolygonEditor.ActionHandlers
                     {
                         selectedCircle.tangentToPolygonConstraint.Polygon.MoveRasterObject(_previousMyPoint, mouseMyPoint);
                     }
-                    _constraintsEnforcer.EnforceCircleConstraint(selectedCircle);
+                    ConstraintsEnforcer.EnforceCircleConstraint(selectedCircle);
                 }
-                _rasterObjects.ForEach(obj =>
+                RasterObjects.ForEach(obj =>
                 {
                     if (obj is Circle)
                     {
-                        _constraintsEnforcer.EnforceCircleConstraint(((Circle)obj));
+                        ConstraintsEnforcer.EnforceCircleConstraint(((Circle)obj));
                     }
                 });
 
@@ -99,7 +86,7 @@ namespace PolygonEditor.ActionHandlers
             else
             {
                 MyPoint detectedMyPoint = null;
-                foreach (var obj in _rasterObjects)
+                foreach (var obj in RasterObjects)
                 {
                     detectedMyPoint = obj.DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS);
                     if (detectedMyPoint != null)
@@ -109,11 +96,11 @@ namespace PolygonEditor.ActionHandlers
                 }
                 if(detectedMyPoint != null)
                 {
-                    _drawingArea.Cursor = Cursors.Hand;
+                    DrawingArea.Cursor = Cursors.Hand;
                 }
                 else
                 {
-                    _drawingArea.Cursor = Cursors.Default;
+                    DrawingArea.Cursor = Cursors.Default;
                 }
             }
         }
