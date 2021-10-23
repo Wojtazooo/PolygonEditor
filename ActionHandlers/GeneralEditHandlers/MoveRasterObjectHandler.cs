@@ -16,11 +16,9 @@ namespace PolygonEditor.ActionHandlers
     {
         private List<RasterObject> _rasterObjects;
         private RasterObject _selectedObject;
-        private RasterObject _copyObject;
-        private MyPoint _startedMyPoint;
         private MyPoint _previousMyPoint;
         private PictureBox _drawingArea;
-        private object _helperTextBox;
+        private TextBox _helperTextBox;
         private ConstraintsEnforcer _constraintsEnforcer;
 
         public MoveRasterObjectHandler(List<RasterObject> rasterObjects, PictureBox drawingArea, TextBox helperTextBox, ConstraintsEnforcer constraintsEnforcer)
@@ -34,7 +32,6 @@ namespace PolygonEditor.ActionHandlers
         public void Cancel()
         {
             _selectedObject = null;
-            _rasterObjects.Remove(_copyObject);
             _drawingArea.Cursor = Cursors.Default;
         }
 
@@ -48,7 +45,7 @@ namespace PolygonEditor.ActionHandlers
             return false;
         }
 
-        public void HandleMouseClick(MouseEventArgs e)
+        public void HandleMouseDown(MouseEventArgs e)
         {
             MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
             if (_selectedObject == null)
@@ -59,26 +56,29 @@ namespace PolygonEditor.ActionHandlers
                     if (detectedMyPoint != null)
                     {
                         _selectedObject = obj;
-                        _startedMyPoint = mouseMyPoint;
                         _previousMyPoint = mouseMyPoint;
-                    }
-                    else
-                    {
                     }
                 }
 
                 if (_selectedObject != null)
                 {
                     _drawingArea.Cursor = Cursors.SizeAll;
-                    _copyObject = _selectedObject.Clone();
-                    _copyObject.SetColor(Color.LightGray);
-                    _rasterObjects.Add(_copyObject);
                 }
             }
-            else
+        }
+        public void HandleMouseUp(MouseEventArgs e)
+        {
+            _selectedObject = null;
+        }
+
+        public void HandleMouseMove(MouseEventArgs e)
+        {
+            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
+            if(_selectedObject != null)
             {
-                _drawingArea.Cursor = Cursors.Default;
-                _selectedObject.MoveRasterObject(_startedMyPoint, mouseMyPoint);
+                _selectedObject.MoveRasterObject(_previousMyPoint, mouseMyPoint);
+                _previousMyPoint = mouseMyPoint;
+
                 if (_selectedObject is Circle) _constraintsEnforcer.EnforceCircleConstraint((Circle)_selectedObject);
                 _rasterObjects.ForEach(obj =>
                 {
@@ -87,20 +87,6 @@ namespace PolygonEditor.ActionHandlers
                         _constraintsEnforcer.EnforceCircleConstraint(((Circle)obj));
                     }
                 });
-                _selectedObject = null;
-                _rasterObjects.Remove(_copyObject);
-            }
-
-        }
-
-        public void HandleMouseMove(MouseEventArgs e)
-        {
-            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
-            if(_selectedObject != null)
-            {
-                _copyObject.MoveRasterObject(_previousMyPoint, mouseMyPoint);
-                
-                _previousMyPoint = mouseMyPoint;
             }
             else
             {
