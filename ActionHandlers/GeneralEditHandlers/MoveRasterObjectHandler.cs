@@ -76,10 +76,15 @@ namespace PolygonEditor.ActionHandlers
             MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
             if(_selectedObject != null)
             {
-                _selectedObject.MoveRasterObject(_previousMyPoint, mouseMyPoint);
-                _previousMyPoint = mouseMyPoint;
-
-                if (_selectedObject is Circle) _constraintsEnforcer.EnforceCircleConstraint((Circle)_selectedObject);
+                if (_selectedObject is Circle)
+                {
+                    Circle selectedCircle = (Circle)_selectedObject;
+                    if(selectedCircle.tangentToPolygonConstraint != null)
+                    {
+                        selectedCircle.tangentToPolygonConstraint.Polygon.MoveRasterObject(_previousMyPoint, mouseMyPoint);
+                    }
+                    _constraintsEnforcer.EnforceCircleConstraint(selectedCircle);
+                }
                 _rasterObjects.ForEach(obj =>
                 {
                     if (obj is Circle)
@@ -87,6 +92,9 @@ namespace PolygonEditor.ActionHandlers
                         _constraintsEnforcer.EnforceCircleConstraint(((Circle)obj));
                     }
                 });
+
+                _selectedObject.MoveRasterObject(_previousMyPoint, mouseMyPoint);
+                _previousMyPoint = mouseMyPoint;
             }
             else
             {
