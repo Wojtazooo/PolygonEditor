@@ -9,7 +9,7 @@ using PolygonEditor.RasterGraphics.RasterObjects;
 
 namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstraintsHandlers
 {
-    class AddConstantRadiusHandler : ActionHandler
+    internal class AddConstantRadiusHandler : ActionHandler
     {
         public AddConstantRadiusHandler(List<RasterObject> rasterObjects, TextBox textBoxHelper, PictureBox drawingArea,
             ConstraintsEnforcer constraintsEnforcer)
@@ -21,13 +21,13 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstrain
 
         public override void HandleMouseClick(MouseEventArgs e)
         {
-            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
+            var mouseMyPoint = new MyPoint(e.X, e.Y);
 
             foreach (var rasterObj in RasterObjects)
             {
                 if (rasterObj is Circle)
                 {
-                    Circle circle = (Circle) rasterObj;
+                    var circle = (Circle) rasterObj;
 
                     var detectedMyPoint = circle.DetectObject(mouseMyPoint, Constants.DETECTION_RADIUS);
                     if (detectedMyPoint != null)
@@ -41,10 +41,9 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstrain
                         }
 
 
-                        string value =
+                        var value =
                             ExtensionMethods.ShowDialogToInsertValue("Insert length", "Add constraint", circle.Radius);
-                        int length;
-                        if (value != null && int.TryParse(value, out length))
+                        if (value != null && int.TryParse(value, out var length))
                         {
                             _ = new ConstantRadiusConstraint(circle, length);
                             ConstraintsEnforcer.EnforceCircleConstraint(circle);
@@ -56,7 +55,7 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstrain
 
         public override void HandleMouseMove(MouseEventArgs e)
         {
-            MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
+            var mouseMyPoint = new MyPoint(e.X, e.Y);
             foreach (var rasterObj in RasterObjects)
             {
                 if (rasterObj is Circle)

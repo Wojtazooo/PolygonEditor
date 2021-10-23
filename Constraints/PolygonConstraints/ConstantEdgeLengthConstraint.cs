@@ -30,15 +30,14 @@ namespace PolygonEditor.Constraints.PolygonConstraints
                 }
             }
 
-            RelatedVertices.Add(numberOfV1);
-            RelatedVertices.Add(numberOfV2);
+            RelatedVertices = (numberOfV1, numberOfV2);
             _constantLength = constantLength;
             _polygon.AddContraint(this);
         }
 
         public override void EnforceConstraint(MyPoint constantMyPoint)
         {
-            (MyPoint, MyPoint) _edgeMyPoints = (_polygon.Vertices[RelatedVertices[0]], _polygon.Vertices[RelatedVertices[1]]);
+            (MyPoint, MyPoint) _edgeMyPoints = (_polygon.Vertices[RelatedVertices.a], _polygon.Vertices[RelatedVertices.b]);
 
             if (constantMyPoint == _edgeMyPoints.Item1)
             {
@@ -55,8 +54,8 @@ namespace PolygonEditor.Constraints.PolygonConstraints
         private MyPoint RelationCenterMyPoint()
         {
             return ExtensionMethods.CountMiddleOfSegment(
-                    _polygon.Vertices[RelatedVertices[0]],
-                    _polygon.Vertices[RelatedVertices[1]]);
+                    _polygon.Vertices[RelatedVertices.a],
+                    _polygon.Vertices[RelatedVertices.b]);
         }
 
         public override void DrawConstraintInfo(Graphics g)

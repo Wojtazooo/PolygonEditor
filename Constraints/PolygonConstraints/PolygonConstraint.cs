@@ -8,18 +8,21 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PolygonEditor.Constraints.PolygonConstraints
 {
     public abstract class PolygonConstraint : IConstraint
     {
         protected Polygon _polygon;
-        public List<int> RelatedVertices = new List<int>();
+        public (int a, int b) RelatedVertices;
+        public bool MoreThanOneEdge = false;
 
         public PolygonConstraint(Polygon polygon)
         {
             _polygon = polygon;
         }
+
         public abstract void EnforceConstraint(MyPoint constantMyPoint);
 
         public RasterObject GetRasterObject()

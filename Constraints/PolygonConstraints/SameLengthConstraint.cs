@@ -11,30 +11,34 @@ namespace PolygonEditor.Constraints.PolygonConstraints
 {
     class SameLengthConstraint : PolygonConstraint
     {
+        
         private static int _constraintCounter = 0;
         public int Id { get; private set; }
+
+        public (int a, int b) SecondEdge;
+        
         public SameLengthConstraint(Polygon polygon, List<MyPoint> relatedMyPoints) : base(polygon) 
         {
             _constraintCounter++;
             Id = _constraintCounter;
-            foreach (var i in relatedMyPoints)
-            {
-                RelatedVertices.Add(_polygon.Vertices.IndexOf(i));
-            }
+            RelatedVertices.a = _polygon.Vertices.IndexOf(relatedMyPoints[0]);
+            RelatedVertices.b = _polygon.Vertices.IndexOf(relatedMyPoints[1]);
+            SecondEdge.a = _polygon.Vertices.IndexOf(relatedMyPoints[2]);
+            SecondEdge.b = _polygon.Vertices.IndexOf(relatedMyPoints[3]);
             _polygon.AddContraint(this);
+            MoreThanOneEdge = true;
         }
 
         public override void DrawConstraintInfo(Graphics g)
         {
             GraphicsApplier.ApplyString(g, $"== {Id}", GetCenterMyPointFirstEdge());
             GraphicsApplier.ApplyString(g, $"== {Id}", GetCenterMyPointSecondEdge());
-
         }
 
         public override void EnforceConstraint(MyPoint constantMyPoint)
         {
-            (MyPoint v1, MyPoint v2) = (_polygon.Vertices[RelatedVertices[0]], _polygon.Vertices[RelatedVertices[1]]);
-            (MyPoint w1, MyPoint w2) = (_polygon.Vertices[RelatedVertices[2]], _polygon.Vertices[RelatedVertices[3]]);
+            (MyPoint v1, MyPoint v2) = (_polygon.Vertices[RelatedVertices.a], _polygon.Vertices[RelatedVertices.b]);
+            (MyPoint w1, MyPoint w2) = (_polygon.Vertices[SecondEdge.a], _polygon.Vertices[SecondEdge.b]);
 
             if(v1 == constantMyPoint || v2 == constantMyPoint)
             {
@@ -57,15 +61,15 @@ namespace PolygonEditor.Constraints.PolygonConstraints
 
         private MyPoint GetCenterMyPointFirstEdge()
         {
-            MyPoint v1 = _polygon.Vertices[RelatedVertices[0]];
-            MyPoint v2 = _polygon.Vertices[RelatedVertices[1]];
+            MyPoint v1 = _polygon.Vertices[RelatedVertices.a];
+            MyPoint v2 = _polygon.Vertices[RelatedVertices.b];
             return ExtensionMethods.CountMiddleOfSegment(v1, v2);
         }
 
         private MyPoint GetCenterMyPointSecondEdge()
         {
-            MyPoint v1 = _polygon.Vertices[RelatedVertices[2]];
-            MyPoint v2 = _polygon.Vertices[RelatedVertices[3]];
+            MyPoint v1 = _polygon.Vertices[SecondEdge.a];
+            MyPoint v2 = _polygon.Vertices[SecondEdge.b];
             return ExtensionMethods.CountMiddleOfSegment(v1, v2);
         }
     }

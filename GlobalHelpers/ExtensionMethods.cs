@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PolygonEditor.RasterGraphics.Models;
 
 namespace PolygonEditor
 {
@@ -29,7 +30,7 @@ namespace PolygonEditor
 
         public static double CountDistanceFromCircleCenterToLine(MyPoint circleCenter, MyPoint p1, MyPoint p2)
         {
-            if (p1.X == p2.X) 
+            if (p1.X == p2.X)
                 return Math.Abs(p1.X - circleCenter.X);
 
             double a = PixelDistance(p1, p2);
@@ -38,7 +39,7 @@ namespace PolygonEditor
 
             double p = (a + b + c) / 2;
 
-            double height = Math.Sqrt(p * (p - a) * (p - b) * (p - c))/a;
+            double height = Math.Sqrt(p * (p - a) * (p - b) * (p - c)) / a;
             return height;
         }
 
@@ -80,16 +81,18 @@ namespace PolygonEditor
             return new MyPoint(pointToMove.X + px, pointToMove.Y + py);
         }
 
-        public static MyPoint MovePointToAchieveRightAngle(MyPoint constv1, MyPoint constv2, MyPoint constw1, MyPoint w2)
+        public static MyPoint MovePointToAchieveRightAngle(MyPoint constv1, MyPoint constv2, MyPoint constw1,
+            MyPoint w2)
         {
             double length = PixelDistance(constw1, w2);
             double dx1 = constv2.X - constv1.X;
             double dy1 = constv2.Y - constv1.Y;
-            
+
             MyPoint rightAngle = new MyPoint(constw1.X - dy1, constw1.Y + dx1);
             MyPoint rightAngleSecond = new MyPoint(constw1.X + dy1, constw1.Y - dx1);
 
-            if (PixelDistance(w2, rightAngle) < PixelDistance(w2, rightAngleSecond)) return MovePointToAchieveLength(rightAngle, constw1, length);
+            if (PixelDistance(w2, rightAngle) < PixelDistance(w2, rightAngleSecond))
+                return MovePointToAchieveLength(rightAngle, constw1, length);
             else return MovePointToAchieveLength(rightAngleSecond, constw1, length);
         }
 
@@ -106,10 +109,11 @@ namespace PolygonEditor
 
         public static int GetVertexNumberFromPoint(Polygon polygon, MyPoint vertexPoint)
         {
-            for(int i = 0; i < polygon.Vertices.Count; i++)
+            for (int i = 0; i < polygon.Vertices.Count; i++)
             {
                 if (polygon.Vertices[i] == vertexPoint) return i;
             }
+
             return 0;
         }
 
@@ -128,7 +132,7 @@ namespace PolygonEditor
             MyPoint rightAngle = new MyPoint(circle.Center.X - dy, circle.Center.Y + dx);
             MyPoint rightAngleSecond = new MyPoint(circle.Center.X + dy, circle.Center.Y - dx);
 
-            if(PixelDistance(v1, rightAngle) < PixelDistance(v1, rightAngleSecond))
+            if (PixelDistance(v1, rightAngle) < PixelDistance(v1, rightAngleSecond))
             {
                 return MovePointToAchieveLength(rightAngle, circle.Center, circle.Radius);
             }
@@ -140,7 +144,22 @@ namespace PolygonEditor
 
         public static MyPoint FindLeftUpperCornerForRectangle(MyPoint center, int width, int height)
         {
-            return new MyPoint(center.X - (int)(width / 2), center.Y - (int)(height / 2));
+            return new MyPoint(center.X - (int) (width / 2), center.Y - (int) (height / 2));
+        }
+
+        public static bool CheckIfTwoEdgesArePerpendicular(Polygon polygon, MyPoint v1, MyPoint v2, MyPoint w1,
+            MyPoint w2)
+        {
+            double vdx = v2.X - v1.X;
+            double vdy = v2.Y - v1.Y;
+
+            MyPoint pointWithSameLength = ExtensionMethods.MovePointToAchieveLength(w2, w1, PixelDistance(v1, v2));
+
+            double wdx = pointWithSameLength.X - w1.X;
+            double wdy = pointWithSameLength.Y - w1.Y;
+
+            return (Math.Abs(Math.Abs(vdx) - Math.Abs(wdy)) < 3 && Math.Abs(Math.Abs(vdy) - Math.Abs(wdx)) < 3 &&
+                    Math.Abs(vdx * vdy - -1 * wdx * wdy) < 3);
         }
 
         public static string ShowDialogToInsertValue(string text, string caption, int initialValue)
@@ -153,10 +172,11 @@ namespace PolygonEditor
                 Text = caption,
                 StartPosition = FormStartPosition.CenterScreen
             };
-            Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
-            TextBox textBox = new TextBox() { Left = 50, Top = 40, Width = 200 };
+            Label textLabel = new Label() {Left = 50, Top = 20, Text = text};
+            TextBox textBox = new TextBox() {Left = 50, Top = 40, Width = 200};
             textBox.Text = initialValue.ToString();
-            Button confirmation = new Button() { Text = "Ok", Left = 100, Width = 100, Top = 80, DialogResult = DialogResult.OK };
+            Button confirmation = new Button()
+                {Text = "Ok", Left = 100, Width = 100, Top = 80, DialogResult = DialogResult.OK};
             confirmation.Click += (sender, e) => { prompt.Close(); };
             prompt.Controls.Add(textBox);
             prompt.Controls.Add(confirmation);

@@ -4,6 +4,7 @@ using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -20,80 +21,70 @@ namespace PolygonEditor.Constraints
             _rasterObjects = rasterObjects;
         }
 
-        public void EnforcePolygonConstraints(Polygon polygon, int startVertex)
+        public static void EnforcePolygonConstraints(Polygon polygon, int startVertex, List<PolygonConstraint> constraintsToEnforce = null)
         {
-            int n = polygon.Vertices.Count;
-            int i = (startVertex + n - 1) % n;
-            bool nextI = false; // if there is next relation
-            bool nextJ = false;
-            int j = (startVertex + 1) % n;
-
-            List<PolygonConstraint> leftConstraints = new List<PolygonConstraint>();
-            foreach (var c in polygon.Constraints)
+            var leftConstraints = new List<PolygonConstraint>(polygon.Constraints);
+            if (constraintsToEnforce != null)
             {
-                leftConstraints.Add(c);
+                leftConstraints = constraintsToEnforce;
             }
 
-            // wywołaj wszystkie z pierwszym wierzchołkiem
-            foreach (var c in polygon.Constraints)
+            if (leftConstraints.Count == 0) return;            
+
+            var leftCounter = 0;
+            var leftContinue = true;
+            var rightCounter = 0;
+            var rightContinue = true;
+            var n = polygon.Vertices.Count;
+            var previousLeftIndex = startVertex;
+            var leftIndex = (startVertex + n - 1) % n;
+            var previousRightIndex = startVertex;
+            var rightIndex = (startVertex + 1) % n;
+
+            while (leftContinue && leftConstraints.Count > 0)
             {
-                if (c.RelatedVertices.Contains(startVertex) && c.RelatedVertices.Contains(i))
+                var nextLeftConstraint = leftConstraints.Find(c =>
+                    (c.RelatedVertices.a == leftIndex || c.RelatedVertices.b == leftIndex) &&
+                    (c.RelatedVertices.a == previousLeftIndex || c.RelatedVertices.b == previousLeftIndex) );
+                if (nextLeftConstraint != null)
                 {
-                    c.EnforceConstraint(polygon.Vertices[startVertex]);
-                    leftConstraints.Remove(c);
-                    nextI = true;
+                    nextLeftConstraint.EnforceConstraint(polygon.Vertices[previousLeftIndex]);
+                    leftContinue = true;
+                    previousLeftIndex = leftIndex;
+                    leftIndex = (leftIndex + n - 1) % n;
+                    leftConstraints.Remove(nextLeftConstraint);
+                    if(nextLeftConstraint.MoreThanOneEdge)
+                        leftCounter++;
                 }
-                else if (c.RelatedVertices.Contains(startVertex) && c.RelatedVertices.Contains(j))
+                else
                 {
-                    c.EnforceConstraint(polygon.Vertices[startVertex]);
-                    leftConstraints.Remove(c);
-                    nextJ = true;
+                    leftContinue = false;
                 }
             }
 
-            int iterationCounter = 0;
-
-            while (leftConstraints.Count > 0 && (nextI || nextJ) && iterationCounter < 10)
+            while (rightContinue && leftConstraints.Count > 0)
             {
-                iterationCounter++;
-                // operacje dla i
-                if (nextI)
+                var nextRightConstraint = leftConstraints.Find(c =>
+                    (c.RelatedVertices.a == rightIndex || c.RelatedVertices.b == rightIndex) &&
+                    (c.RelatedVertices.a == previousRightIndex || c.RelatedVertices.b == previousRightIndex) );
+                if (nextRightConstraint != null)
                 {
-                    nextI = false;
-                    for (int m = 0; m < leftConstraints.Count; m++)
-                    {
-                        var nextConstr = leftConstraints[m];
-                        if (nextConstr.RelatedVertices.Contains(i))
-                        {
-                            nextConstr.EnforceConstraint(polygon.Vertices[i]);
-                            leftConstraints.Remove(nextConstr);
-                            nextI = true;
-                            break;
-                        }
-                    }
-                    i = (i + n - 1) % polygon.Vertices.Count;
+                    nextRightConstraint.EnforceConstraint(polygon.Vertices[previousRightIndex]);
+                    rightContinue = true;
+                    previousRightIndex = rightIndex;
+                    rightIndex = (rightIndex + 1) % n;
+                    leftConstraints.Remove(nextRightConstraint);
+                    if(nextRightConstraint.MoreThanOneEdge)
+                        rightCounter++;
                 }
-
-
-
-                // operacje dla j
-                if (nextJ)
+                else
                 {
-                    nextJ = false;
-                    for (int m = 0; m < leftConstraints.Count; m++)
-                    {
-                        var nextConstr = leftConstraints[m];
-                        if (nextConstr.RelatedVertices.Contains(j))
-                        {
-                            nextConstr.EnforceConstraint(polygon.Vertices[j]);
-                            leftConstraints.Remove(nextConstr);
-                            nextJ = true;
-                            break;
-                        }
-                    }
-                    j = (j + 1) % polygon.Vertices.Count;
+                    rightContinue = false;
                 }
             }
+            
+            if(leftConstraints.Count > 0 && leftCounter > 0 && rightCounter > 0)
+                EnforcePolygonConstraints(polygon, leftConstraints[0].RelatedVertices.a, leftConstraints);
         }
 
         public void EnforceCircleConstraint(Circle circle)
@@ -102,6 +93,5 @@ namespace PolygonEditor.Constraints
             circle.ConstantRadiusConstraint?.EnforceConstraint(null);
             circle.tangentToPolygonConstraint?.EnforceConstraint(null);
         }
-
     }
 }

@@ -80,7 +80,6 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrai
                                 firstSelectedLine.b,
                                 edge.a,
                                 edge.b};
-
                             var relatedMyPoint2 = new List<MyPoint> {
                                 edge.a,
                                 edge.b,
@@ -88,7 +87,7 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrai
                                 firstSelectedLine.b,
                                };
                             _ = new SameLengthConstraint(polygon, relatedMyPoint);
-                           // _ = new SameLengthConstraint(polygon, relatedMyPoint2);
+                            _ = new SameLengthConstraint(polygon, relatedMyPoint2);
                             ConstraintsEnforcer.EnforcePolygonConstraints(polygon, polygon.Vertices.IndexOf(edge.a));
                             firstSelectedLine = (null, null);
                             return;

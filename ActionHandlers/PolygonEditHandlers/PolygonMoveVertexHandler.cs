@@ -98,7 +98,7 @@ namespace PolygonEditor.ActionHandlers.PolygonEditHandlers
                 if (_moving)
                 {
                     _polygonToEdit.MoveVertex(_polygonToEdit.Vertices[_vertexToMove], mouseMyPoint);
-                    ConstraintsEnforcer.EnforcePolygonConstraints(_polygonToEdit, ExtensionMethods.GetVertexNumberFromPoint(_polygonToEdit, mouseMyPoint));
+                    ConstraintsEnforcer.EnforcePolygonConstraints(_polygonToEdit, ExtensionMethods.GetVertexNumberFromPoint(_polygonToEdit, _polygonToEdit.Vertices[_vertexToMove]));
                     RasterObjects.ForEach(obj =>
                     {
                         if(obj is Circle)

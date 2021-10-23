@@ -39,8 +39,10 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             var polygonPixels = new List<Pixel>();
             for (int v = 0; v < Vertices.Count; v++)
             {
-                polygonPixels.AddRange(LineGenerator.GetPixels(Vertices[v].GetPoint(), Vertices[(v + 1) % Vertices.Count].GetPoint(), Color));
+                polygonPixels.AddRange(LineGenerator.GetPixels(Vertices[v].GetPoint(),
+                    Vertices[(v + 1) % Vertices.Count].GetPoint(), Color));
             }
+
             _pixels = polygonPixels;
         }
 
@@ -52,16 +54,18 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 
         public void RemoveVertex(MyPoint vertex)
         {
-            for(int i = 0; i < Vertices.Count; i++)
+            for (int i = 0; i < Vertices.Count; i++)
             {
                 if (Vertices[i] == vertex)
                 {
-                    Constraints.RemoveAll(constraint => constraint.RelatedVertices.Contains(i));
+                    Constraints.RemoveAll(constraint =>
+                        constraint.RelatedVertices.a == i || constraint.RelatedVertices.b == i);
                     Constraints.ForEach(c =>
                     {
-                        if(c.RelatedVertices.TrueForAll(v => v > i))
+                        if(c.RelatedVertices.a > i && c.RelatedVertices.b > i)
                         {
-                            c.RelatedVertices.ForEach(v => v--);
+                            c.RelatedVertices.a--;
+                            c.RelatedVertices.b--;
                         }
                     });
                 }
@@ -71,6 +75,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             Vertices.Remove(pointToDelete);
             Update();
         }
+
         public override MyPoint DetectObject(MyPoint mousePoint, int radius)
         {
             foreach (var v in Vertices)
@@ -88,6 +93,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
                     return mousePoint;
                 }
             }
+
             return null;
         }
 
@@ -98,6 +104,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
                 if (ExtensionMethods.IsInCircle(mousePoint, v, Constants.DETECTION_RADIUS))
                     return v;
             }
+
             return null;
         }
 
@@ -112,16 +119,18 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
                     return (currentV, nextV);
                 }
             }
+
             return (null, null);
         }
 
         public override void MoveRasterObject(MyPoint from, MyPoint to)
         {
-            for(int v = 0; v < Vertices.Count; v++)
+            for (int v = 0; v < Vertices.Count; v++)
             {
                 MyPoint newV = ExtensionMethods.MovePoint(Vertices[v], from, to);
                 Vertices[v] = newV;
             }
+
             Update();
         }
 
@@ -130,11 +139,12 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             if (!Vertices.Contains(vertex)) return vertex;
 
             MyPoint movedPoint = ExtensionMethods.MovePoint(vertex, vertex, to);
-            for(int i = 0; i < Vertices.Count; i++)
+            for (int i = 0; i < Vertices.Count; i++)
             {
                 if (Vertices[i] == vertex)
                     Vertices[i] = movedPoint;
             }
+
             Update();
             return movedPoint;
         }
@@ -157,17 +167,20 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 
             if (a != null && b != null)
             {
-                for(int v = 0; v < Vertices.Count; v++)
+                for (int v = 0; v < Vertices.Count; v++)
                 {
                     newVertices.Add(Vertices[v]);
-                    if(Vertices[v] == a)
+                    if (Vertices[v] == a)
                     {
                         newVertices.Add(vertexToAdd);
-                        Constraints.RemoveAll(constraint => constraint.RelatedVertices.Contains(v) && constraint.RelatedVertices.Contains(v+1));
+                        Constraints.RemoveAll(constraint =>
+                            (constraint.RelatedVertices.a == v || constraint.RelatedVertices.b == v) &&
+                            (constraint.RelatedVertices.a == v + 1 || constraint.RelatedVertices.b == v + 1));
                     }
                 }
                 Vertices = newVertices;
             }
+
             Update();
         }
 
@@ -186,9 +199,9 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             Constraints.Remove(constraint);
         }
 
-        public override void DrawConstraints(Graphics g) 
+        public override void DrawConstraints(Graphics g)
         {
-            foreach(var c in Constraints)
+            foreach (var c in Constraints)
             {
                 c.DrawConstraintInfo(g);
             }
@@ -196,7 +209,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 
         public override bool RemoveConstraintByClick(MyPoint mousePoint)
         {
-            for(int i = 0; i < Constraints.Count; i++)
+            for (int i = 0; i < Constraints.Count; i++)
             {
                 MyPoint constraintCenterPoint = new MyPoint(Constraints[i].GetCenterDrawingPoint());
                 if (ExtensionMethods.IsInCircle(constraintCenterPoint, mousePoint, Constants.DETECTION_RADIUS))
@@ -205,12 +218,13 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
                     return true;
                 }
             }
+
             return false;
         }
 
         public override bool DetectConstraint(MyPoint mousePoint)
         {
-            for(int i = 0; i < Constraints.Count; i++)
+            for (int i = 0; i < Constraints.Count; i++)
             {
                 MyPoint constraintCenterPoint = new MyPoint(Constraints[i].GetCenterDrawingPoint());
                 if (ExtensionMethods.IsInCircle(constraintCenterPoint, mousePoint, Constants.DETECTION_RADIUS))
@@ -218,6 +232,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
                     return true;
                 }
             }
+
             return false;
         }
     }

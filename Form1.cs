@@ -5,8 +5,6 @@ using PolygonEditor.ActionHandlers.ConstraintsActionHandlers.CircleConstraintsHa
 using PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrainsHandlers;
 using PolygonEditor.ActionHandlers.PolygonEditHandlers;
 using PolygonEditor.Constraints;
-using PolygonEditor.Constraints.CircleConstraints;
-using PolygonEditor.Constraints.PolygonConstraints;
 using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
@@ -18,13 +16,13 @@ using PolygonEditor.ActionHandlers.GeneralEditHandlers;
 
 namespace PolygonEditor
 {
-    public partial class MainForm : System.Windows.Forms.Form
+    public partial class MainForm : Form
     {
-        private RasterGraphicsApplier _pointsApplier;
-        private List<RasterObject> _rasterObjects;
+        private readonly RasterGraphicsApplier _pointsApplier;
+        private readonly List<RasterObject> _rasterObjects;
         private ActionHandler _activeActionHandler;
         private Timer _timer;
-        private ConstraintsEnforcer _constraintsEnforcer;
+        private readonly ConstraintsEnforcer _constraintsEnforcer;
         public Polygon TestLine;
         public Circle TestCircle;
 
@@ -39,15 +37,15 @@ namespace PolygonEditor
             InitializeRefreshTimer();
         }
 
-        public void InitializeRefreshTimer()
+        private void InitializeRefreshTimer()
         {
             _timer = new Timer();
             _timer.Interval = Constants.REFRESH_TIME_IN_MS;
-            _timer.Tick += new EventHandler(UpdateView);
+            _timer.Tick += UpdateView;
             _timer.Start();
         }
 
-        public void InitializeSelectedColor()
+        private void InitializeSelectedColor()
         {
             PictureBoxSelectedColor.BackColor = Color.Black;
         }
@@ -57,11 +55,11 @@ namespace PolygonEditor
             _pointsApplier.Apply();
         }
 
-        private void ButtonPickColor_Click(object sender, System.EventArgs e)
+        private void ButtonPickColor_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
             _activeActionHandler = null;
-            ColorDialog colorDialog = new ColorDialog();
+            var colorDialog = new ColorDialog();
             colorDialog.AllowFullOpen = true;
             colorDialog.ShowHelp = true;
             colorDialog.Color = PictureBoxSelectedColor.BackColor;
@@ -74,15 +72,15 @@ namespace PolygonEditor
         {
             if (_activeActionHandler != null && _activeActionHandler.HandleKeyboardKeyClick(e)) return;
 
-            if (e.KeyCode == Keys.Escape)
+            switch (e.KeyCode)
             {
-                _activeActionHandler?.Finish();
-                _activeActionHandler = null;
-            }
-
-            if (e.KeyCode == Keys.Delete)
-            {
-                ButtonDeleteObject_Click(null, null);
+                case Keys.Escape:
+                    _activeActionHandler?.Finish();
+                    _activeActionHandler = null;
+                    break;
+                case Keys.Delete:
+                    ButtonDeleteObject_Click(null, null);
+                    break;
             }
         }
 
@@ -104,11 +102,12 @@ namespace PolygonEditor
             }
         }
 
-        private void ButtonAddPolygon_Click(object sender, System.EventArgs e)
+        private void ButtonAddPolygon_Click(object sender, EventArgs e)
         {
             _activeActionHandler?.Finish();
 
-            _activeActionHandler = new AddPolygonHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer,
+            _activeActionHandler = new AddPolygonHandler(_rasterObjects, textBoxHelper, DrawingArea,
+                _constraintsEnforcer,
                 PictureBoxSelectedColor.BackColor);
         }
 
@@ -116,7 +115,7 @@ namespace PolygonEditor
         {
             _activeActionHandler?.Finish();
             _activeActionHandler =
-                new RemoveRasterObjectHandler(_rasterObjects,textBoxHelper, DrawingArea, _constraintsEnforcer);
+                new RemoveRasterObjectHandler(_rasterObjects, textBoxHelper, DrawingArea, _constraintsEnforcer);
         }
 
         private void ButtonMoveObject_Click(object sender, EventArgs e)
