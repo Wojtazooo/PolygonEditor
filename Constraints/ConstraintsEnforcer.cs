@@ -31,9 +31,9 @@ namespace PolygonEditor.Constraints
 
             if (leftConstraints.Count == 0) return;            
 
-            var leftCounter = 0;
+            List<PolygonConstraint> OtherConstraintsOnLeft = new List<PolygonConstraint>();
             var leftContinue = true;
-            var rightCounter = 0;
+            List<PolygonConstraint> OtherConstraintsOnRight = new List<PolygonConstraint>();
             var rightContinue = true;
             var n = polygon.Vertices.Count;
             var previousLeftIndex = startVertex;
@@ -53,8 +53,10 @@ namespace PolygonEditor.Constraints
                     previousLeftIndex = leftIndex;
                     leftIndex = (leftIndex + n - 1) % n;
                     leftConstraints.Remove(nextLeftConstraint);
-                    if(nextLeftConstraint.MoreThanOneEdge)
-                        leftCounter++;
+                    if (nextLeftConstraint.MoreThanOneEdge)
+                    {
+                        OtherConstraintsOnLeft.Add(nextLeftConstraint.RelatedConstraint);                        
+                    }
                 }
                 else
                 {
@@ -74,17 +76,26 @@ namespace PolygonEditor.Constraints
                     previousRightIndex = rightIndex;
                     rightIndex = (rightIndex + 1) % n;
                     leftConstraints.Remove(nextRightConstraint);
-                    if(nextRightConstraint.MoreThanOneEdge)
-                        rightCounter++;
+                    if (nextRightConstraint.MoreThanOneEdge)
+                    {
+                        OtherConstraintsOnRight.Add(nextRightConstraint.RelatedConstraint);
+                    }
                 }
                 else
                 {
                     rightContinue = false;
                 }
             }
+
+            foreach (var c in OtherConstraintsOnLeft)
+            {
+                EnforcePolygonConstraints(polygon, c.RelatedVertices.a, leftConstraints);
+            }
             
-            if(leftConstraints.Count > 0 && leftCounter > 0 && rightCounter > 0)
-                EnforcePolygonConstraints(polygon, leftConstraints[0].RelatedVertices.a, leftConstraints);
+            foreach (var c in OtherConstraintsOnRight)
+            {
+                EnforcePolygonConstraints(polygon, c.RelatedVertices.a, leftConstraints);
+            }
         }
 
         public void EnforceCircleConstraint(Circle circle)
