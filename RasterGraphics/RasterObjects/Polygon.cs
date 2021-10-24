@@ -9,6 +9,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PolygonEditor.RasterGraphics.RasterObjects
 {
@@ -54,27 +55,51 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
 
         public void RemoveVertex(MyPoint vertex)
         {
-            for (int i = 0; i < Vertices.Count; i++)
-            {
-                if (Vertices[i] == vertex)
-                {
-                    Constraints.RemoveAll(constraint =>
-                        constraint.RelatedVertices.a == i || constraint.RelatedVertices.b == i);
-                    Constraints.ForEach(c =>
-                    {
-                        if(c.RelatedVertices.a > i && c.RelatedVertices.b > i)
-                        {
-                            c.RelatedVertices.a--;
-                            c.RelatedVertices.b--;
-                        }
-                    });
-                }
-            }
-
-            var pointToDelete = Vertices.Find(mp => mp == vertex);
-            Vertices.Remove(pointToDelete);
+            var vertexToRemoveIndex = Vertices.IndexOf(vertex);
+            RemoveAllConstraintsRelatedToVertex(vertexToRemoveIndex);
+            CorrectConstraintsAfterVertexRemove(vertexToRemoveIndex);
+            Vertices.Remove(vertex);
             Update();
         }
+
+        private void CorrectConstraintsAfterVertexRemove(int vertexToRemoveIndex)
+        {
+            foreach (var constraint in Constraints)
+            {
+                if (constraint.RelatedVertices.a > vertexToRemoveIndex &&
+                    constraint.RelatedVertices.b > vertexToRemoveIndex)
+                {
+                    constraint.RelatedVertices.a--;
+                    constraint.RelatedVertices.b--;
+                    if (constraint.SecondEdge.HasValue && constraint.SecondEdge.Value.a > vertexToRemoveIndex &&
+                        constraint.SecondEdge.Value.b > vertexToRemoveIndex)
+                    {
+                        constraint.SecondEdge = new(constraint.SecondEdge.Value.a - 1,
+                            constraint.SecondEdge.Value.b - 1);
+                    }
+                }
+            }
+        }
+        
+        private void CorrectConstraintsAfterAddVertex() {}
+
+
+        private void RemoveAllConstraintsRelatedToVertex(int vertexIndex)
+        {
+            for (int i = 0; i < Constraints.Count; i++)
+            {
+                var constraint = Constraints[i];
+                if (constraint.RelatedVertices.a == vertexIndex || constraint.RelatedVertices.b == vertexIndex)
+                {
+                    Constraints.Remove(constraint);
+                    if (constraint.RelatedConstraint != null)
+                    {
+                        Constraints.Remove(constraint.RelatedConstraint);
+                    }
+                }
+            }
+        }
+
 
         public override MyPoint DetectObject(MyPoint mousePoint, int radius)
         {
@@ -134,9 +159,9 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             Update();
         }
 
-        public MyPoint MoveVertex(MyPoint vertex, MyPoint to)
+        public void MoveVertex(MyPoint vertex, MyPoint to)
         {
-            if (!Vertices.Contains(vertex)) return vertex;
+            if (!Vertices.Contains(vertex)) return;
 
             MyPoint movedPoint = ExtensionMethods.MovePoint(vertex, vertex, to);
             for (int i = 0; i < Vertices.Count; i++)
@@ -145,11 +170,9 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
                 {
                     Vertices[i] = movedPoint;
                     Update();
-                    return movedPoint;
+                    return;
                 }
             }
-            Update();
-            return movedPoint;
         }
 
         public (MyPoint, MyPoint) MoveEdge(MyPoint endOfEdge1, MyPoint endOfEdge2, MyPoint from, MyPoint to)
@@ -168,6 +191,8 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             (MyPoint a, MyPoint b) = isEdgeClicked(vertexToAdd);
             List<MyPoint> newVertices = new List<MyPoint>();
 
+            
+            
             if (a != null && b != null)
             {
                 for (int v = 0; v < Vertices.Count; v++)
@@ -181,6 +206,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
                             (constraint.RelatedVertices.a == v + 1 || constraint.RelatedVertices.b == v + 1));
                     }
                 }
+
                 Vertices = newVertices;
             }
 
@@ -223,6 +249,7 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
                     {
                         Constraints.Remove(polygonConstraintToRemove.RelatedConstraint);
                     }
+
                     return true;
                 }
             }

@@ -24,10 +24,9 @@ namespace PolygonEditor.Constraints.PolygonConstraints
             Id = _constraintCounter;
             RelatedVertices.a = _polygon.Vertices.IndexOf(relatedMyPoints[0]);
             RelatedVertices.b = _polygon.Vertices.IndexOf(relatedMyPoints[1]);
-            SecondEdge.a = _polygon.Vertices.IndexOf(relatedMyPoints[2]);
-            SecondEdge.b = _polygon.Vertices.IndexOf(relatedMyPoints[3]);
+            SecondEdge = new(_polygon.Vertices.IndexOf(relatedMyPoints[2]),
+                _polygon.Vertices.IndexOf(relatedMyPoints[3]));
             _polygon.AddContraint(this);
-            MoreThanOneEdge = true;
         }
 
         public override void DrawConstraintInfo(Graphics g)

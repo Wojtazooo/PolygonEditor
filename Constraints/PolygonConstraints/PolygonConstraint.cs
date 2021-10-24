@@ -3,6 +3,7 @@ using PolygonEditor.RasterGraphics.Models;
 using PolygonEditor.RasterGraphics.RasterObjects;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -16,8 +17,9 @@ namespace PolygonEditor.Constraints.PolygonConstraints
     {
         protected Polygon _polygon;
         public (int a, int b) RelatedVertices;
-        public bool MoreThanOneEdge = false;
+        public bool MoreThanOneEdge => SecondEdge.HasValue;
         public PolygonConstraint RelatedConstraint;
+        public (int a, int b)? SecondEdge; 
 
         public PolygonConstraint(Polygon polygon)
         {
