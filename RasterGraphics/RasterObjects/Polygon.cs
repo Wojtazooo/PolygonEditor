@@ -142,9 +142,12 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             for (int i = 0; i < Vertices.Count; i++)
             {
                 if (Vertices[i] == vertex)
+                {
                     Vertices[i] = movedPoint;
+                    Update();
+                    return movedPoint;
+                }
             }
-
             Update();
             return movedPoint;
         }

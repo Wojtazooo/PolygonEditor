@@ -73,7 +73,7 @@ namespace PolygonEditor
             double dx = seceondPoint.X - pointToMove.X;
             double dy = seceondPoint.Y - pointToMove.Y;
 
-            if (c == 0) return pointToMove;
+            if (c < Constants.PIXEL_TOLERANCE && c > -Constants.PIXEL_TOLERANCE) return pointToMove;
 
             double px = ((c - length) * dx) / c;
             double py = ((c - length) * dy) / c;
