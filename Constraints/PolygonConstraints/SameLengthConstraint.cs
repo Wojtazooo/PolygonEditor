@@ -17,9 +17,10 @@ namespace PolygonEditor.Constraints.PolygonConstraints
         public int Id { get; private set; }
         public (int a, int b) SecondEdge;
         
-        public SameLengthConstraint(Polygon polygon, List<MyPoint> relatedMyPoints) : base(polygon) 
+        public SameLengthConstraint(Polygon polygon, List<MyPoint> relatedMyPoints, bool increaseCounter = true) : base(polygon) 
         {
-            _constraintCounter++;
+            if(increaseCounter)
+                _constraintCounter++;
             Id = _constraintCounter;
             RelatedVertices.a = _polygon.Vertices.IndexOf(relatedMyPoints[0]);
             RelatedVertices.b = _polygon.Vertices.IndexOf(relatedMyPoints[1]);

@@ -17,9 +17,10 @@ namespace PolygonEditor.Constraints.PolygonConstraints
 
         public (int a, int b) SecondEdge; 
 
-        public RightAngleConstraint(Polygon polygon, List<MyPoint> relatedMyPoints) : base(polygon)
+        public RightAngleConstraint(Polygon polygon, List<MyPoint> relatedMyPoints, bool increaseCounter = true) : base(polygon)
         {
-            _constraintCounter++;
+            if(increaseCounter)
+                _constraintCounter++;
             Id = _constraintCounter;
             RelatedVertices.a = _polygon.Vertices.IndexOf(relatedMyPoints[0]);
             RelatedVertices.b = _polygon.Vertices.IndexOf(relatedMyPoints[1]);
@@ -31,7 +32,6 @@ namespace PolygonEditor.Constraints.PolygonConstraints
         public override void DrawConstraintInfo(Graphics g)
         {
             GraphicsApplier.ApplyString(g, $"|_ {Id}", GetCenterMyPointFirstEdge());
-            GraphicsApplier.ApplyString(g, $"|_  {Id}", GetCenterMyPointSecondEdge());
         }
 
         private bool Check()

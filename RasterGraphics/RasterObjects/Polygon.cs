@@ -217,7 +217,12 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
                 MyPoint constraintCenterPoint = new MyPoint(Constraints[i].GetCenterDrawingPoint());
                 if (ExtensionMethods.IsInCircle(constraintCenterPoint, mousePoint, Constants.DETECTION_RADIUS))
                 {
+                    PolygonConstraint polygonConstraintToRemove = Constraints[i];
                     Constraints.Remove(Constraints[i]);
+                    if (polygonConstraintToRemove.RelatedConstraint != null)
+                    {
+                        Constraints.Remove(polygonConstraintToRemove.RelatedConstraint);
+                    }
                     return true;
                 }
             }

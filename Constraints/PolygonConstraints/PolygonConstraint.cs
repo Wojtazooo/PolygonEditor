@@ -17,6 +17,7 @@ namespace PolygonEditor.Constraints.PolygonConstraints
         protected Polygon _polygon;
         public (int a, int b) RelatedVertices;
         public bool MoreThanOneEdge = false;
+        public PolygonConstraint RelatedConstraint;
 
         public PolygonConstraint(Polygon polygon)
         {
@@ -28,6 +29,11 @@ namespace PolygonEditor.Constraints.PolygonConstraints
         public RasterObject GetRasterObject()
         {
             return _polygon;
+        }
+
+        public void AddRelatedConstraint(PolygonConstraint relatedConstraint)
+        {
+            RelatedConstraint = relatedConstraint;
         }
 
         public abstract void DrawConstraintInfo(Graphics g);
