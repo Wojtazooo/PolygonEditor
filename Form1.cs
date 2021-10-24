@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using PolygonEditor.ActionHandlers.GeneralEditHandlers;
+using PolygonEditor.Constraints.PolygonConstraints;
 
 namespace PolygonEditor
 {
@@ -35,6 +36,7 @@ namespace PolygonEditor
             _constraintsEnforcer = new ConstraintsEnforcer(_rasterObjects);
             InitializeSelectedColor();
             InitializeRefreshTimer();
+            SampleScene.GenerateScene(_rasterObjects);
         }
 
         private void InitializeRefreshTimer()
@@ -49,6 +51,9 @@ namespace PolygonEditor
         {
             PictureBoxSelectedColor.BackColor = Color.Black;
         }
+
+       
+
 
         private void UpdateView(object sender, EventArgs e)
         {

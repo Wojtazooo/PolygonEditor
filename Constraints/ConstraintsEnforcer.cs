@@ -48,7 +48,7 @@ namespace PolygonEditor.Constraints
                     (c.RelatedVertices.a == previousLeftIndex || c.RelatedVertices.b == previousLeftIndex) );
                 if (nextLeftConstraint != null)
                 {
-                    nextLeftConstraint.EnforceConstraint(polygon.Vertices[previousLeftIndex]);
+                    nextLeftConstraint.EnforceConstraint(polygon.Vertices[leftIndex]);
                     leftContinue = true;
                     previousLeftIndex = leftIndex;
                     leftIndex = (leftIndex + n - 1) % n;
@@ -71,7 +71,7 @@ namespace PolygonEditor.Constraints
                     (c.RelatedVertices.a == previousRightIndex || c.RelatedVertices.b == previousRightIndex) );
                 if (nextRightConstraint != null)
                 {
-                    nextRightConstraint.EnforceConstraint(polygon.Vertices[previousRightIndex]);
+                    nextRightConstraint.EnforceConstraint(polygon.Vertices[rightIndex]);
                     rightContinue = true;
                     previousRightIndex = rightIndex;
                     rightIndex = (rightIndex + 1) % n;
@@ -98,7 +98,7 @@ namespace PolygonEditor.Constraints
             }
         }
 
-        public void EnforceCircleConstraint(Circle circle)
+        public static void EnforceCircleConstraint(Circle circle)
         {
             circle.ConstantCenterConstraint?.EnforceConstraint(null);
             circle.ConstantRadiusConstraint?.EnforceConstraint(null);
