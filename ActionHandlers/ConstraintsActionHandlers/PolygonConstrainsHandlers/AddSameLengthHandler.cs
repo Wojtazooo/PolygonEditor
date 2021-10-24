@@ -24,7 +24,31 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrai
         {
             AddInstructions(InstructionTexts.SameLengthConstraintInstruction);
         }
+        
+        public override void Cancel()
+        {
+            firstSelectedLine = (null,null);
+            RemoveHelpObjects();
+        }
 
+        public override void Submit()
+        {
+            firstSelectedLine = (null,null);
+            RemoveHelpObjects();
+        }
+
+        public override void Finish()
+        {
+            firstSelectedLine = (null,null);
+            RemoveHelpObjects();
+            base.Finish();
+        }
+
+        private void RemoveHelpObjects()
+        {
+            RasterObjects.Remove(_helpCross);
+        }
+        
         public override void HandleMouseMove(MouseEventArgs e)
         {
             MyPoint mouseMyPoint = new MyPoint(e.X, e.Y);
