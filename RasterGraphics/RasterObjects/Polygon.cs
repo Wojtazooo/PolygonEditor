@@ -4,6 +4,7 @@ using PolygonEditor.RasterGraphics.Helpers;
 using PolygonEditor.RasterGraphics.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -71,17 +72,58 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
                 {
                     constraint.RelatedVertices.a--;
                     constraint.RelatedVertices.b--;
-                    if (constraint.SecondEdge.HasValue && constraint.SecondEdge.Value.a > vertexToRemoveIndex &&
-                        constraint.SecondEdge.Value.b > vertexToRemoveIndex)
-                    {
-                        constraint.SecondEdge = new(constraint.SecondEdge.Value.a - 1,
-                            constraint.SecondEdge.Value.b - 1);
-                    }
+                    CorrectSecondEdge(constraint, -1, vertexToRemoveIndex);
+                }
+                else if (constraint.RelatedVertices.b > vertexToRemoveIndex && constraint.RelatedVertices.a == 0)
+                {
+                    constraint.RelatedVertices.b--;
+                    CorrectSecondEdge(constraint, -1, vertexToRemoveIndex);
+                }
+                else if (constraint.RelatedVertices.a > vertexToRemoveIndex && constraint.RelatedVertices.b == 0)
+                {
+                    constraint.RelatedVertices.a--;
+                    CorrectSecondEdge(constraint, -1, vertexToRemoveIndex);
                 }
             }
         }
+
+        private void CorrectConstraintsAfterVertexAdd(int addedVertexIndex)
+        {
+            foreach (var constraint in Constraints)
+            {
+                if (constraint.RelatedVertices.a > addedVertexIndex && constraint.RelatedVertices.b > addedVertexIndex)
+                {
+                    constraint.RelatedVertices.a++;
+                    constraint.RelatedVertices.b++;
+                    CorrectSecondEdge(constraint, +1, addedVertexIndex);
+                }
+                else if (constraint.RelatedVertices.b > addedVertexIndex && constraint.RelatedVertices.a == 0)
+                {
+                    constraint.RelatedVertices.b++;
+                    CorrectSecondEdge(constraint, +1, addedVertexIndex);
+                }
+                else if (constraint.RelatedVertices.a > addedVertexIndex && constraint.RelatedVertices.b == 0)
+                {
+                    constraint.RelatedVertices.a++;
+                    CorrectSecondEdge(constraint, +1, addedVertexIndex);
+                }
+            }
+        }
+
+        private void CorrectSecondEdge(PolygonConstraint constraint, int value, int addedVertexIndex)
+        {
+            if (constraint.SecondEdge.HasValue && constraint.SecondEdge.Value.a > addedVertexIndex &&
+                constraint.SecondEdge.Value.b > addedVertexIndex)
+            {
+                constraint.SecondEdge = new(constraint.SecondEdge.Value.a + value,
+                    constraint.SecondEdge.Value.b + 1);
+            }
+        }
         
-        private void CorrectConstraintsAfterAddVertex() {}
+
+        private void CorrectConstraintsAfterAddVertex()
+        {
+        }
 
 
         private void RemoveAllConstraintsRelatedToVertex(int vertexIndex)
@@ -90,6 +132,23 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
             {
                 var constraint = Constraints[i];
                 if (constraint.RelatedVertices.a == vertexIndex || constraint.RelatedVertices.b == vertexIndex)
+                {
+                    Constraints.Remove(constraint);
+                    if (constraint.RelatedConstraint != null)
+                    {
+                        Constraints.Remove(constraint.RelatedConstraint);
+                    }
+                }
+            }
+        }
+
+        private void RemoveAllConstraintsRelatedToEdge(int v1, int v2)
+        {
+            for (int i = 0; i < Constraints.Count; i++)
+            {
+                var constraint = Constraints[i];
+                if ((constraint.RelatedVertices.a == v1 && constraint.RelatedVertices.b == v2) ||
+                    (constraint.RelatedVertices.a == v2 && constraint.RelatedVertices.b == v1))
                 {
                     Constraints.Remove(constraint);
                     if (constraint.RelatedConstraint != null)
@@ -189,21 +248,19 @@ namespace PolygonEditor.RasterGraphics.RasterObjects
         public void AddVertexInsideEdge(MyPoint vertexToAdd)
         {
             (MyPoint a, MyPoint b) = isEdgeClicked(vertexToAdd);
-            List<MyPoint> newVertices = new List<MyPoint>();
 
-            
             
             if (a != null && b != null)
             {
+                List<MyPoint> newVertices = new List<MyPoint>();
+                RemoveAllConstraintsRelatedToEdge(Vertices.IndexOf(a), Vertices.IndexOf(b));
                 for (int v = 0; v < Vertices.Count; v++)
                 {
                     newVertices.Add(Vertices[v]);
                     if (Vertices[v] == a)
                     {
                         newVertices.Add(vertexToAdd);
-                        Constraints.RemoveAll(constraint =>
-                            (constraint.RelatedVertices.a == v || constraint.RelatedVertices.b == v) &&
-                            (constraint.RelatedVertices.a == v + 1 || constraint.RelatedVertices.b == v + 1));
+                        CorrectConstraintsAfterVertexAdd(v);
                     }
                 }
 

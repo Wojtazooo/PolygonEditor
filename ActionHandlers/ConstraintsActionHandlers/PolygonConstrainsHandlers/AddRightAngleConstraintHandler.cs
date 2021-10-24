@@ -18,6 +18,7 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrai
     class AddRightAngleConstraintHandler : ActionHandler
     {
         private (MyPoint a, MyPoint b) firstSelectedLine;
+        private Polygon firstSelectedPolygon;
         private Cross _helpCross;
 
         public AddRightAngleConstraintHandler(List<RasterObject> rasterObjects, TextBox helperTextBox, PictureBox drawingArea, ConstraintsEnforcer constraintsEnforcer)
@@ -29,18 +30,21 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrai
         public override void Cancel()
         {
             firstSelectedLine = (null,null);
+            firstSelectedPolygon = null;
             RemoveHelpObjects();
         }
 
         public override void Submit()
         {
             firstSelectedLine = (null,null);
+            firstSelectedPolygon = null;
             RemoveHelpObjects();
         }
 
         public override void Finish()
         {
             firstSelectedLine = (null,null);
+            firstSelectedPolygon = null;
             RemoveHelpObjects();
             base.Finish();
         }
@@ -81,45 +85,63 @@ namespace PolygonEditor.ActionHandlers.ConstraintsActionHandlers.PolygonConstrai
                 {
                     Polygon polygon = (Polygon)rasterObj;
                     var edge = polygon.isEdgeClicked(mouseMyPoint);
-
                     if (edge.a != null && edge.b != null)
                     {
-                        if (firstSelectedLine.a == null)
-                        {
-                            _helpCross = new Cross(mouseMyPoint, Constants.CROSS_WIDTH, Color.Green);
-                            RasterObjects.Add(_helpCross);
-                            firstSelectedLine = (edge.a, edge.b);
-                            return;
-                        }
-                        else if (firstSelectedLine.a != null && firstSelectedLine.b != null && edge.a == firstSelectedLine.a && edge.b == firstSelectedLine.b)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            RasterObjects.Remove(_helpCross);
-                            var relatedMyPoint = new List<MyPoint> {
-                                firstSelectedLine.a,
-                                firstSelectedLine.b,
-                                edge.a,
-                                edge.b };
-                            var relatedMyPoint2 = new List<MyPoint> {
-                                edge.a,
-                                edge.b,
-                                firstSelectedLine.a,
-                                firstSelectedLine.b
-                                };
-                            var constraint1 = new RightAngleConstraint(polygon, relatedMyPoint);
-                            var constraint2 = new RightAngleConstraint(polygon, relatedMyPoint2, false);
-                            constraint1.AddRelatedConstraint(constraint2);
-                            constraint2.AddRelatedConstraint(constraint1);
-                            ConstraintsEnforcer.EnforcePolygonConstraints(polygon, polygon.Vertices.IndexOf(edge.a));
-                            firstSelectedLine = (null, null);
-                            return;
-                        }
+                        if(HandleEdgeClicked(mouseMyPoint, edge, polygon)) return;
                     }
                 }
             }
         }
+
+        private bool HandleEdgeClicked(MyPoint mouseMyPoint, (MyPoint a, MyPoint b) edge, Polygon polygon)
+        {
+            if (firstSelectedLine.a == null)
+            {
+                _helpCross = new Cross(mouseMyPoint, Constants.CROSS_WIDTH, Color.Green);
+                RasterObjects.Add(_helpCross);
+                firstSelectedLine = (edge.a, edge.b);
+                firstSelectedPolygon = polygon;
+                return true;
+            }
+            else if (firstSelectedLine.a != null && firstSelectedLine.b != null && edge.a == firstSelectedLine.a && edge.b == firstSelectedLine.b)
+            {
+                return false;
+            }
+            else
+            {
+                if (firstSelectedPolygon != polygon)
+                {
+                    MessageBox.Show("Can't add relation between two shapes", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return true;
+                }
+                RasterObjects.Remove(_helpCross);
+                AddConstraints(edge, polygon);
+                firstSelectedLine = (null, null);
+                firstSelectedPolygon = null;
+                return true;
+            }
+        }
+        
+
+        private void AddConstraints((MyPoint a, MyPoint b) edge, Polygon polygon)
+        {
+            var relatedMyPoint = new List<MyPoint> {
+                firstSelectedLine.a,
+                firstSelectedLine.b,
+                edge.a,
+                edge.b };
+            var relatedMyPoint2 = new List<MyPoint> {
+                edge.a,
+                edge.b,
+                firstSelectedLine.a,
+                firstSelectedLine.b
+            };
+            var constraint1 = new RightAngleConstraint(polygon, relatedMyPoint);
+            var constraint2 = new RightAngleConstraint(polygon, relatedMyPoint2, false);
+            constraint1.AddRelatedConstraint(constraint2);
+            constraint2.AddRelatedConstraint(constraint1);
+            ConstraintsEnforcer.EnforcePolygonConstraints(polygon, polygon.Vertices.IndexOf(edge.a));
+        }
+        
     }
 }
